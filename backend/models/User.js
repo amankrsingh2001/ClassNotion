@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         trim:true,
+        unique:true
     },
     password:{
         type:String,
@@ -36,9 +37,12 @@ const userSchema = new mongoose.Schema({
             ref:"Course",
         }
     ],
+    contactNumber:{
+        type:Number,
+    },
     image:{
         type:String,
-        required:true,
+    
     },
     courseProgress:[
         {
