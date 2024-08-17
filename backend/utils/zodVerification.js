@@ -15,7 +15,21 @@ const signUpValidation = zod.object({
     accountType:zod.enum(['Admin',"Student","Instructor"])
 })
 
+const loginValidation = zod.object({
+    email:zod.string().semail(),
+    password:zod.string().min(5).max(20)
+})
+
+const changePasswordValidation = zod.object({
+    email:zod.string().email(),
+    password:zod.string().min(5).max(20),
+    newPassword:zod.string().min(5).max(20),
+    confirmNewPassword:zod.string().min(5).max(20)
+})
+
 module.exports = {
     optValidate,
-    signUpValidation
+    signUpValidation,
+    loginValidation,
+    changePasswordValidation
 }

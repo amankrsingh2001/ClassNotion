@@ -1,11 +1,14 @@
 const User = require('../models/User')
 const Otp = require('../models/Otp')
 const otpGenerator = require('otp-generator')
-const { optValidate, signUpValidation } = require('../utils/zodVerification')
+const { optValidate, signUpValidation, loginValidation, changePasswordValidation } = require('../utils/zodVerification')
 const bcrypt = require('bcrypt')
 const { Profile } = require('../models/Profile')
+const jwt = require("jsonwebtoken")
+const { mailSender } = require('../utils/mailSender')
 
 
+require("dotenv").config()
 
 const sendOtp = async (req,res) =>{
     const createPayload = req.body
@@ -48,7 +51,7 @@ const sendOtp = async (req,res) =>{
 const signUp = async (req,res) =>{
     const createPayload = req.body;
     const parserPayload = signUpValidation.safeParse(createPayload)
-    if( !parserPayload ){
+    if( !parserPayload.success ){
         return res.status(400).json({success:false,message:"Please enter valid Credentials"})
     }
     try {
@@ -84,7 +87,7 @@ const signUp = async (req,res) =>{
             return res.status(400).json({ success:false,message:"Invalid OTP" })
          }
          const salt = await bcrypt.genSalt(10)
-         const hashedPasswrod = await bcrypt.hash(password,salt);
+         const hashedPassword = await bcrypt.hash(password,salt);
     
          const  profile = await Profile({
             gender:null,
@@ -97,13 +100,34 @@ const signUp = async (req,res) =>{
             firstName,
             lastName,
             email,
-            password,
+            password:hashedPassword,
             accountType,
             contactNumber,
             additionalDetails:profile._id,
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
          })
-         res.status(200).json({success:true,message:"User created",user:user})
+
+         const payload = {
+            email:user.email,
+            accountType:user.accountType,
+            id:user._id
+         }
+         
+         const token = jwt.sign(payload,process.env.JWT_SECRET,{
+            expiresIn:"2h"
+         })
+
+         const newUser = user.toObject()
+         delete newUser.password;
+         newUser.token = token;
+
+         const option = {
+            expires:new Date(Date.now()+3*24*60*60*1000),
+            httpOnly:true,
+            secure:true
+         }
+
+         res.cookie("token",token,option).status(200).json({success:true,message:"User created",user:newUser})
     } catch (error) {
         console.log(error)
         return res.status(500).json({success:false,message:"User cannot be registered. Please try again"})
@@ -111,7 +135,105 @@ const signUp = async (req,res) =>{
 
 }
 
+const login = async(req,res)=>{
+    const createPayload = req.body
+    const parsePayload = loginValidation.safeParse(createPayload)
+    if(!parsePayload.success){
+        return res.status(400).json({success:false,message:"Invalid Credentials"})
+    }
+
+    try {
+        const {email,password} = req.body;
+
+            //removed populate 
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(401).json({success:false,message:'User is not registered,Please register'})
+        }
+        const validUser = await bcrypt.compare(password,user.password);
+        if(!validUser){
+            return res.status(401).json({success:false,message:'Password is not valid,Please enter valid password'})
+        }
+
+        const payload = {
+            email : user.email,
+            id:user._id,
+            accountType:user.accountType
+        }
+
+        const token = jwt.sign(payload,process.env.JWT_SECRET,{
+            expiresIn:"2h"
+        })
+
+        const sendUser = user.toObject()
+        delete sendUser.password;
+        sendUser.token = token
+
+        const options = {
+            expires:new Date(Date.now()+3*24*60*60*1000),
+            httpOnly:true,
+            secure:true
+        }
+
+        res.cookie("token",token,options).status(200).json({
+            success:true,
+            user:sendUser,
+            message:"Logged in successfully"
+         })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({success:false,message:"Login failed, please try again"})
+    }
+}
+
+
+const changePassword = async (req,res) =>{
+    //get data from req.body
+    const createPayload = req.authorization || req.user;
+    const parsePayload = changePasswordValidation.safeParse(createPayload)
+    if(!parsePayload.success){
+        return res.status(400).json({success:false, message:"Invalid credentials" })
+    }
+
+    const user = await User.findOne({email:createPayload.email})
+
+    if(!user){
+        return res.status(401).json({success:false,message:"User does not exist"})
+    }
+
+    const validUser = await  bcrypt.compare(createPayload.password,user.password);
+    if(!validUser){
+        return res.status(401).json({success:false,message:'Invalid credentials'})
+    }
+
+    // scope for improvement 
+    if(createPayload.newPassword !== createPayload.confirmNewPassword){
+        return res.status(401).json({success:false,message:"password and Confirm Password didn't match"})
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(createPayload.newPassword,salt);
+
+    const updatedUserDetils = await User.findOneAndUpdate({ email:createPayload.email },{ password:hashedPassword },{ new:true })
+     const mailResponse = await mailSender(updatedUserDetils.email,'Reset Password',passwordUpdated(updatedUserDetils.email,
+        `Password updated Successfully for ${updatedUserDetils.firstName} ${updatedUserDetils.lastName}`))
+  
+
+    return res.status(200).json({success:true,message:"Password updated successfully",mailResponse:mailResponse})
+
+
+    //get old password 
+    // get newPassword,confirmNewPassword
+    // validation
+    // updatePassword in db
+    //send mail password Updated
+    //return password
+}
+
 module.exports = {
     sendOtp,
-    signUp
+    signUp,
+    login,
+    changePassword
 }

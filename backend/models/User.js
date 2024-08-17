@@ -40,6 +40,12 @@ const userSchema = new mongoose.Schema({
     contactNumber:{
         type:Number,
     },
+    token:{
+        type:String
+    },
+    resetPasswordExpires:{
+        type:Date,
+    },
     image:{
         type:String,
     
