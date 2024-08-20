@@ -27,7 +27,7 @@ const changePasswordValidation = zod.object({
     confirmNewPassword:zod.string().min(5).max(20)
 })
 
-const createTagValidation = zod.object({
+const createCategoryValidation = zod.object({
     name:zod.string(),
     description:zod.string()
 })
@@ -47,6 +47,6 @@ module.exports = {
     signUpValidation,
     loginValidation,
     changePasswordValidation,
-    createTagValidation,
+    createCategoryValidation,
     courseValidation
 }
