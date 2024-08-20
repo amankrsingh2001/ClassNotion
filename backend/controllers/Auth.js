@@ -89,7 +89,7 @@ const signUp = async (req,res) =>{
          const salt = await bcrypt.genSalt(10)
          const hashedPassword = await bcrypt.hash(password,salt);
     
-         const  profile = await Profile({
+         const  profile = await Profile.create({
             gender:null,
             dateOfBirth:null,
             about:null,

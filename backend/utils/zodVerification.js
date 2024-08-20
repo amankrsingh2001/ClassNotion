@@ -42,11 +42,26 @@ const courseValidation = zod.object({
     studentEnrolled:zod.array[zod.object()].optional()
 })
 
+const sectionValidation = zod.object({
+    sectionName:zod.string()
+})
+
+const subSectionValidation = zod.object({
+    title:zod.string(),
+    description:zod.string(),
+    timeDuration:zod.string(),
+})
+
+
 module.exports = {
     optValidate,
     signUpValidation,
     loginValidation,
     changePasswordValidation,
     createCategoryValidation,
-    courseValidation
+    courseValidation,
+    sectionValidation,
+    subSectionValidation,
 }
+
+
