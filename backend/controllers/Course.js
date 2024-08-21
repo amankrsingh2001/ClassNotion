@@ -5,6 +5,54 @@ const {uploadOnCloudinary} = require('../utils/imageUploader');
 const { courseValidation } = require('../utils/zodVerification');
 
 
+//get course details (everything populated) with section and subsection
+//Rating and review -- create rating, getAverageRating, getAllRating
+
+
+const getcourseDetail = async(req, res) =>{
+    try {
+        const courseId = req.params || req.body;
+        if(!courseId){
+            return res.status(402).json({success:false, message:"Failed to get the courseId"})
+        }
+        const course = await Course.findById({_id:courseId}).populate({path:"instructor",populate:{
+            path:"additionalDetails"
+        }}).populate("category").populate("ratingAndReviews").populate({path:"courseContent",populate:{
+            path:"subSection",
+            select:"-videoUrl"
+        }}).exec()
+
+        if(!course){
+            return res.status(402).json({success:false, message:"Failed to get the course"})
+        }
+        let totalDurationInSeconds = 0;
+        course.courseContent.forEach((content)=>{
+            content.subSection.forEach((subSection)=>{
+                const timeDurationInSeconds = parseInt(subSection.timeDuration)
+                totalDurationInSeconds += timeDurationInSeconds
+            })
+        })
+
+        const getCourse = {
+            courseName:course.courseName,
+            courseDescription:courseDescription,
+            instructor:course.instructor,
+            whatYouWillLearn:course.whatYouWillLearn,
+            courseContent:course.courseContent,
+            ratingAndReviews:course.ratingAndReviews,
+            price:course.price,
+            thumbnail:course.thumbnail,
+            Category:course.Category,
+        }
+
+        return res.status(200).json({success:true,message:'Course sent successfully',data:{
+            getCourse,totalDurationInSeconds
+        }});
+        
+    } catch (error) {
+        return res.status(500).json({success:false, message:"Failed to get course detal"})
+    }
+}
 
 const createCourse = async(req,res)=>{
     const createPayload = req.body;
@@ -78,7 +126,10 @@ const showAllCourses = async(req,res) =>{
     }
 }
 
+
+
 module.exports = {
+    getcourseDetail,
     createCourse,
     showAllCourses
 }
