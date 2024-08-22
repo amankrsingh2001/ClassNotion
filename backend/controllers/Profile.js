@@ -1,6 +1,7 @@
 const { Course } = require('../models/Course');
 const {Profile} = require('../models/Profile');
 const { User } = require('../models/User');
+const { uploadOnCloudinary } = require('../utils/imageUploader');
 
 
 const updateProfile = async(req,res) =>{
@@ -74,8 +75,43 @@ const getUserDetails = async(req, res)=>{
     }
 }
 
+const updateDisplayPicture = async(req, res)=>{
+    try {
+        const displayPicture = req.files.displayPicture
+
+        const userId = req.user.id;
+        const image = await uploadOnCloudinary(displayPicture,process.env.FOLDER_NAME,1000,1000)
+        const updateProfile = await User.findByIdAndUpdate(userId,{
+            image:image.secure_url
+        },{ new :true})
+
+        res.status(200).json({success:true,message:"Image Updated Successfully",data:updateProfile})
+    } catch (error) {
+        return res.status(500).json({success: false,message:error.message})
+    }
+}
+
+const getEnrolledCourse = async(req, res)=>{
+    try {
+        const userId = req.user.id || req.authorization.id;
+        const userDetail = await User.findOne({_id:userId}).populate("courses").exec()
+        if(!userDetail){
+            return res.status(400).json({success:false, message: `Could not found user with id: ${userId}`})
+        }
+        return res.status(200).json({success:true, data:userDetail})
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+          })
+    }
+}
+
+
 module.exports = {
     updateProfile,
     deleteAccount,
-    getUserDetails
+    getUserDetails,
+    updateDisplayPicture,
+    getEnrolledCourse
 }

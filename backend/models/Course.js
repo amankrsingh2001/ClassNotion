@@ -30,6 +30,10 @@ const courseSchema = new mongoose.Schema({
             ref:"RatingAndReview"
         }
     ],
+    tag:{
+        type:[String],
+        required:true
+    },
     price:{
         type:Number,
         required:true

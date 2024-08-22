@@ -10,42 +10,6 @@ const { mailSender } = require('../utils/mailSender')
 
 require("dotenv").config()
 
-const sendOtp = async (req,res) =>{
-    const createPayload = req.body
-    const parserPayload = optValidate.safeParse(createPayload)
-    if(!parserPayload){
-        return res.status(400).json({message:"Please enter valid credentials"})
-    }
-      try {
-      const {email} = req.body
-  
-      const checkUser = await User.findOne({email})
-      if(checkUser) {
-          return res.status(401).json({success:false,message:"User already registered"})
-      }
-      var otp = otpGenerator.generate(6,{upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false})
-      console.log(otp,"Otp generator")
-      // check unique otp or not
-      var result = await Otp.findOne({otp:otp})
-      // scope for improvement
-      while(result){
-            otp = otpGenerator.generate(6,{upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false})
-            result = await Otp.findOne({otp:otp})
-      }
-
-      //create an entry for otp
-      const otpPayload =  {email,otp};
-      const otpBody = await Otp.create(otpPayload)
-      res.status(200).json({success:true,message:"Otp sent successfully"})
-      
-  } catch (error) {
-        console.log(error);
-        res.status(500).json({success:false,message:error.message})
-  }
-     
-}
-
-
 
 
 const signUp = async (req,res) =>{
@@ -135,6 +99,7 @@ const signUp = async (req,res) =>{
 
 }
 
+
 const login = async(req,res)=>{
     const createPayload = req.body
     const parsePayload = loginValidation.safeParse(createPayload)
@@ -185,6 +150,41 @@ const login = async(req,res)=>{
         console.log(error)
         return res.status(500).json({success:false,message:"Login failed, please try again"})
     }
+}
+
+const sendOtp = async (req,res) =>{
+    const createPayload = req.body
+    const parserPayload = optValidate.safeParse(createPayload)
+    if(!parserPayload){
+        return res.status(400).json({message:"Please enter valid credentials"})
+    }
+      try {
+      const {email} = req.body
+  
+      const checkUser = await User.findOne({email})
+      if(checkUser) {
+          return res.status(401).json({success:false,message:"User already registered"})
+      }
+      var otp = otpGenerator.generate(6,{upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false})
+      console.log(otp,"Otp generator")
+      // check unique otp or not
+      var result = await Otp.findOne({otp:otp})
+      // scope for improvement
+      while(result){
+            otp = otpGenerator.generate(6,{upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false})
+            result = await Otp.findOne({otp:otp})
+      }
+
+      //create an entry for otp
+      const otpPayload =  {email,otp};
+      const otpBody = await Otp.create(otpPayload)
+      res.status(200).json({success:true,message:"Otp sent successfully"})
+      
+  } catch (error) {
+        console.log(error);
+        res.status(500).json({success:false,message:error.message})
+  }
+     
 }
 
 
