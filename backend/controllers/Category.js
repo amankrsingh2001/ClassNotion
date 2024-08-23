@@ -2,6 +2,7 @@ const {Category} = require('../models/Category')
 const { createCategoryValidation } = require("../utils/zodVerification")
 
 const createCategory = async(req,res) =>{
+    console.log(req.body)
     const createPayload = req.body
     const parserPayload = createCategoryValidation.safeParse(createPayload)
 
@@ -16,10 +17,10 @@ const createCategory = async(req,res) =>{
 
         //checking
         console.log(categoryDetails)
-        return res.status(200).json({success:true,message:"Tag created Successfully"})
+        return res.status(200).json({success:true,message:"Category created Successfully"})
         
     } catch (error) {
-        res.status(500).json({success:false,msg:"Failed to create Tag"})
+        res.status(500).json({success:false,msg:"Failed to create Category"})
     }
 }
 

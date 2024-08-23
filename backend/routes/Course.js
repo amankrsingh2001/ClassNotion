@@ -9,7 +9,10 @@ const router = express.Router();
 
 router.post('/createCourse', auth, isInstructor, createCourse)
 
+//section
+
 router.post('/addSection', auth, isInstructor, createSection)
+
 
 router.post('/updateSection', auth, isInstructor, updateSection)
 

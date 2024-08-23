@@ -8,14 +8,19 @@ const updateProfile = async(req,res) =>{
     try {
         const {dateOfBirth="" ,about="", contactNumber="", gender} = req.body
 
-        const userId = req.user.id || req.authorization;
+        const userId = req.user.id || req.authorization.id;
+
         
         //user Profile
         const userDetails = await User.findById(userId)
         
         const profileId = userDetails.additionalDetails;
 
+        console.log(profileId)
+
         const profileDetails = await Profile.findById(profileId)
+        console.log(profileDetails)
+        
 
         profileDetails.dateOfBirth = dateOfBirth;
         profileDetails.about = about;
@@ -28,7 +33,7 @@ const updateProfile = async(req,res) =>{
 
     } catch (error) {
 
-        return res.status(500).json({success:false,message:"Failed to update Profile"})
+        return res.status(500).json({success:false,message:error.message})
 
     }
 }
@@ -65,7 +70,7 @@ const deleteAccount = async(req,res) =>{
 
 const getUserDetails = async(req, res)=>{
     try {
-        const id = req.user || req.authorization
+        const id = req.user.id || req.authorization.id
 
         const userDetail = await User.findById(id).populate('additionalDetails').exec();
 
@@ -77,6 +82,7 @@ const getUserDetails = async(req, res)=>{
 
 const updateDisplayPicture = async(req, res)=>{
     try {
+        console.log("Control is reaching herer")
         const displayPicture = req.files.displayPicture
 
         const userId = req.user.id;

@@ -20,10 +20,10 @@ const courseSchema = new mongoose.Schema({
     whatYouWillLearn:{
         type:String,
     },
-    courseContent:{
+    courseContent:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Section"
-    },
+    }],
     ratingAndReviews:[
         {
             type:mongoose.Schema.Types.ObjectId,
@@ -40,6 +40,11 @@ const courseSchema = new mongoose.Schema({
     },
     thumbnail:{
         type:String
+    },
+    status:{
+        type:String,
+        enum:["Upcoming","Draft","Approved","Published"],
+        default:"Draft"
     },
     Category:{
         type:mongoose.Schema.Types.ObjectId,
@@ -61,3 +66,13 @@ const Course = mongoose.model('Course',courseSchema)
 module.exports={
     Course
 }
+
+     // let totalDurationInSeconds = 0;
+        // course.courseContent.forEach((content)=>{
+        //     content.subSection.forEach((subSection)=>{
+        //         const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        //         totalDurationInSeconds += timeDurationInSeconds
+        //     })
+        // })
+
+  

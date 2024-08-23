@@ -16,36 +16,33 @@ const createCourse = async(req,res)=>{
     if(!parsePayload.success){
         return res.status(401).json({status:false,message:"All fileds are required"})
     }
-
     try {
-        
-        const {courseName, courseDescription, whatYouWillLearn, category, price} = req.body
+        const {courseName, courseDescription, whatYouWillLearn, category, price, tag} = req.body
         const thumbnail = req.files.thumbnail
 
         const userId = req.user.id || req.auhorization.id
+
         const instructorDetails = await User.findById(userId)
 
         if(!instructorDetails) {
             return res.status(404).json({success:false,message:"Instructor not found"})
         }
-
         //check given category is valid or not 
         const categoryDetail = await Category.findById(category);
         if(!categoryDetail){
             return res.status(404).json({success:false,message:"Category details not found"})
         }
-
         //upload image on cloudinary
         const thumbnailImage = await uploadOnCloudinary(thumbnail,process.env.FOLDER_NAME)
 
         const newCourse = await Course.create({
             courseName,
             courseDescription,
-            instructorDetails:instructorDetails._id,
+            instructor:instructorDetails._id,
             whatYouWillLearn,
             price,
-            category:category._id,
-            thumbnail:thumbnailImage.secure_url
+            category:categoryDetail._id,
+            thumbnail:thumbnailImage.secure_url,tag
         })
 
             await User.findByIdAndUpdate({
@@ -66,7 +63,7 @@ const createCourse = async(req,res)=>{
         return res.status(200).json({success:true,message:"Course created",data:newCourse})
 
     } catch (error) {
-        return res.status(500).json({success:false,message:"failed to create courses"})
+        return res.status(500).json({success:false,message:error.message})
 
     }
 
@@ -74,49 +71,45 @@ const createCourse = async(req,res)=>{
 
 
 const getcourseDetail = async(req, res) =>{
+   
     try {
-        const courseId = req.params || req.body;
+        const courseId =  req.body.courseId;
+        console.log(courseId)
         if(!courseId){
             return res.status(402).json({success:false, message:"Failed to get the courseId"})
         }
-        const course = await Course.find({_id:courseId}).populate({path:"instructor",populate:{
-            path:"additionalDetails"
-        }}).populate("category").populate("ratingAndReviews").populate({path:"courseContent",populate:{
-            path:"subSection",
-            select:"-videoUrl"
-        }}).exec()
+        const courseDetails = await Course.find(
+            {_id:courseId})
+            .populate(
+                {
+                    path:"instructor",
+                    populate:{
+                        path:"additionalDetails",
+                    },
+                }
+            )
+            .populate("Category")
+            // .populate("ratingAndreviews")
+            .populate({
+                path:"courseContent",
+                populate:{
+                    path:"subSection",
+                },
+            })
+            .exec();
 
-        if(!course){
+
+
+        if(!courseDetails){
             return res.status(402).json({success:false, message:"Failed to get the course"})
         }
-        let totalDurationInSeconds = 0;
-        course.courseContent.forEach((content)=>{
-            content.subSection.forEach((subSection)=>{
-                const timeDurationInSeconds = parseInt(subSection.timeDuration)
-                totalDurationInSeconds += timeDurationInSeconds
-            })
-        })
-
-        
-
-        const getCourse = {
-            courseName:course.courseName,
-            courseDescription:courseDescription,
-            instructor:course.instructor,
-            whatYouWillLearn:course.whatYouWillLearn,
-            courseContent:course.courseContent,
-            ratingAndReviews:course.ratingAndReviews,
-            price:course.price,
-            thumbnail:course.thumbnail,
-            Category:course.Category,
-        }
-
+   
         return res.status(200).json({success:true,message:'Course sent successfully',data:{
-            getCourse,totalDurationInSeconds
+            courseDetails
         }});
         
     } catch (error) {
-        return res.status(500).json({success:false, message:"Failed to get course detal"})
+        return res.status(500).json({success:false, message:error.message})
     }
 }
 

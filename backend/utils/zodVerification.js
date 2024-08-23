@@ -7,24 +7,24 @@ const optValidate = zod.object({
 const signUpValidation = zod.object({
     firstName:zod.string(),
     lastName:zod.string(),
-    email:zod.string.email(),
-    password:zod.string.max(20).min(5),
-    image:zod.string().optional(),
-    courses:zod.array[z.object({})].optional(),
-    courseProgress:zod.array[z.object({})].optional(),
-    accountType:zod.enum(['Admin',"Student","Instructor"])
+    email:zod.string().email(),
+    password:zod.string().max(20).min(5),
+    confirmPassword:zod.string().max(20).min(5),
+    accountType:zod.enum(['Admin',"Student","Instructor"]),
+    contactNumber:zod.string(),
+    otp: zod.string()
 })
 
 const loginValidation = zod.object({
-    email:zod.string().semail(),
+    email:zod.string().email(),
     password:zod.string().min(5).max(20)
 })
 
 const changePasswordValidation = zod.object({
     email:zod.string().email(),
-    password:zod.string().min(5).max(20),
-    newPassword:zod.string().min(5).max(20),
-    confirmNewPassword:zod.string().min(5).max(20)
+    password:zod.string().min(5).max(20).optional(),
+    newPassword:zod.string().min(5).max(20).optional(),
+    confirmNewPassword:zod.string().min(5).max(20).optional()
 })
 
 const createCategoryValidation = zod.object({
@@ -36,14 +36,14 @@ const courseValidation = zod.object({
     courseName:zod.string(),
     courseDescription:zod.string(),
     whatYouWillLearn:zod.string(),
-    ratingAndReviews:zod.array[zod.object()].optional(),
-    price:zod.number(),
+    price:zod.string(),
     thumbnail:zod.string().optional(),
-    studentEnrolled:zod.array[zod.object()].optional()
+    studentEnrolled:zod.array(zod.object()).optional()
 })
 
 const sectionValidation = zod.object({
-    sectionName:zod.string()
+    sectionName:zod.string(),
+
 })
 
 const subSectionValidation = zod.object({

@@ -3,7 +3,8 @@ require("dotenv").config()
 //auth  
 const auth = async( req , res , next )=>{
     try {
-        const token =  req.cookies.token || req.headers.authorization
+        const token =  req.headers.authorization
+      
         if(!token){
             res.status(401).json({msg:"Token not found"})
         }
@@ -45,6 +46,7 @@ const isInstructor = async( req,res,next ) =>{
         if(req.user.accountType !== "Instructor"){
             res.status(401).json({message:false,message:"This is a protected route for Instructors only"})
         }
+        next()
     } catch (error) {
         return res.status(500).json({success:false,message:"User cannot be verified"})
     }
@@ -52,10 +54,12 @@ const isInstructor = async( req,res,next ) =>{
 
 //idAdmin
 const isAdmin = async( req,res,next ) =>{
+  
     try {
         if(req.user.accountType !== "Admin"){
-            res.status(401).json({message:false,message:"This is a protected route for Admin only"})
+           return res.status(401).json({message:false,message:"This is a protected route for Admin only"})
         }
+        next()
     } catch (error) {
         return res.status(500).json({success:false,message:"User cannot be verified"})
     }
