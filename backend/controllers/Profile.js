@@ -41,7 +41,7 @@ const updateProfile = async(req,res) =>{
 //delete account 
 const deleteAccount = async(req,res) =>{
     try {
-        const {id} = req.user || req.authorization;
+        const id = req.user.id || req.authorization.id;
       
         const userDetails = await User.findById(id);
         // Needed to be fixed
@@ -64,7 +64,7 @@ const deleteAccount = async(req,res) =>{
         return res.status(200).json({succss:true,message:"User Deleted Successfully"})
 
     } catch (error) {
-        return res.status(500).json({success:false,message:"Cannot delete User"})
+        return res.status(500).json({success:false,message:error.message})
     }
 }
 

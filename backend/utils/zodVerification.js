@@ -28,7 +28,7 @@ const changePasswordValidation = zod.object({
 })
 
 const createCategoryValidation = zod.object({
-    name:zod.string(),
+    title:zod.string(),
     description:zod.string()
 })
 

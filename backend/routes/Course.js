@@ -26,7 +26,7 @@ router.post('/addSubSection', auth, isInstructor, createSubSection)
 
 router.get('/getAllCourses', showAllCourses)
 
-router.get('/getCoursesDetails', getcourseDetail)
+router.post('/getCoursesDetails', getcourseDetail)
 
 // Category router (only by Admin)
 

@@ -4,7 +4,7 @@ const { auth } = require('../middlewares/auth.middleware')
 const router = express.Router()
 
 
-router.delete("/deleteProfile", deleteAccount)
+router.delete("/deleteProfile",auth ,deleteAccount)
 
 router.put('/updateProfile', auth, updateProfile)
 

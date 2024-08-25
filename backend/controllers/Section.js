@@ -46,23 +46,34 @@ const updateSection = async(req,res)=>{
             return res.status(400).json({success:false,message:"Missing Data"})
         }
 
-        const section = await findByIdAndUpdate(sectionId,{name:sectionName},{new:true})
-        return res.status(200).json({success:true,message:"Section updated Successfully"})
+        const section = await Section.findByIdAndUpdate(sectionId,{sectionName:sectionName},{new:true})
+        return res.status(200).json({success:true,message:"Section updated Successfully",data:section})
 
     } catch (error) {
-        return res.status(500).json({success:false,message:"Failed to update Section"})
+        return res.status(500).json({success:false,message:error.message})
     }
 }
 
 const deleteSection = async(req,res)=>{
     try {
-        const {sectionId} = req.params;
-        await findByIdAndDelete(sectionId)
-        return res.status(200).json({success:true,message:"Section Deleted Successfully"})
+        const sectionId = req.body.sectionId;
+        const courseId = req.body.courseId;
+
+        const existingSection = await Section.findById(sectionId)
+        if(!existingSection){
+            return res.status(404).json({success:false, message:'Section not found'})
+        }
+        const course = await Course.findByIdAndUpdate(courseId, {
+            $pull: {
+                courseContent: sectionId
+            }
+        }, { new: true })
+      await Section.findByIdAndDelete(sectionId)
+        return res.status(200).json({success:true,message:"Section deleted Successfully"})
         
 
     } catch (error) {
-        return res.status(500).json({success:false,message:"Failed to delete seciton"})
+        return res.status(500).json({success:false,message:error.message})
     }
 }
 
