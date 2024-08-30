@@ -226,12 +226,7 @@ const changePassword = async (req,res) =>{
     return res.status(200).json({success:true,message:"Password updated successfully",mailResponse:mailResponse})
 
 
-    //get old password 
-    // get newPassword,confirmNewPassword
-    // validation
-    // updatePassword in db
-    //send mail password Updated
-    //return password
+
 }
 
 module.exports = {
