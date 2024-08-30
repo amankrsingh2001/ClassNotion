@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "backend": "cd backend && nodemon index.js",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "concurrently -n \"frontend,backend\" -c \"bgBlue,bgYellow\" \"npm run frontend\" \"npm run backend\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
