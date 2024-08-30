@@ -12,14 +12,14 @@ import CardImage from "../components/core/HomePage/CardImage";
 import { LogoCard } from "../components/core/HomePage/LogoCard";
 import CardData from '../data/CardData'
 import ExploreMore from "../components/core/HomePage/ExploreMore";
-console.log(CardData)
+
 
 const Home = () => {
   useEffect(() => {
     AOS.init({
       duration: 1000,
       delay: 0,
-      offset: 280,
+      offset: 400,
       mirror: false,
     });
   }, []);
