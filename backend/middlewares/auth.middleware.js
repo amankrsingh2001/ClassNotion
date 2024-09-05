@@ -11,7 +11,7 @@ const auth = async( req , res , next )=>{
        try {
          const word = token.split(' ');
          const jwtToken = word[1];
-         const token_decode = jwt.verify(jwtToken,process.env.JWT_SECRET)
+         const token_decode = jwt.verify(jwtToken, process.env.JWT_SECRET)
          req.authorization = token_decode
          req.user = token_decode // temprory added to check the user 
          next()

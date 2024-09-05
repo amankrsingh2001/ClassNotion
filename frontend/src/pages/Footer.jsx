@@ -1,4 +1,4 @@
-import { Block } from "../components/core/Footer/Block";
+import { Block } from "../components/Common/Block";
 import Logo from "../assets/Logo/Logo-Small-Light.png";
 import { FaYoutube, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 import {footerData, Plans, Community, FooterLink2} from "../data/footer-links";

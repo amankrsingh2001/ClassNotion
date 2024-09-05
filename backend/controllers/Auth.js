@@ -113,12 +113,11 @@ const login = async(req,res)=>{
     try {
         const {email,password} = req.body;
 
-            //removed populate 
         const user = await User.findOne({email})
         if(!user){
             return res.status(401).json({success:false,message:'User is not registered,Please register'})
         }
-        const validUser = await bcrypt.compare(password,user.password);
+        const validUser = await bcrypt.compare(password, user.password);
         if(!validUser){
             return res.status(401).json({success:false,message:'Password is not valid,Please enter valid password'})
         }
@@ -133,19 +132,19 @@ const login = async(req,res)=>{
             expiresIn:"2h"
         })
 
-        const sendUser = user.toObject()
-        delete sendUser.password;
-        sendUser.token = token
+        user.token = token
+        user.password = undefined;
+
 
         const options = {
             expires:new Date(Date.now()+3*24*60*60*1000),
             httpOnly:true,
             secure:true
         }
-        console.log('User logged In')
-       return res.cookie("token",token,options).status(200).json({
+        console.log('User logged In',user)
+       return res.cookie("token", token, options).status(200).json({
             success:true,
-            user:sendUser,
+            user:user,
             message:"Logged in successfully"
          })
 

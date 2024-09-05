@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HilightText } from "../HomePage/HilightText";
 import { Link } from "react-router-dom";
 import Cpabutton from "../HomePage/Cpabutton";
@@ -6,38 +6,39 @@ import { signUpValue } from "../../../data/signUpData";
 import { FaRegEye } from "react-icons/fa";
 import { value } from "../../../data/signUpData";
 
-
-
-
-
 const SignUpTemp = ({ frame, code }) => {
-
   const [active, setActive] = useState(0);
-  const [data, setData] = useState(signUpValue[0])
+  const [data, setData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
-
-  const chagneActive = (e,index) => {
+  const chagneActive = (e, index) => {
     setActive(index);
-    const text = e.target.innerText
-    const newValue = signUpValue.filter((it)=>{
-      return (it.type === text)
-    })
-    setData(newValue[0])
   };
 
-  const confirmPasswordHandler = () =>{
-    setShowConfirmPassword(!showConfirmPassword)
-    console.log('clicked')
-   
- }
 
-  const passwordHandler = () =>{
-     setShowPassword( !showPassword)
-  }
 
+  useEffect(()=>{
+    const newValue = signUpValue.filter((it, index) => {
+      return index === active;
+    });
+
+    setData(newValue[0]);
+  },[active])
+ 
+
+
+
+  const confirmPasswordHandler = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+    console.log("clicked");
+  };
+
+  const passwordHandler = () => {
+    setShowPassword(!showPassword);
+  };
+
+  if(!data) return;
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
@@ -59,7 +60,7 @@ const SignUpTemp = ({ frame, code }) => {
               {value.map((element, index) => {
                 return (
                   <p
-                    onClick={(e) => chagneActive(e,index)}
+                    onClick={(e) => chagneActive(e, index)}
                     className={`py-2 px-4 cursor-pointer ${
                       active === index
                         ? "bg-richblack-900 text-white"
@@ -73,7 +74,9 @@ const SignUpTemp = ({ frame, code }) => {
               })}
             </div>
           </div>
+              <form action="">
 
+            
           <div className="w-full flex  py-3 flex-col">
             <div className="flex md:flex-row flex-col justify-between ">
               <div className="flex flex-col md:w-[47%]">
@@ -97,21 +100,21 @@ const SignUpTemp = ({ frame, code }) => {
                   id="lastName"
                   name="lastName"
                   placeholder="Last Name"
-                   type="text"
+                  type="text"
                   className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
                 />
               </div>
             </div>
 
             <div className="flex flex-col ">
-              <label className="text-sm py-[6px]" for="email" >
+              <label className="text-sm py-[6px]" for="email">
                 Email Address <span className="text-[#EF476F]"> *</span>
               </label>
               <input
                 id="email"
                 name="email"
                 placeholder="Enter your email"
-                 type="text"
+                type="text"
                 className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
               />
             </div>
@@ -124,7 +127,8 @@ const SignUpTemp = ({ frame, code }) => {
                 <div className="md:w-[18%]">
                   <select
                     className="bg-[#161D29]  md:w-full w-[60%]  text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
-                    defaultValue="+91">
+                    defaultValue="+91"
+                  >
                     {code.map((it) => {
                       return <option>{it.code}</option>;
                     })}
@@ -135,7 +139,7 @@ const SignUpTemp = ({ frame, code }) => {
                   <input
                     id="phoneNumber"
                     name="phonenumber"
-                     type="number"
+                    type="number"
                     placeholder="123 456 789"
                     className="p-3 bg-[#161D29] w-full outline-none rounded-lg text-[#999DAA]"
                   />
@@ -146,34 +150,39 @@ const SignUpTemp = ({ frame, code }) => {
             <div className="flex md:flex-row flex-col justify-between ">
               <div className="flex flex-col md:w-[47%] ">
                 <label for="password " className="text-sm py-[6px]">
-                    Password
+                  Password
                 </label>
-               <div className="relative">
-               <input
-               
-               id="password"
-               name="password"
-               placeholder="Enter password"
-               type={`${showPassword?'text':'password'}`}
-               className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
-             />
-             <FaRegEye className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]" onClick={passwordHandler}/>
-               </div>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    type={`${showPassword ? "text" : "password"}`}
+                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                  />
+                  <FaRegEye
+                    className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
+                    onClick={passwordHandler}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col md:w-[50%] ">
                 <label for="confirmPassword " className="text-sm py-[6px]">
-                 Confirm Password
+                  Confirm Password
                 </label>
                 <div className="relative">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Enter Password"
-                   type={`${showConfirmPassword?'text':'password'}`}
-                  className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
-                />
-                <FaRegEye className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]" onClick={confirmPasswordHandler}/>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Enter Password"
+                    type={`${showConfirmPassword ? "text" : "password"}`}
+                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                  />
+                  <FaRegEye
+                    className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
+                    onClick={confirmPasswordHandler}
+                  />
                 </div>
               </div>
             </div>
@@ -187,12 +196,18 @@ const SignUpTemp = ({ frame, code }) => {
           <div>
             <Cpabutton active={true}>Sign Up</Cpabutton>
           </div>
+          </form>
         </div>
+
+       
 
         {/*section2 */}
         <div className="w-[45%] justify-center flex relative ">
           <div className="w-[75%] drop-shadow-xl relative z-[1] overflow-hidden mx-auto">
-            <img className="w-full aspect-square object-cover" src={data.image} />
+            <img
+              className="w-full aspect-square object-cover"
+              src={data.image}
+            />
           </div>
 
           <div className="w-[75%]  absolute right-14 overflow-hidden top-[24px] z-0">
