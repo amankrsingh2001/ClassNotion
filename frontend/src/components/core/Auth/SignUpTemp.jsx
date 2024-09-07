@@ -1,44 +1,76 @@
 import React, { useEffect, useState } from "react";
 import { HilightText } from "../HomePage/HilightText";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cpabutton from "../HomePage/Cpabutton";
 import { signUpValue } from "../../../data/signUpData";
 import { FaRegEye } from "react-icons/fa";
 import { value } from "../../../data/signUpData";
+import { useDispatch } from "react-redux";
+import { setSignUpData } from '../../../slices/authSlice'
+import { toast } from 'react-hot-toast';
+import { otpApi } from "../../../services/authApi";
 
 const SignUpTemp = ({ frame, code }) => {
   const [active, setActive] = useState(0);
   const [data, setData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    contactNumber: "",
+  });
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   const chagneActive = (e, index) => {
     setActive(index);
   };
 
+  const changeHandler = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const newValue = signUpValue.filter((it, index) => {
       return index === active;
     });
-
     setData(newValue[0]);
-  },[active])
+  }, [active]);
+
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log('clikced')
+    const signUpData = { ...formData, accountType: value[active].value };
+
+    const {password, confirmPassword} = signUpData;
+   if(password !== confirmPassword){
+      console.log('Bhaag yha se')
+      toast.error("false")
+      return
+   }
+
+    dispatch(setSignUpData(signUpData));
+    dispatch(otpApi(signUpData.email, navigate))
  
+  };
 
 
 
   const confirmPasswordHandler = () => {
     setShowConfirmPassword(!showConfirmPassword);
-    console.log("clicked");
   };
 
   const passwordHandler = () => {
     setShowPassword(!showPassword);
   };
 
-  if(!data) return;
+  if (!data) return;
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
@@ -74,132 +106,139 @@ const SignUpTemp = ({ frame, code }) => {
               })}
             </div>
           </div>
-              <form action="">
 
-            
-          <div className="w-full flex  py-3 flex-col">
-            <div className="flex md:flex-row flex-col justify-between ">
-              <div className="flex flex-col md:w-[47%]">
-                <label for="firstName " className="text-sm py-[6px]">
-                  First Name
+          <form onSubmit={submitHandler}>
+            <div className="w-full flex  py-3 flex-col">
+              <div className="flex md:flex-row flex-col justify-between ">
+                <div className="flex flex-col md:w-[47%]">
+                  <label htmlFor="firstName " className="text-sm py-[6px]">
+                    First Name
+                  </label>
+                  <input
+                    onChange={changeHandler}
+                    id="firstName"
+                    name="firstName"
+                    placeholder="First Name"
+                    type="text"
+                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col md:w-[50%] ">
+                  <label htmlFor="lastName" className="text-sm py-[6px]">
+                    Last Name
+                  </label>
+                  <input
+                    onChange={changeHandler}
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Last Name"
+                    type="text"
+                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col ">
+                <label className="text-sm py-[6px]" htmlFor="email">
+                  Email Address <span className="text-[#EF476F]"> *</span>
                 </label>
                 <input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="First Name"
+                  onChange={changeHandler}
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
                   type="text"
-                  className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                  className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
+                  autoComplete="email"
                 />
               </div>
 
-              <div className="flex flex-col md:w-[50%] ">
-                <label for="lastName " className="text-sm py-[6px]">
-                  Last Name
+              <div className="flex flex-col">
+                <label className="text-sm py-[6px]" htmlFor="contactNumber">
+                  Phone Number <span className="text-[#EF476F]"> *</span>
                 </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Last Name"
-                  type="text"
-                  className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
-                />
-              </div>
-            </div>
+                <div className="flex md:flex-row flex-col gap-2 justify-between">
+                  <div className="md:w-[18%]">
+                    <select
+                      className="bg-[#161D29]  md:w-full w-[60%]  text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
+                      defaultValue="+91"
+                    >
+                      {code.map((it, index) => {
+                        return <option key={index}>{it.code}</option>;
+                      })}
+                    </select>
+                  </div>
 
-            <div className="flex flex-col ">
-              <label className="text-sm py-[6px]" for="email">
-                Email Address <span className="text-[#EF476F]"> *</span>
-              </label>
-              <input
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                type="text"
-                className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-sm py-[6px]" for="phoneNumber">
-                Phone Number <span className="text-[#EF476F]"> *</span>
-              </label>
-              <div className="flex md:flex-row flex-col gap-2 justify-between">
-                <div className="md:w-[18%]">
-                  <select
-                    className="bg-[#161D29]  md:w-full w-[60%]  text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
-                    defaultValue="+91"
-                  >
-                    {code.map((it) => {
-                      return <option>{it.code}</option>;
-                    })}
-                  </select>
-                </div>
-
-                <div className="md:w-[78%]">
-                  <input
-                    id="phoneNumber"
-                    name="phonenumber"
-                    type="number"
-                    placeholder="123 456 789"
-                    className="p-3 bg-[#161D29] w-full outline-none rounded-lg text-[#999DAA]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex md:flex-row flex-col justify-between ">
-              <div className="flex flex-col md:w-[47%] ">
-                <label for="password " className="text-sm py-[6px]">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    name="password"
-                    placeholder="Enter password"
-                    type={`${showPassword ? "text" : "password"}`}
-                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
-                  />
-                  <FaRegEye
-                    className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
-                    onClick={passwordHandler}
-                  />
+                  <div className="md:w-[78%]">
+                    <input
+                      onChange={changeHandler}
+                      id="contactNumber"
+                      name="contactNumber"
+                      type="number"
+                      placeholder="123 456 789"
+                      className="p-3 bg-[#161D29] w-full outline-none rounded-lg text-[#999DAA]"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-col md:w-[50%] ">
-                <label for="confirmPassword " className="text-sm py-[6px]">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Enter Password"
-                    type={`${showConfirmPassword ? "text" : "password"}`}
-                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
-                  />
-                  <FaRegEye
-                    className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
-                    onClick={confirmPasswordHandler}
-                  />
+              <div className="flex md:flex-row flex-col justify-between ">
+                <div className="flex flex-col md:w-[47%] ">
+                  <label htmlFor="password" className="text-sm py-[6px]">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      onChange={changeHandler}
+                      id="password"
+                      name="password"
+                      placeholder="Enter password"
+                      type={`${showPassword ? "text" : "password"}`}
+                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                      autoComplete="new-password"
+                    />
+                    <FaRegEye
+                      className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
+                      onClick={passwordHandler}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:w-[50%] ">
+                  <label htmlFor="confirmPassword" className="text-sm py-[6px]">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      onChange={changeHandler}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="Enter Password"
+                      type={`${showConfirmPassword ? "text" : "password"}`}
+                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                      autoComplete="confirm-newPassword"
+                    />
+                    <FaRegEye
+                      className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
+                      onClick={confirmPasswordHandler}
+                    />
+                  </div>
                 </div>
               </div>
+              <Link to="forgotPassword">
+                <p className="text-[#47A5C5] text-xs text-end p-2 ">
+                  Forgot Password ?
+                </p>
+              </Link>
             </div>
-            <Link to="forgotPassword">
-              <p className="text-[#47A5C5] text-xs text-end p-2 ">
-                Forgot Password ?
-              </p>
-            </Link>
-          </div>
 
-          <div>
-            <Cpabutton active={true}>Sign Up</Cpabutton>
-          </div>
+            <div>
+              <button type="submit">Submit</button>
+              <Cpabutton active={true}>Sign Up</Cpabutton>
+            </div>
           </form>
         </div>
-
-       
 
         {/*section2 */}
         <div className="w-[45%] justify-center flex relative ">

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { HilightText } from "../HomePage/HilightText";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Cpabutton from "../HomePage/Cpabutton";
+import { useDispatch } from "react-redux";
+import authSlice, { setToken } from "../../../slices/authSlice";
+import axios from 'axios'
 
 const value = [
   {
@@ -13,11 +16,30 @@ const value = [
 ];
 
 const LoginTemp = ({ image, frame, title, description }) => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [active, setActive] = useState(0);
+
+  const [input, setInput] = useState({
+    email:'',
+    password:''
+  })
+  
 
   const chagneActive = (index) => {
     setActive(index);
   };
+
+const submitHandler = async() =>{
+    const fetchData = await axios.post("http://localhost:4000/api/v1/auth/login",input,{
+      withCredentials: true
+})
+    const token = fetchData.data.user.token;
+    dispatch(setToken(token))
+    // navigate('/')
+}
+
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
@@ -53,11 +75,14 @@ const LoginTemp = ({ image, frame, title, description }) => {
           </div>
 
           <div className="w-full flex gap-4 py-6 flex-col">
+            <form >
             <div className="flex flex-col ">
               <label className="text-sm py-[6px]" for="email">
                 Email Address <span className="text-[#EF476F]"> *</span>
               </label>
               <input
+              value = {input.name}
+              onChange={(e)=>setInput({...input, [e.target.name]:e.target.value})}
                 id="email"
                 name="email"
                 placeholder="Enter your email"
@@ -69,6 +94,8 @@ const LoginTemp = ({ image, frame, title, description }) => {
                 Password<span className="text-[#EF476F]"> *</span>
               </label>
               <input
+                value = {input.name}
+                onChange={(e)=>setInput({...input, [e.target.name]:e.target.value})}
                 id="password"
                 name="password"
                 placeholder="Enter your password"
@@ -80,11 +107,15 @@ const LoginTemp = ({ image, frame, title, description }) => {
                 </p>
               </Link>
             </div>
+            <div>
+            {/* <Cpabutton data={{onclickHandler:handleSubmit}} active={true}>Sign In</Cpabutton> */}
+            <Cpabutton data={submitHandler} active={true}>Sign In</Cpabutton>
+          </div>
+          </form>
           </div>
 
-          <div>
-            <Cpabutton active={true}>Sign In</Cpabutton>
-          </div>
+         
+          
         </div>
 
         {/*section2 */}

@@ -33,6 +33,7 @@ const signUp = async (req,res) =>{
             contactNumber="",
             otp
          } = req.body
+         console.log(req.body)
          
          // password and confpass check 
          if(password != confirmPassword){

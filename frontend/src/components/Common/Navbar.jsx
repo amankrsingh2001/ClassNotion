@@ -9,6 +9,8 @@ import { apiConnector } from "../../services/apiConnector";
 import { categories } from "../../services/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
+
+
 const Navbar = () => {
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
@@ -20,6 +22,8 @@ const Navbar = () => {
     fetchSubLinks();
   }, []);
 
+
+
   const fetchSubLinks = async () => {
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
@@ -30,7 +34,7 @@ const Navbar = () => {
     }
   };
 
-  const matchRoute = ( route ) => {
+  const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   };
 
@@ -56,18 +60,25 @@ const Navbar = () => {
                       <MdOutlineKeyboardArrowDown className="text-white" />
 
                       <div className="invisible flex flex-col z-20 text-white rounded-md translate-x-[-51%] translate-y-[20%] bg-richblack-600 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all duration-200 group-hover:opacity-100 lg:w-[300px]">
-                      <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-richblack-600"></div>
-                      {
-                        subLinks.length === 0?<div>Testing </div>:(
-                            subLinks.map((links, index)=>{
-                              return <Link to={`/catalog/${links.name.split(' ').join('_').toLowerCase()}`}  key={index}>
+                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-richblack-600"></div>
+                        {subLinks.length === 0 ? (
+                          <div>Testing </div>
+                        ) : (
+                          subLinks.map((links, index) => {
+                            return (
+                              <Link
+                                to={`/catalog/${links.name
+                                  .split(" ")
+                                  .join("_")
+                                  .toLowerCase()}`}
+                                key={index}
+                              >
                                 <p className="px-4 py-2">{links.name}</p>
                               </Link>
-                            })
-                      )
-                      }
+                            );
+                          })
+                        )}
                       </div>
-                      
                     </div>
                   ) : (
                     <Link to={item.path}>
@@ -108,7 +119,8 @@ const Navbar = () => {
               </button>
             </Link>
           )}
-          {token !== null && <ProfileDropDown />}
+          {token  && <ProfileDropDown />}
+
         </div>
       </div>
     </div>

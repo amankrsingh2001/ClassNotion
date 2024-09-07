@@ -14,6 +14,7 @@ import CardData from '../data/CardData'
 import ExploreMore from "../components/core/HomePage/ExploreMore";
 
 
+
 const Home = () => {
   useEffect(() => {
     AOS.init({
