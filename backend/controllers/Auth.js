@@ -75,30 +75,13 @@ const signUp = async (req,res) =>{
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
          })
 
-         const payload = {
-            email:user.email,
-            accountType:user.accountType,
-            id:user._id
-         }
-         
-         const token = jwt.sign(payload,process.env.JWT_SECRET,{
-            expiresIn:"2h"
-         })
-
          const newUser = user.toObject()
          delete newUser.password;
-         newUser.token = token;
 
-         const option = {
-            expires:new Date(Date.now()+3*24*60*60*1000),
-            httpOnly:true,
-            secure:true
-         }
-
-         res.cookie("token",token,option).status(200).json({success:true,message:"User created",user:newUser})
+         res.status(200).json({success:true,message:"User created",user:newUser})
     } catch (error) {
         console.log(error)
-        return res.status(500).json({success:false,message:"User cannot be registered. Please try again"})
+        return res.status(500).json({success:false,message:error.message})
     }
 
 }
@@ -110,7 +93,7 @@ const login = async(req,res)=>{
     if(!parsePayload.success){
         return res.status(400).json({success:false,message:"Invalid Credentials"})
     }
-
+    // No Need of confirm password
     try {
         const {email,password} = req.body;
 
@@ -142,10 +125,11 @@ const login = async(req,res)=>{
             httpOnly:true,
             secure:true
         }
-        console.log('User logged In',user)
+   
        return res.cookie("token", token, options).status(200).json({
             success:true,
             user:user,
+            token,
             message:"Logged in successfully"
          })
 

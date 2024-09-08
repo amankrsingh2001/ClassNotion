@@ -1,19 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {jwtDecode} from 'jwt-decode'
-
-let token = localStorage.getItem('token')
-let decodedToken = null;
-
-if(token){
-        decodedToken = jwtDecode(token);
-}
 
 
 const initialState = {
     signupData: null,
     loading: false,
-    token:localStorage.getItem("token") ? decodedToken : null
+    token:localStorage.getItem("token") ? localStorage.getItem('token') : null
 };
+
 
 
 // singup token setLocalStorage - 

@@ -50,7 +50,6 @@ const SignUpTemp = ({ frame, code }) => {
 
     const {password, confirmPassword} = signUpData;
    if(password !== confirmPassword){
-      console.log('Bhaag yha se')
       toast.error("false")
       return
    }

@@ -3,16 +3,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineCaretDown } from "react-icons/ai";
 import { VscDashboard, VscSignOut } from "react-icons/vsc"
 import userOnClickOutside from '../../../hooks/useOnClickOutside'
+import { Link, useNavigate } from 'react-router-dom';
+import { logOut } from '../../../services/authApi';
 
 const ProfileDropDown = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const { user } = useSelector((state)=>state.profile)
   const ref = useRef(null)
 
+
     userOnClickOutside(ref, () =>setOpen(false))
 
     if(!user) return null;
+
+
+    const logOutHandler = () =>{
+      dispatch(logOut(navigate))
+    }
 
   return (
     <button className='relative border-2 border-white z-[10] ' onClick={()=>setOpen(true)}>
@@ -32,13 +41,12 @@ const ProfileDropDown = () => {
             Dashboard
             </div>
           </Link>
-          <div onClick={()=>{
-            dispatch(logout(navigate))
-            setOpen(false)
-          }}
-          className='flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25'
+          <div className='flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25'
+            onClick={logOutHandler}
           >
+           
             <VscSignOut className="text-lg" />
+           <p className='p-[2px]'> Logout</p>
           </div>
         </div>
         )}

@@ -6,5 +6,6 @@ export const categories = {
 
 export const authApi = {
     SENDOTP_API :BASE_URL + 'auth/sendotp',
-    SIGNUP_API :BASE_URL + 'auth/signup'
+    SIGNUP_API :BASE_URL + 'auth/signup',
+    LOGIN_API: BASE_URL + 'auth/login'
 }
