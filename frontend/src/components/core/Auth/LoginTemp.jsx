@@ -98,7 +98,7 @@ const submitHandler = (e) =>{
                 placeholder="Enter your password"
                 className="p-3 bg-[#161D29] outline-none rounded-md text-[#999DAA]"
               />
-              <Link to="forgotPassword">
+              <Link to="/reset-password">
                 <p className="text-[#47A5C5] text-xs text-end p-2 ">
                   Forgot Password ?
                 </p>
@@ -112,6 +112,7 @@ const submitHandler = (e) =>{
           <button type="submit">Submit</button>
           </form>
           </div>
+
 
          
           

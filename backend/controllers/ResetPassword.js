@@ -20,7 +20,7 @@ const bcrypt = require('bcrypt')
                 new:true
             })
             
-            const url = `http://localhost:3000/update-password/${token}`
+            const url = `http://localhost:5173/update-password/${token}`
     
             await mailSender(email,"Password Reset Link",`Password Reset Link ${url}`)
             return res.status(200).json({success:true,message:"Email sent successFully, Please check email and change your password"})
@@ -33,7 +33,7 @@ const bcrypt = require('bcrypt')
     const resetPassword = async(req,res) =>{
         try {
              const {password,confirmPassword,token} = req.body
-             if(password!== confirmPassword){
+             if(password !== confirmPassword){
                 return res.status(401).json({success:false,message:"Password and confirm Password can't be different"})
              }
              const userDetails = await User.findOne({token})

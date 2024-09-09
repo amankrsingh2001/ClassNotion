@@ -54,6 +54,7 @@ const SignUpTemp = ({ frame, code }) => {
       return
    }
 
+   
     dispatch(setSignUpData(signUpData));
     dispatch(otpApi(signUpData.email, navigate))
  
@@ -225,11 +226,7 @@ const SignUpTemp = ({ frame, code }) => {
                   </div>
                 </div>
               </div>
-              <Link to="forgotPassword">
-                <p className="text-[#47A5C5] text-xs text-end p-2 ">
-                  Forgot Password ?
-                </p>
-              </Link>
+           
             </div>
 
             <div>

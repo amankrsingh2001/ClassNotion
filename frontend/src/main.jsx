@@ -6,13 +6,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
-import Resetpassword from "./pages/ResetPassword.jsx";
-import {Provider } from 'react-redux'
+import { Provider } from "react-redux";
 import { store } from "./store/store.jsx";
-import {Toaster} from 'react-hot-toast'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import VerifyEmail from "./components/core/Auth/VerifyEmail.jsx";
+import UpdatePassword from "./components/core/Auth/UpdatePassword.jsx";
+import ResetPasswordTemp from "./components/core/Auth/ResetPasswordTemp.jsx";
+import ConfirmChange from "./components/core/Auth/ConfirmChange.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -22,7 +24,8 @@ const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-      },{
+      },
+      {
         path: "/login",
         element: <Login />,
       },
@@ -31,16 +34,23 @@ const Router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: "/resetPassword",
-        element: <Resetpassword />,
+        path: "/verify-email",
+        element: <VerifyEmail />,
       },
-      {
-        path:'/verify-email',
-        element:<VerifyEmail/>
-      }
     ],
   },
-  
+  {
+    path: "/reset-password",
+    element: <ResetPasswordTemp />,
+  },
+  {
+    path: "/update-password/:id",
+    element: <UpdatePassword />,
+  },
+  {
+    path:'/confirmChange',
+    element: <ConfirmChange/>
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(
@@ -49,7 +59,7 @@ createRoot(document.getElementById("root")).render(
       <ToastContainer />
       <StrictMode>
         <App />
-        <Toaster/>
+        <Toaster />
       </StrictMode>
     </RouterProvider>
   </Provider>

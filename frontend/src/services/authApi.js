@@ -6,7 +6,7 @@ import { setUser } from "../slices/profileSlice";
 import { signUpValue } from '../data/signUpData';
 
 
-const { SENDOTP_API, SIGNUP_API, LOGIN_API } = authApi;
+const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD } = authApi;
 
 export function otpApi(email, navigate) {
   return async (dispatch) => {
@@ -16,10 +16,9 @@ export function otpApi(email, navigate) {
         { email },
         { withCredentials: true }
       );
-      console.log(response, "Response");
       navigate("/verify-email");
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 }
@@ -51,8 +50,6 @@ export function signup(data, navigate) {
         },
         { withCredentials: true }
       );
-
-      dispatch(setUser(response.data.user));
 
       if (!response.data.success) {
         console.log("Failed to get Response",response);
@@ -90,6 +87,34 @@ export function setLogin(data, navigate) {
       navigate('/login')
     }
   };
+}
+
+export function resetPasswordToken(email, setSentEmail){
+  return async(dispatch)=>{
+    try {
+      const response =await axios.post(RESET_PASSWORD_TOKEN, {email})
+      console.log(response)
+      setSentEmail(true)
+    } catch (error) {
+        console.log(error)
+    }
+   
+  }
+}
+
+export function resetPassword(password, confirmPassword, token, navigate){
+  return async(dispatch)=>{
+      try {
+        const response = await axios.post(RESET_PASSWORD, {password, confirmPassword, token})
+
+        if(!response.data.success){
+          throw new Error("Failed to change password")
+        }
+        navigate('/confirmChange')
+      } catch (error) {
+          console.log(error, error.message)
+      }
+  } 
 }
 
 export function logOut(navigate){
