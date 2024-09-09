@@ -9,8 +9,6 @@ import SignUp from "./pages/SignUp.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.jsx";
 import { Toaster } from "react-hot-toast";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import VerifyEmail from "./components/core/Auth/VerifyEmail.jsx";
 import UpdatePassword from "./components/core/Auth/UpdatePassword.jsx";
 import ResetPasswordTemp from "./components/core/Auth/ResetPasswordTemp.jsx";
@@ -54,13 +52,10 @@ const Router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={Router}>
-      <ToastContainer />
-      <StrictMode>
-        <App />
-        <Toaster />
-      </StrictMode>
-    </RouterProvider>
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={Router} />
+      <Toaster />
+    </Provider>
+  </StrictMode>
 );

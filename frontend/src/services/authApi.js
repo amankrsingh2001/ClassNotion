@@ -4,6 +4,7 @@ import { apiConnector } from "./apiConnector";
 import { setSignUpData, setToken } from "../slices/authSlice";
 import { setUser } from "../slices/profileSlice";
 import { signUpValue } from '../data/signUpData';
+import toast from "react-hot-toast";
 
 
 const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD } = authApi;
@@ -76,7 +77,7 @@ export function setLogin(data, navigate) {
       if(!response.data.success){
         throw new Error(response.data.message)
       }
-      console.log(response)
+      toast.success("Logged In Successfully")
 
       window.localStorage.setItem("token", response.data.token)
       dispatch(setToken(response.data.token))
@@ -84,6 +85,7 @@ export function setLogin(data, navigate) {
       navigate('/')
     } catch (error) {
       console.log(error.message)
+      toast.error('Failed to login')
       navigate('/login')
     }
   };

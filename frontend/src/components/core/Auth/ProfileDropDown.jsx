@@ -24,7 +24,7 @@ const ProfileDropDown = () => {
     }
 
   return (
-    <button className='relative border-2 border-white z-[10] ' onClick={()=>setOpen(true)}>
+    <button className='relative  ' onClick={()=>setOpen(true)}>
       <div className='flex items-center gap-x-1'>
         <img src={user?.image} alt={user?.firstName} className='aspect-square w-[30px] rounded-full object-cover'/>
         <AiOutlineCaretDown className="text-sm text-richblack-100" />

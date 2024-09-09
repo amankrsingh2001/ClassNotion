@@ -15,12 +15,10 @@ const value = [
 ];
 
 const LoginTemp = ({ image, frame, title, description }) => {
-  const {token} = useSelector(state=>state.auth)
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const [active, setActive] = useState(0);
-  console.log(typeof token,"This is the token")
-  
+
 
   const [input, setInput] = useState({
         email:'',
