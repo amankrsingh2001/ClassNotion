@@ -13,6 +13,8 @@ import VerifyEmail from "./components/core/Auth/VerifyEmail.jsx";
 import UpdatePassword from "./components/core/Auth/UpdatePassword.jsx";
 import ResetPasswordTemp from "./components/core/Auth/ResetPasswordTemp.jsx";
 import ConfirmChange from "./components/core/Auth/ConfirmChange.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/Contact.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -22,6 +24,15 @@ const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      { 
+        path:'/about',
+        element:<About/>
+
+      },
+      {
+        path:'/contact-us',
+        element:<Contact/>
       },
       {
         path: "/login",

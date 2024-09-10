@@ -17,9 +17,14 @@ export function otpApi(email, navigate) {
         { email },
         { withCredentials: true }
       );
+      if(!response.data.success){
+        toast.error('Failed to sent OTP')
+      }
+      toast.success('OTP sent successfully')
       navigate("/verify-email");
     } catch (error) {
-      console.log(error);
+      console.log(error); // remove console
+      toast.error('Something Went Wrong')
     }
   };
 }
@@ -54,10 +59,13 @@ export function signup(data, navigate) {
 
       if (!response.data.success) {
         console.log("Failed to get Response",response);
+        toast.error('Failed to create User')
       }
+      toast.success("User Created Successfully")
       navigate("/login");
     } catch (error) {
-      console.log(error.message); //No console
+      console.log(error.message); //Remove console
+      toast.error('Something Went Wrong ')
       navigate("/signup");
     }
   };
@@ -77,11 +85,11 @@ export function setLogin(data, navigate) {
       if(!response.data.success){
         throw new Error(response.data.message)
       }
-      toast.success("Logged In Successfully")
-
+      
       window.localStorage.setItem("token", response.data.token)
       dispatch(setToken(response.data.token))
       dispatch(setUser(response.data.user))
+      toast.success("Logged In Successfully")
       navigate('/')
     } catch (error) {
       console.log(error.message)
@@ -97,8 +105,13 @@ export function resetPasswordToken(email, setSentEmail){
       const response =await axios.post(RESET_PASSWORD_TOKEN, {email})
       console.log(response)
       setSentEmail(true)
+      if(!response.data.success){
+        toast.error('Failed to sent Email')
+      }
+      toast.success('Email sent successfully')
     } catch (error) {
-        console.log(error)
+        console.log(error) //remove console
+        toast.error("Something Went Wrong")
     }
    
   }
@@ -110,22 +123,31 @@ export function resetPassword(password, confirmPassword, token, navigate){
         const response = await axios.post(RESET_PASSWORD, {password, confirmPassword, token})
 
         if(!response.data.success){
+          toast.error('Failed to change password')
           throw new Error("Failed to change password")
         }
+        toast.success('Reset password successfully')
         navigate('/confirmChange')
       } catch (error) {
-          console.log(error, error.message)
+          console.log(error, error.message) //remove console
+          toast.error('Something went wrong')
       }
   } 
 }
 
 export function logOut(navigate){
   return async(dispatch)=>{
-    dispatch(setToken(null))
-    dispatch(setSignUpData(null))
-    dispatch(setUser(null))
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    navigate('/')
+    try {
+      dispatch(setToken(null))
+      dispatch(setSignUpData(null))
+      dispatch(setUser(null))
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      toast.success("Logged out successfully")
+      navigate('/')
+    } catch (error) {
+      console.log(error)
+      toast.error("Something went wrong")
+    }
   }
 }

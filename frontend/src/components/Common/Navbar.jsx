@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { apiConnector } from "../../services/apiConnector";
 import { categories } from "../../services/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import toast from "react-hot-toast";
 
 
 
@@ -28,8 +29,8 @@ const Navbar = () => {
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
       setSubLinks(result.data.allCategory);
-      console.log(result.data.allCategory);
     } catch (error) {
+      toast.error('Something went wrong')
       console.log("Failed to fetch the category list", error);
     }
   };
