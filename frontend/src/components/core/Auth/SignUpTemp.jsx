@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HilightText } from "../HomePage/HilightText";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Cpabutton from "../HomePage/Cpabutton";
 import { signUpValue } from "../../../data/signUpData";
 import { FaRegEye } from "react-icons/fa";

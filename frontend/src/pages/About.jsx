@@ -1,6 +1,7 @@
 import AboutCard from "../components/core/About.jsx/AboutCard";
 import AboutDetail from "../components/core/About.jsx/AboutDetail";
 import AboutGrid from "../components/core/About.jsx/AboutGrid";
+import ContactForm from "../components/core/About.jsx/ContactForm";
 
 const About = () => {
   return (
@@ -106,16 +107,16 @@ const About = () => {
 
             {/* section-4 */}
 
-            <div className="w-full bg-richblack-800">
+            <div className="w-full bg-richblack-800 lg:px-4 p-8">
                 <AboutDetail/>
             </div>
 
 
             {/* section-5 */}
 
-            <div className="w-full  flex justify-center items-center ">
+            <div className="flex flex-col gap-5 justify-center items-center ">
                 <AboutGrid/>
-                
+                <ContactForm/>                
             </div>
 
 

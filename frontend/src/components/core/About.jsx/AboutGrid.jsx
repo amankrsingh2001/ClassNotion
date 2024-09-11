@@ -51,12 +51,12 @@ const AboutGrid = () =>{
                     {
 
                         card.order < 0 ?( 
-                        <div className="p-4 flex flex-col gap-4">
+                        <div className="py-4 flex flex-col gap-4">
                             <div >
-                                <h1 className="text-4xl">{card.heading}</h1>
-                                <HilightText font={'text-4xl'} text={card.hilightText}/>
+                                <h1 className="text-md lg:text-4xl">{card.heading}</h1>
+                                <HilightText font={'text-md lg:text-4xl'} text={card.hilightText}/>
                             </div>
-                            <p className="text-[#838894] text-lg font-inter text-start">{card.description}</p>
+                            <p className="text-[#838894] text-sm lg:text-lg font-inter text-start">{card.description}</p>
                             <Link to={card.BtnLink}>
                                 <button className="bg-yellow-100 py-2 px-3 rounded-md text-black">{card.BtnText }</button>
                             </Link>

@@ -22,8 +22,8 @@ const AboutDetail = () =>{
         {
             Details.map((detail, index)=>{
                 return (<div key={index}>
-                    <h1 className="text-4xl tracking-wide text-center">{detail.count}</h1>
-                    <p className="tr text-sm tracking-wider text-[#585D69] py-2 text-center"> {detail.name}</p>
+                    <h1 className="lg:text-4xl text-2xl tracking-wide text-center">{detail.count}</h1>
+                    <p className="lg:text-sm text-xs tracking-wider text-[#585D69] py-2 text-center"> {detail.name}</p>
                 </div>)
             })
         }
