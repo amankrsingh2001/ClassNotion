@@ -15,6 +15,11 @@ import ResetPasswordTemp from "./components/core/Auth/ResetPasswordTemp.jsx";
 import ConfirmChange from "./components/core/Auth/ConfirmChange.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Myprofile from "./components/core/Dashboard/Myprofile.jsx";
+import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses.jsx";
+import PrivateRoute from './components/core/Auth/PrivateRoute';
+import Setting from "./components/core/Dashboard/Setting.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -29,6 +34,24 @@ const Router = createBrowserRouter([
         path:'/about',
         element:<About/>
 
+      },
+      {
+        path:'/dashboard',
+        element:<PrivateRoute>
+            <Dashboard/>
+        </PrivateRoute>,
+        children:[
+          {
+            path:'my-profile',
+            element:<Myprofile/>
+          },{
+            path:'enrolled-courses',
+            element:<EnrolledCourses/>
+          },{
+            path:"setting",
+            element:<Setting/>
+          }
+        ]
       },
       {
         path:'/contact-us',

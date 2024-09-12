@@ -15,7 +15,7 @@ const bcrypt = require('bcrypt')
             const token = crypto.randomUUID();
     
             const updatedDetails = await User.findOneAndUpdate({email},{token:token,
-                resetPasswordExpires:Date.now()+ 5*60*1000
+                resetPasswordExpires:Date.now() + 5*60*1000
             },{
                 new:true
             })

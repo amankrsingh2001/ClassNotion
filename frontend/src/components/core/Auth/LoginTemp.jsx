@@ -122,7 +122,7 @@ const submitHandler = (e) =>{
             <img className="" src={image} />
           </div>
 
-          <div className="w-[full] absolute right-[18px] top-[24px] z-0">
+          <div className="w-[full] absolute right-[36px] top-[24px] z-0">
             <img className="" src={frame} />
           </div>
         </div>

@@ -35,7 +35,7 @@ export const sidebarLinks = [
     icon: "VscMortarBoard",
   },
   {
-    id: 6,
+    id: 7,
     name: "Purchase History",
     path: "/dashboard/purchase-history",
     type: ACCOUNT_TYPE.STUDENT,

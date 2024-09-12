@@ -87,6 +87,7 @@ export function setLogin(data, navigate) {
       }
       
       window.localStorage.setItem("token", response.data.token)
+      window.localStorage.setItem("user",JSON.stringify(response.data.user))
       dispatch(setToken(response.data.token))
       dispatch(setUser(response.data.user))
       toast.success("Logged In Successfully")
