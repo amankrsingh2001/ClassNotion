@@ -82,10 +82,10 @@ const getUserDetails = async(req, res)=>{
 
 const updateDisplayPicture = async(req, res)=>{
     try {
-        console.log("Control is reaching herer")
         const displayPicture = req.files.displayPicture
 
         const userId = req.user.id;
+        console.log(userId)
         const image = await uploadOnCloudinary(displayPicture,process.env.FOLDER_NAME,1000,1000)
         const updateProfile = await User.findByIdAndUpdate(userId,{
             image:image.secure_url

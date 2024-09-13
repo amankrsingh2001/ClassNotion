@@ -11,3 +11,7 @@ export const authApi = {
     RESET_PASSWORD_TOKEN : BASE_URL + "auth/reset-password-token",
     RESET_PASSWORD: BASE_URL + 'auth/reset-password'
 }
+
+export const profileApi = {
+    UPDATE_DISPLAY_API : "http://localhost:4000/api/v1/profile/updateDisplayPicture"
+}

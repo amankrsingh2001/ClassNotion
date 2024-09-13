@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authApi } from "./api";
+import { authApi, profileApi } from "./api";
 import { apiConnector } from "./apiConnector";
 import { setSignUpData, setToken } from "../slices/authSlice";
 import { setUser } from "../slices/profileSlice";
@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 
 const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD } = authApi;
+const {  UPDATE_DISPLAY_API } = profileApi
 
 export function otpApi(email, navigate) {
   return async (dispatch) => {
@@ -85,7 +86,7 @@ export function setLogin(data, navigate) {
       if(!response.data.success){
         throw new Error(response.data.message)
       }
-      
+      console.log(response.data.user)
       window.localStorage.setItem("token", response.data.token)
       window.localStorage.setItem("user",JSON.stringify(response.data.user))
       dispatch(setToken(response.data.token))
@@ -152,3 +153,29 @@ export function logOut(navigate){
     }
   }
 }
+
+export function UpdateDispayPicture(formData){
+    return async(dispatch)=>{
+      try{
+
+        const File = formData
+        const token = localStorage.getItem('token')
+        const response = await axios.put(UPDATE_DISPLAY_API, File,{
+          headers:{
+            'Authorization': `Bearer ${token}`,
+          }
+        })
+        if(!response.data.success){
+          toast.error('Failed to update Profile')
+        }
+        const data = JSON.parse(localStorage.getItem('user'))
+        data.image = response.data.data.image
+        localStorage.setItem('user',JSON.stringify(data));
+        toast.success("Profile updated")
+      }catch(error){
+        console.log('error***************')
+        console.log(error)
+        toast.error("Something went wrong")
+      }
+    }
+} 

@@ -97,7 +97,7 @@ const login = async(req,res)=>{
     try {
         const {email,password} = req.body;
 
-        const user = await User.findOne({email})
+        const user = await User.findOne({email}).populate('additionalDetails')
         if(!user){
             return res.status(401).json({success:false,message:'User is not registered,Please register'})
         }

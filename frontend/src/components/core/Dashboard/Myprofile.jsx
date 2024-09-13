@@ -7,66 +7,73 @@ const Myprofile = ()=>{
     const navigate = useNavigate()
 
 
-    return <div className="text-white">
-             
-                    <h1>My Profile</h1>
 
-                    <div className="">
-                        <div>
-                            <img src={user.image} alt={`profile-${user.firstName}`}
-                                className="aspect-square w-[78px] rounded-full object-cover"
+    return <div className="text-white h-full flex flex-col items-start gap-8 justify-center  w-[80%] p-4 ">
+             
+                    <h1 className="text-4xl font-medium">My Profile</h1>
+
+                    <div className="p-4  flex justify-between w-full  bg-richblack-800">
+                        <div className="flex flex-row gap-2 items-center">
+                            <img src={user?.image} alt={`profile-${user.firstName}`}
+                                className="aspect-square w-[68px] p-2 rounded-full object-cover"
                             />
                             <div>
-                            <p>{user?.firstName +" "+ user?.lastName }</p>
-                            <p>{user.email}</p>
+                            <p className="text-xl text-[#F1F2FF] font-medium">{user?.firstName +" "+ user?.lastName }</p>
+                            <p className="text-[#838894] text-sm">{user.email}</p>
                             </div>
                         </div>
-                        <IconBtn  text="Edit" onclick={()=>{navigate('/dashboard/settings')}}/>
-                            <button onClick={()=>navigate('setting')}>Salaman clicked</button>
+                        <IconBtn  text="Edit" onclick={()=>{navigate('/dashboard/setting')}}/>
                        
                     </div>
 
                         {/* section2 */}
-                        <div>
-                            <div>
-                            <p>About</p>
-                            <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')}/>
+                        <div className=" p-5 flex justify-between w-full bg-richblack-800">
+                            <div className="flex flex-col">
+                            <p className="text-xl text-[#F1F2FF] font-medium">About</p>
+                            <p className="text-[#838894] text-sm">{user?.additionalDetail?.about || "Write something about Yourself"}</p>
                             </div>
-                            <p>Write something about yourself</p>
+                            
+                           
                              {/*  {user?.additionalDetail?.about} fix the above one */}
+                             <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')}/>
                         </div>
                         {/* section 3 */}
-                        <div>
-                            <div>
-                            <p>Personal Details</p>
-                            <IconBtn text="edit" onclick={()=>navigate('/dashboard/setting')}/>
+                       
+                        <div className="flex justify-between  flex-col gap-4 p-3 w-full  bg-richblack-800">
+                            <div className="flex justify-between p-2 items-center">
+                            <p className="text-xl text-[#F1F2FF] font-medium " >Personal Details</p>
+                            <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')}/>
                             </div>
-                            <div>
-                                <p>First Name</p>
-                                <p>First Name Value</p>
+                            <div className="grid grid-cols-2 gap-5 p-3">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md text-[#F1F2FF] font-medium">First Name</p>
+                                <p className="text-[#838894] text-md">{user?.firstName || "First Name Value"}</p>
                             </div>
-                            <div>
-                                <p>Email </p>
-                                <p>Email Value</p>
-                            </div>
-
-                            <div>
-                                <p>Gender </p>
-                                <p>Gender Value</p>
-                            </div>
-                            <div>
-                                <p>Last name</p>
-                                <p>Last Name Value</p>
-                            </div>
-                            <div>
-                                <p>Phone Number</p>
-                                <p>Phone Number Value</p>
-                            </div>
-                            <div>
-                                <p>Date of Birth</p>
-                                <p>DOB Value</p>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md text-[#F1F2FF] font-medium">Email </p>
+                                <p className="text-[#838894] text-md">{user?.email || "Add your Email"}</p>
                             </div>
 
+                            <div className="flex flex-col gap-1" >
+                                <p className="text-md text-[#F1F2FF] font-medium">Gender </p>
+                                <p className="text-[#838894] text-md">{user?.gender || "Enter Your Gender"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md text-[#F1F2FF] font-medium">Last name</p>
+                                <p className="text-[#838894] text-md">{user?.lastName || "Last Name Value"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md text-[#F1F2FF] font-medium">Phone Number</p>
+                                <p className="text-[#838894] text-md"Phone Number> {user?.contactNumber || "Add your contact"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md text-[#F1F2FF] font-medium">Date of Birth</p>
+                                <p className="text-[#838894] text-md"Phone Number>{user.dateofBirth || "Add your Date Of Birth"}</p>
+                            </div>
+
+                            </div>
+                           
+                         
                         </div>
 
     </div>

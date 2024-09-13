@@ -17,12 +17,7 @@ const Sidebar = () =>{
     const {user} = useSelector(state=>state.profile)
     const [confirmationModal, setConfirmationModal] = useState(null)
 
-
-
-
-
     return <div>
-
     <div className='h-[calc(100vh-3.5rem)] flex flex-col min-w-[200px] border-r-richblack-700 border-t-richblack-700 border-r-[1px] bg-richblack-800 text-white py-10'>
         <div className='flex flex-col gap-2'>
             {

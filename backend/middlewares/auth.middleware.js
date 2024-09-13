@@ -4,7 +4,6 @@ require("dotenv").config()
 const auth = async( req , res , next )=>{
     try {
         const token =  req.headers.authorization
-      
         if(!token){
             res.status(401).json({msg:"Token not found"})
         }
@@ -12,13 +11,13 @@ const auth = async( req , res , next )=>{
          const word = token.split(' ');
          const jwtToken = word[1];
          const token_decode = jwt.verify(jwtToken, process.env.JWT_SECRET)
+         console.log(token_decode)
          req.authorization = token_decode
          req.user = token_decode // temprory added to check the user 
          next()
        } catch (error) {
             return res.status(401).json({success:false,message:'Token is invalid'})
        }
-    
     } catch (error) {
         return res.status(400).json({
             success:false,

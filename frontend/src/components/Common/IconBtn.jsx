@@ -1,5 +1,4 @@
 const IconBtn = ({text, onclick, children, outline = false, customClasses, type,disabled}) =>{
-    console.log(text)
     return <button
     className="text-white"
     disabled={disabled}
@@ -7,8 +6,8 @@ const IconBtn = ({text, onclick, children, outline = false, customClasses, type,
     >
         {
             children ?(<>
-                <span className="text-white">{text}</span>{children}
-            </>):(text)
+                <span className="text-white bg-yellow-50">{text}</span>
+            </>):(<span className="bg-yellow-50 px-8 py-3 rounded-xl text-black">{text}</span>)
         }
     </button>
 }
