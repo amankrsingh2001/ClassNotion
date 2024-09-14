@@ -7,8 +7,9 @@ import { signUpValue } from '../data/signUpData';
 import toast from "react-hot-toast";
 
 
-const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD } = authApi;
-const {  UPDATE_DISPLAY_API } = profileApi
+const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD, CHANGE_PASSWORD } = authApi;
+const {  UPDATE_DISPLAY_API, UPDATE_ABOUT_API } = profileApi
+
 
 export function otpApi(email, navigate) {
   return async (dispatch) => {
@@ -179,3 +180,58 @@ export function UpdateDispayPicture(formData){
       }
     }
 } 
+
+export function updateAbout(aboutData){
+  return async(dispatch)=>{
+    try {
+      const {
+        contactNumber,
+        about,
+        dateOfBirth,
+        profession,
+        gender
+      } = aboutData
+      const token = localStorage.getItem('token')
+        const response = await axios.put(UPDATE_ABOUT_API,{
+          contactNumber,
+          about,
+          dateOfBirth,
+          profession,
+          gender
+        } , {
+          headers:{
+            'Authorization': `Bearer ${token}`,
+          }
+        })
+        if(response.data.success){
+          toast.success("Successfully Updated your About")
+        }
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went Wrong')
+    }
+  }
+}
+
+export function changeNewPassword(formData){
+  return async(dispatch)=>{
+    try {
+      const {password, newPassword} = formData;
+      const token = localStorage.getItem('token')
+        const response = await axios.post(CHANGE_PASSWORD ,{
+          password,
+          newPassword
+        },{
+          headers:{
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        if(response.data.success){
+          toast.success("Updated Password successfully")
+        }
+    } catch (error) {
+        console.log(error)
+        toast.error('Something went wrong')
+    }
+  }
+}

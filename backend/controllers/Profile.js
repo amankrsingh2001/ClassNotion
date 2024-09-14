@@ -6,7 +6,8 @@ const { uploadOnCloudinary } = require('../utils/imageUploader');
 
 const updateProfile = async(req,res) =>{
     try {
-        const {dateOfBirth="" ,about="", contactNumber="", gender} = req.body
+        const {dateOfBirth="" ,about="", contactNumber="", gender, profession} = req.body
+        console.log("************************", about)
 
         const userId = req.user.id || req.authorization.id;
 
@@ -26,6 +27,7 @@ const updateProfile = async(req,res) =>{
         profileDetails.about = about;
         profileDetails.gender = gender;
         profileDetails.contactNumber = contactNumber;
+        profileDetails.profession = profession
 
        await profileDetails.save();
 

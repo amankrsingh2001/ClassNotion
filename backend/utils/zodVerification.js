@@ -21,10 +21,8 @@ const loginValidation = zod.object({
 })
 
 const changePasswordValidation = zod.object({
-    email:zod.string().email(),
     password:zod.string().min(5).max(20).optional(),
     newPassword:zod.string().min(5).max(20).optional(),
-    confirmNewPassword:zod.string().min(5).max(20).optional()
 })
 
 const createCategoryValidation = zod.object({

@@ -177,34 +177,37 @@ const sendOtp = async (req,res) =>{
 
 const changePassword = async (req,res) =>{
     //get data from req.body
-    const createPayload = req.authorization || req.user;
+    const createPayload = req.body
+    console.log(req.body)
+    const userDetails = req.authorization || req.user
     const parsePayload = changePasswordValidation.safeParse(createPayload)
+
     if(!parsePayload.success){
         return res.status(400).json({success:false, message:"Invalid credentials" })
     }
 
-    const user = await User.findOne({email:createPayload.email})
+    const user = await User.findOne({_id:userDetails.id})
 
     if(!user){
         return res.status(401).json({success:false,message:"User does not exist"})
     }
 
-    const validUser = await  bcrypt.compare(createPayload.password,user.password);
+
+
+    const validUser = await bcrypt.compare(createPayload.password, user.password);
+
     if(!validUser){
         return res.status(401).json({success:false,message:'Invalid credentials'})
     }
 
     // scope for improvement 
-    if(createPayload.newPassword !== createPayload.confirmNewPassword){
-        return res.status(401).json({success:false,message:"password and Confirm Password didn't match"})
-    }
 
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(createPayload.newPassword,salt);
 
-    const updatedUserDetils = await User.findOneAndUpdate({ email:createPayload.email },{ password:hashedPassword },{ new:true })
-     const mailResponse = await mailSender(updatedUserDetils.email,'Reset Password',passwordUpdated(updatedUserDetils.email,
-        `Password updated Successfully for ${updatedUserDetils.firstName} ${updatedUserDetils.lastName}`))
+    const updatedUserDetils = await User.findOneAndUpdate({ _id:userDetails.id },{ password:hashedPassword },{ new:true })
+     const mailResponse = await mailSender(updatedUserDetils.email,'Reset Password',
+        `Password updated Successfully for ${updatedUserDetils.firstName} ${updatedUserDetils.lastName}`)
   
 
     return res.status(200).json({success:true,message:"Password updated successfully",mailResponse:mailResponse})

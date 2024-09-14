@@ -1,10 +1,39 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import IconBtn from "../../Common/IconBtn"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { profileApi } from "../../../services/api"
+import { setUser } from "../../../slices/profileSlice"
 
-const Myprofile = ()=>{
+
+
+
+const Myprofile = () => {
     const {user} = useSelector(state =>state.profile)
+    const [userData, setUserData] = useState({})
     const navigate = useNavigate()
+    const { GET_USER_INFO } = profileApi
+    const dispatch = useDispatch()
+
+
+
+        const getUserDetails = async() =>{
+            const token = localStorage.getItem('token')
+            const response = await axios.get(GET_USER_INFO,{
+                headers:{
+                  "Authorization": `Bearer ${token}`
+                }
+              })
+              console.log(response.data)
+              localStorage.setItem('user',JSON.stringify(response.data.userDetail))
+                dispatch(setUser(response.data.userDetail))
+         
+        }
+
+        useEffect(()=>{
+            getUserDetails()
+        }, [])
 
 
 
@@ -30,7 +59,7 @@ const Myprofile = ()=>{
                         <div className=" p-5 flex justify-between w-full bg-richblack-800">
                             <div className="flex flex-col">
                             <p className="text-xl text-[#F1F2FF] font-medium">About</p>
-                            <p className="text-[#838894] text-sm">{user?.additionalDetail?.about || "Write something about Yourself"}</p>
+                            <p className="text-[#838894] text-sm">{user?.additionalDetails?.about || "Write something about Yourself"}</p>
                             </div>
                             
                            
@@ -50,25 +79,26 @@ const Myprofile = ()=>{
                                 <p className="text-[#838894] text-md">{user?.firstName || "First Name Value"}</p>
                             </div>
                             <div className="flex flex-col gap-1">
-                                <p className="text-md text-[#F1F2FF] font-medium">Email </p>
-                                <p className="text-[#838894] text-md">{user?.email || "Add your Email"}</p>
+                                <p className="text-md text-[#F1F2FF] font-medium">Last name</p>
+                                <p className="text-[#838894] text-md">{user?.lastName || "Last Name Value"}</p>
                             </div>
 
                             <div className="flex flex-col gap-1" >
                                 <p className="text-md text-[#F1F2FF] font-medium">Gender </p>
-                                <p className="text-[#838894] text-md">{user?.gender || "Enter Your Gender"}</p>
+                                <p className="text-[#838894] text-md">{user?.additionalDetails?.gender || "Enter Your Gender"}</p>
                             </div>
                             <div className="flex flex-col gap-1">
-                                <p className="text-md text-[#F1F2FF] font-medium">Last name</p>
-                                <p className="text-[#838894] text-md">{user?.lastName || "Last Name Value"}</p>
+                                <p className="text-md text-[#F1F2FF] font-medium">Email </p>
+                                <p className="text-[#838894] text-md">{user?.email || "Add your Email"}</p>
                             </div>
+                      
                             <div className="flex flex-col gap-1">
                                 <p className="text-md text-[#F1F2FF] font-medium">Phone Number</p>
-                                <p className="text-[#838894] text-md"Phone Number> {user?.contactNumber || "Add your contact"}</p>
+                                <p className="text-[#838894] text-md"> {user?.additionalDetails?.contactNumber || "Add your contact"}</p>
                             </div>
                             <div className="flex flex-col gap-1">
                                 <p className="text-md text-[#F1F2FF] font-medium">Date of Birth</p>
-                                <p className="text-[#838894] text-md"Phone Number>{user.dateofBirth || "Add your Date Of Birth"}</p>
+                                <p className="text-[#838894] text-md">{user?.additionalDetails?.dateOfBirth || "Add your Date Of Birth"}</p>
                             </div>
 
                             </div>
