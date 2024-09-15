@@ -20,6 +20,7 @@ import Myprofile from "./components/core/Dashboard/Myprofile.jsx";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses.jsx";
 import PrivateRoute from './components/core/Auth/PrivateRoute';
 import Setting from "./components/core/Dashboard/Setting.jsx";
+import Cart from "./components/core/Dashboard/Cart/Cart.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -50,6 +51,9 @@ const Router = createBrowserRouter([
           },{
             path:"setting",
             element:<Setting/>
+          },{
+            path:"cart",
+            element:<Cart/>
           }
         ]
       },

@@ -8,3 +8,16 @@ export const ACCOUNT_TYPE = {
     DRAFT: "Draft",
     PUBLISHED: "Published",
   }
+
+  export const COURSES_DATA =[
+    {
+      status : "All",
+    },
+    {
+      status : "Pending",
+    },
+    {
+       status :"Completed"
+    }
+   
+  ]

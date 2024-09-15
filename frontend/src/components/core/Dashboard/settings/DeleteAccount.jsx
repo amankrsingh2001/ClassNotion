@@ -1,11 +1,11 @@
 import axios from "axios";
 import { RiDeleteBin6Line } from "react-icons/ri"
 import { useNavigate } from 'react-router-dom';
-import { profileApi } from "../../../services/api";
+import { profileApi } from "../../../../services/api";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../../slices/profileSlice";
-import { setToken } from "../../../slices/authSlice";
+import { setUser } from "../../../../slices/profileSlice";
+import { setToken } from "../../../../slices/authSlice";
 
 const DeleteAccount = () =>{
     const dispatch = useDispatch()

@@ -2,11 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { updateAbout, UpdateDispayPicture } from "../../../services/authApi";
 import toast from "react-hot-toast";
-
 import countrycode from "../../../data/countrycode.json";
-import UpdateContact from "../settings/ChagnePasswrd";
-import DeleteAccount from "../settings/DeleteAccount";
-import ChangePassword from "../settings/ChagnePasswrd";
+import DeleteAccount from "./settings/DeleteAccount";
+import ChangePassword from "./settings/ChangePassword";
 
 const Setting = () => {
   const { user } = useSelector((state) => state.profile);
@@ -228,9 +226,9 @@ const Setting = () => {
         </form>
       </div>
 
-      <ChangePassword />
+                <ChangePassword/>
 
-      <DeleteAccount />
+    <DeleteAccount/>
     </div>
   );
 };

@@ -25,7 +25,6 @@ const Myprofile = () => {
                   "Authorization": `Bearer ${token}`
                 }
               })
-              console.log(response.data)
               localStorage.setItem('user',JSON.stringify(response.data.userDetail))
                 dispatch(setUser(response.data.userDetail))
          

@@ -75,6 +75,7 @@ const getUserDetails = async(req, res)=>{
         const id = req.user.id || req.authorization.id
 
         const userDetail = await User.findById(id).populate('additionalDetails').exec();
+        userDetail.password = undefined;
 
           return res.status(200).json({success:true, message:"User details fetched successfully ",userDetail:userDetail})
     } catch (error) {
@@ -92,6 +93,7 @@ const updateDisplayPicture = async(req, res)=>{
         const updateProfile = await User.findByIdAndUpdate(userId,{
             image:image.secure_url
         },{ new :true})
+        updateProfile.password = undefined;
 
         res.status(200).json({success:true,message:"Image Updated Successfully",data:updateProfile})
     } catch (error) {
@@ -106,7 +108,7 @@ const getEnrolledCourse = async(req, res)=>{
         if(!userDetail){
             return res.status(400).json({success:false, message: `Could not found user with id: ${userId}`})
         }
-        return res.status(200).json({success:true, data:userDetail})
+        return res.status(200).json({success:true, data:{course: userDetail.courses, courseProgress:userDetail.courseProgress }})
     } catch (error) {
         return res.status(500).json({
             success: false,

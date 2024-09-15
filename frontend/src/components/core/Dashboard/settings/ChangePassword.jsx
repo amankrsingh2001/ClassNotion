@@ -2,7 +2,8 @@ import {  useState } from "react"
 import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { changeNewPassword } from "../../../services/authApi";
+import { changeNewPassword } from "../../../../services/authApi";
+
 
 
 const ChangePassword = () =>{

@@ -87,7 +87,6 @@ export function setLogin(data, navigate) {
       if(!response.data.success){
         throw new Error(response.data.message)
       }
-      console.log(response.data.user)
       window.localStorage.setItem("token", response.data.token)
       window.localStorage.setItem("user",JSON.stringify(response.data.user))
       dispatch(setToken(response.data.token))
@@ -174,7 +173,6 @@ export function UpdateDispayPicture(formData){
         localStorage.setItem('user',JSON.stringify(data));
         toast.success("Profile updated")
       }catch(error){
-        console.log('error***************')
         console.log(error)
         toast.error("Something went wrong")
       }

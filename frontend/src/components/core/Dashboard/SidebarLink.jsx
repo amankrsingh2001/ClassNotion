@@ -11,7 +11,6 @@ const SidebarLink = ({ link, iconName }) => {
     return matchPath({ path: route }, location.pathname);
   };
 
-  console.log(location.pathname)
 
   return (
     <NavLink

@@ -1,9 +1,7 @@
 import IconBtn from "./IconBtn"
 
 const ConfirmationModal = ({modalData}) =>{
-    console.log(modalData)
 
-    console.log(modalData , 'Modal active')
     return <div className="text-white">
         <div className="text-white">
             <p>{modalData?.text1}</p>

@@ -1,6 +1,6 @@
 const IconBtn = ({text, onclick, children, outline = false, customClasses, type,disabled}) =>{
     return <button
-    className="text-white"
+    className={`${customClasses} "text-white"`}
     disabled={disabled}
     onClick={onclick}
     >
