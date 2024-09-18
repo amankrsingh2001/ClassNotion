@@ -14,7 +14,7 @@ export const authApi = {
 }
 
 export const profileApi = {
-    UPDATE_DISPLAY_API : "http://localhost:4000/api/v1/profile/updateDisplayPicture",
+    UPDATE_DISPLAY_API : BASE_URL+ "profile/updateDisplayPicture",
     UPDATE_ABOUT_API : BASE_URL + "profile/updateProfile",
     GET_USER_INFO : BASE_URL + "profile/getUserDetails",
     DELETE_USER_ACCOUNT: BASE_URL + "profile/deleteProfile",
@@ -22,5 +22,7 @@ export const profileApi = {
 }
 
 export const courseApi = {
-    GET_AVERAGE_RATING : BASE_URL + "/api/v1/course/getAverageRating"
+    GET_AVERAGE_RATING : BASE_URL + "course/getAverageRating",
+    GET_ALL_COURSE_CATEGORY :BASE_URL + 'course/showAllCategories',
+    CREATE_COURSE_API : BASE_URL + 'course/createCourse'
 }

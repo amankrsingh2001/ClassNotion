@@ -230,8 +230,7 @@ const SignUpTemp = ({ frame, code }) => {
             </div>
 
             <div>
-              <button type="submit">Submit</button>
-              <Cpabutton active={true}>Sign Up</Cpabutton>
+              <button type="submit" className="w-full p-4 rounded-md bg-yellow-50 text-black">Submit</button>
             </div>
           </form>
         </div>

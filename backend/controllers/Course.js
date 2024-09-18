@@ -17,10 +17,14 @@ const createCourse = async(req,res)=>{
         return res.status(401).json({status:false,message:"All fileds are required"})
     }
     try {
-        const {courseName, courseDescription, whatYouWillLearn, category, price, tag} = req.body
-        const thumbnail = req.files.thumbnail
+        const { courseName, courseDescription, whatYouWillLearn, category, price, tag } = req.body
 
-        const userId = req.user.id || req.auhorization.id
+        const thumbnail = req.files.image
+        console.log(thumbnail)
+
+        const userId = req.user.id || req.auhorization.id   
+
+       
 
         const instructorDetails = await User.findById(userId)
 
@@ -33,8 +37,8 @@ const createCourse = async(req,res)=>{
             return res.status(404).json({success:false,message:"Category details not found"})
         }
         //upload image on cloudinary
-        const thumbnailImage = await uploadOnCloudinary(thumbnail,process.env.FOLDER_NAME)
-
+        const thumbnailImage = await uploadOnCloudinary(thumbnail, process.env.FOLDER_NAME)
+            console.log("this")
         const newCourse = await Course.create({
             courseName,
             courseDescription,
@@ -74,7 +78,7 @@ const getcourseDetail = async(req, res) =>{
    
     try {
         const courseId =  req.body.courseId;
-        console.log(courseId)
+   
         if(!courseId){
             return res.status(402).json({success:false, message:"Failed to get the courseId"})
         }
@@ -112,6 +116,7 @@ const getcourseDetail = async(req, res) =>{
         return res.status(500).json({success:false, message:error.message})
     }
 }
+
 
 const showAllCourses = async(req,res) =>{
     try {

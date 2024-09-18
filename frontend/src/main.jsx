@@ -21,6 +21,7 @@ import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses.jsx";
 import PrivateRoute from './components/core/Auth/PrivateRoute';
 import Setting from "./components/core/Dashboard/Setting.jsx";
 import Cart from "./components/core/Dashboard/Cart/Cart.jsx";
+import AddCourse from "./components/core/Dashboard/AddCourse/AddCourse.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -54,6 +55,9 @@ const Router = createBrowserRouter([
           },{
             path:"cart",
             element:<Cart/>
+          },{
+            path:'add-course',
+            element:<AddCourse/>
           }
         ]
       },
@@ -90,10 +94,10 @@ const Router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+
     <Provider store={store}>
       <RouterProvider router={Router} />
       <Toaster />
     </Provider>
-  </StrictMode>
+
 );

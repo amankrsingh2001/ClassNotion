@@ -14,7 +14,7 @@ const Cart = () =>{
 
     useEffect(() => {
         if (user.accountType !== "Student") {
-            navigate('/dashboard/my-profile')
+            navigate('/dashboard')
         }
     }, [user.accountType, navigate])
 

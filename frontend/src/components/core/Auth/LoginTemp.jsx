@@ -107,7 +107,7 @@ const submitHandler = (e) =>{
             {/* <Cpabutton active={true}>Sign In</Cpabutton> */}
           </div>
 
-          <button type="submit">Submit</button>
+          <button type="submit" className="w-full p-4 rounded-md bg-yellow-50 text-black">Submit</button>
           </form>
           </div>
 

@@ -1,9 +1,7 @@
 import axios from "axios";
 import { authApi, profileApi } from "./api";
-import { apiConnector } from "./apiConnector";
 import { setSignUpData, setToken } from "../slices/authSlice";
 import { setUser } from "../slices/profileSlice";
-import { signUpValue } from '../data/signUpData';
 import toast from "react-hot-toast";
 
 
@@ -19,17 +17,17 @@ export function otpApi(email, navigate) {
         { email },
         { withCredentials: true }
       );
-      if(!response.data.success){
-        toast.error('Failed to sent OTP')
-      }
+
       toast.success('OTP sent successfully')
       navigate("/verify-email");
     } catch (error) {
-      console.log(error); // remove console
-      toast.error('Something Went Wrong')
+      console.log(error, "This is the error"); // remove console
+      toast.error(error.response.data.message)
     }
   };
 }
+
+
 
 export function signup(data, navigate) {
   return async (dispatch) => {
@@ -60,8 +58,8 @@ export function signup(data, navigate) {
       );
 
       if (!response.data.success) {
-        console.log("Failed to get Response",response);
-        toast.error('Failed to create User')
+        console.log("Failed to get Response",response.response);
+        toast.error('')
       }
       toast.success("User Created Successfully")
       navigate("/login");
@@ -72,6 +70,9 @@ export function signup(data, navigate) {
     }
   };
 }
+
+
+
 
 export function setLogin(data, navigate) {
   return async (dispatch) => {
@@ -84,9 +85,6 @@ export function setLogin(data, navigate) {
           withCredentials: true,
         }
       );
-      if(!response.data.success){
-        throw new Error(response.data.message)
-      }
       window.localStorage.setItem("token", response.data.token)
       window.localStorage.setItem("user",JSON.stringify(response.data.user))
       dispatch(setToken(response.data.token))
@@ -94,8 +92,8 @@ export function setLogin(data, navigate) {
       toast.success("Logged In Successfully")
       navigate('/')
     } catch (error) {
-      console.log(error.message)
-      toast.error('Failed to login')
+
+      toast.error(error.response.data.message)
       navigate('/login')
     }
   };

@@ -5,10 +5,11 @@ import { useSelector } from "react-redux";
 import { FaCartPlus } from "react-icons/fa";
 import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { useEffect, useState } from "react";
-import { apiConnector } from "../../services/apiConnector";
+
 import { categories } from "../../services/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import toast from "react-hot-toast";
+import { category } from "../../services/courseDetail";
 
 
 
@@ -27,8 +28,8 @@ const Navbar = () => {
 
   const fetchSubLinks = async () => {
     try {
-      const result = await apiConnector("GET", categories.CATEGORIES_API);
-      setSubLinks(result.data.allCategory);
+      const result = await category();
+      setSubLinks(result);
     } catch (error) {
       toast.error('Something went wrong')
       console.log("Failed to fetch the category list", error);

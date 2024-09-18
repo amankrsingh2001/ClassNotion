@@ -35,7 +35,6 @@ const courseValidation = zod.object({
     courseDescription:zod.string(),
     whatYouWillLearn:zod.string(),
     price:zod.string(),
-    thumbnail:zod.string().optional(),
     studentEnrolled:zod.array(zod.object()).optional()
 })
 

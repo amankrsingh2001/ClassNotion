@@ -44,7 +44,7 @@ const Sidebar = () =>{
                     btn2Text:"Cancel",
                     btn1Handler:() => dispatch(logOut(navigate)),
                     btn2Handler:() => setConfirmationModal(null),
-                    disabled:false
+                   
                 })}
                 className='text-sm font-medium text-richblack-300'
                 > <div className='flex px-8 py-2 flex-row items-center gap-x-2'>
@@ -57,7 +57,7 @@ const Sidebar = () =>{
          </div>
 
          {
-            ConfirmationModal !==null && <ConfirmationModal  modalData={confirmationModal}/>
+            confirmationModal  && <ConfirmationModal  modalData={confirmationModal}/>
          }
          </div>
 }
