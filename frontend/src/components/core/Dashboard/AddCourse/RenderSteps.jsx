@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { FaCheck } from "react-icons/fa";
 import CourseInformationForm from './CourseInfo/CourseInformationForm';
+import CourseBuilderForm from './courseBuilder/CourseBuilderForm';
 
 const  RenderSteps = () => {
     const {step} = useSelector(state =>state.course)
@@ -29,13 +30,13 @@ const  RenderSteps = () => {
                 {steps.map((item, index)=>(
                     <div key={index}  className='w-[60%] flex items-center justify-center'>
                       <div className='rounded-full text-[#838894] w-full flex items-center justify-center relative'>
-                          <div className={ `h-[40px] w-[40px] flex rounded-full font-bold z-[2] ${step === item.id ? "bg-[#251400] text-yellow-300  border-[#FFD60A] border-2" :"bg-[#161D29] #text-[#838894] border-[#2C333F]" } `}>
+                          <div className={ `h-[40px] w-[40px] flex rounded-full font-bold z-[2] ${step === item.id ? "bg-[#251400]  text-yellow-300  border-[#FFD60A] border-2" :(`${step>item.id?"bg-yellow-25":"bg-[#161D29] #text-[#838894] border-[#2C333F]"}`) } `}>
                               {
-                                  step>item.id ? (< FaCheck className='text-center'/>) : (<p className=' mx-auto my-auto text-center'>{item.id}</p>)
+                                  step>item.id ? (< FaCheck className=' mx-auto my-auto text-[#5d5e61]'/>) : (<p className=' mx-auto my-auto text-center'>{item.id}</p>)
                               }
                           </div>
                           {
-                            item.id!== 3 && (  <hr className={`${item.id === step-1 ? "border-[1px] border-caribbeangreen-300 w-[94%] border-dotted absolute left-36 z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute left-36 z-[1]"}`} />)
+                            item.id!== 3 && (  <hr className={`${item.id === step-1 ? "border-[1px] border-yellow-50 w-[94%] border-dotted absolute left-36 z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute left-36 z-[1]"}`} />)
                           }
                         
                       </div>
@@ -49,7 +50,7 @@ const  RenderSteps = () => {
             
                   return  <div key={index} className='w-[90%]  items-center'>
                     
-                        <p className={`text-lg text-center  ml-2 ${index === (step+-1) ? "text-[#F1F2FF] ":"text-[#585D69]"}`}>{item.title}</p>
+                        <p className={`text-lg text-center  ml-2 ${index === (step-1) ? "text-[#F1F2FF] ":(`${index<step?"text-yellow-50":"text-[#585D69]"}`)}`}>{item.title}</p>
                     </div>
       
           })}

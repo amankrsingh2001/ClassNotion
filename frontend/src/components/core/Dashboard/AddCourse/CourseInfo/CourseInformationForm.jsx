@@ -104,7 +104,8 @@ const CourseInformationForm = () => {
         const result = await editCourse("Api", token);
         setLoading(false);
         if(result){
-          setStep(2);
+
+         dispatch(setStep(2))
           dispatch(setCourse(result))
         }
       }else{
@@ -128,9 +129,8 @@ const CourseInformationForm = () => {
 
     setLoading(true)
     const result = await addCourseDetails(formData, token)
-    console.log(result, "this is the result")
     if(result){
-      setStep(2)
+     dispatch(setStep(2))
       dispatch(setCourse(result))
     }
     setLoading(false)

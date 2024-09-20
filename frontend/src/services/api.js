@@ -24,5 +24,11 @@ export const profileApi = {
 export const courseApi = {
     GET_AVERAGE_RATING : BASE_URL + "course/getAverageRating",
     GET_ALL_COURSE_CATEGORY :BASE_URL + 'course/showAllCategories',
-    CREATE_COURSE_API : BASE_URL + 'course/createCourse'
+    CREATE_COURSE_API : BASE_URL + 'course/createCourse',
+    CREATE_SECTION_API :BASE_URL + 'course/addSection',
+    UPDATE_COURSE_SECTION_API : BASE_URL + 'course/updateSection',
+    DELETE_COURSE_SECTION_API : BASE_URL + 'course/deleteSection',
+    DELETE_COURSE_SUB_SECTION_API : BASE_URL + 'course/deleteSubSection',
+    CREATE_SUB_SECTION_API : BASE_URL + 'course/addSubSection',
+    UPDATE_SUB_SECTION_API :  BASE_URL + 'course/updateSubSection'
 }

@@ -9,33 +9,54 @@ const ThumbnailUpload = ({
   errors,
   setValue,
   getValues,
+  viewData,
+  editData
 }) => {
   const [file, setFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
     e.preventDefault();
   };
+
+
   const handleDrop = (e) => {
     e.preventDefault();
     const droppedFiles = e.dataTransfer.files;
     if (droppedFiles && droppedFiles.length > 0) {
-      setFile(droppedFiles[0]);
-      setValue(name, droppedFiles[0]);
-      const thumbnail = URL.createObjectURL(droppedFiles[0]);
-      setImage(thumbnail);
+      handleFile(droppedFiles[0])  // Resuing the logic in one function to make the code more redable
     }
   };
 
   const handleFileInputChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile); // Set the selected file
-    setValue(name, selectedFile); // Set the file in react-hook-form
-    const thumbnail = URL.createObjectURL(selectedFile);
-    setImage(thumbnail);
+    handleFile(selectedFile); // Resuing the logic in one function to make the code more redable
   };
 
+  const handleFile = (file) =>{
+    setFile(file);
+    setValue(name, file) // set the file in react-hook-form
+    const fileURL = URL.createObjectURL(file); 
+
+    //check if the file is image or video
+
+    const fileType = file.type.split('/')[0]
+    if(fileType === "image"){
+      setMediaPreview(<img className="w-full h-full object-contain" src={fileURL} alt="Preview" />);
+    }
+    else if(fileType === "video"){
+      setMediaPreview(
+        <video className="w-full h-full object-contain" controls>
+        <source src={fileURL} type={file.type}/>
+      </video>
+      )
+    }
+    else{
+      setMediaPreview(null) // Clear preview for unsupported types
+    }
+  }
 
   useEffect(() => {
     register(name, {
@@ -51,7 +72,7 @@ const ThumbnailUpload = ({
   const removeHandler = (e) =>{
     e.preventDefault()
     setFile(null)
-    setImage(null)
+    setMediaPreview(null)
   }
 
   return (
@@ -97,7 +118,7 @@ const ThumbnailUpload = ({
       )}
       {file && (
         <div className="flex items-start gap-1">
-          <img className="w-full h-full object-contain" src={image} />
+          {mediaPreview}
           <button onClick={removeHandler}><RxCross2 className="text-[#EF476F]" /></button>
         </div>
       )}

@@ -1,3 +1,4 @@
+const { populate } = require("dotenv");
 const { Course } = require("../models/Course")
 const { Section } = require("../models/Section");
 const { sectionValidation } = require("../utils/zodVerification");
@@ -40,14 +41,17 @@ const createSection = async(req,res)=>{
 
 
 const updateSection = async(req,res)=>{
+    
     try {
-        const { sectionName,sectionId } = req.body;
+       
+        const { sectionName, sectionId, courseId } = req.body;
         if(!sectionName || !sectionId){
             return res.status(400).json({success:false,message:"Missing Data"})
         }
-
+        
         const section = await Section.findByIdAndUpdate(sectionId,{sectionName:sectionName},{new:true})
-        return res.status(200).json({success:true,message:"Section updated Successfully",data:section})
+        const updateSection = await section.populate({path:"subSection"})
+        return res.status(200).json({success:true, message:"Section updated Successfully", data:updateSection})
 
     } catch (error) {
         return res.status(500).json({success:false,message:error.message})
@@ -56,10 +60,13 @@ const updateSection = async(req,res)=>{
 
 const deleteSection = async(req,res)=>{
     try {
-        const sectionId = req.body.sectionId;
-        const courseId = req.body.courseId;
 
-        const existingSection = await Section.findById(sectionId)
+       
+       const {sectionId, courseId} = req.body
+
+        console.log(req.body.data)
+
+        const existingSection = await Section.findById({_id:sectionId})
         if(!existingSection){
             return res.status(404).json({success:false, message:'Section not found'})
         }
@@ -68,9 +75,14 @@ const deleteSection = async(req,res)=>{
                 courseContent: sectionId
             }
         }, { new: true })
-      await Section.findByIdAndDelete(sectionId)
-        return res.status(200).json({success:true,message:"Section deleted Successfully"})
-        
+        await Section.findByIdAndDelete( sectionId )
+        const populatedCourse = await course.populate({
+            path: "courseContent", 
+            populate: {
+                path: "subSection" 
+            }
+        })
+        return res.status(200).json({ success:true,message:"Section deleted Successfully", data:populatedCourse})
 
     } catch (error) {
         return res.status(500).json({success:false,message:error.message})

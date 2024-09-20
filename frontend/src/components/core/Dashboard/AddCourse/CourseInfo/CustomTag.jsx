@@ -17,7 +17,6 @@ const CustomTag = ({ label, name, placeholder, register, errors, setValue, getVa
   };
 
   const removeHandler = (index) =>{
-    
         const newValue = [...tags]
         newValue.splice(index,1)
         setTags(newValue)

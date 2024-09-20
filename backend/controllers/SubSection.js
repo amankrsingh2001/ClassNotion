@@ -36,7 +36,7 @@ const createSubSection = async(req,res)=>{
                 }
             },{new:true}).populate({path:"subSection"})
 
-            return res.status(200).json({success:true,message:"SubSection created Successfully"})
+            return res.status(200).json({success:true,message:"SubSection created Successfully", data:section} )
 
         } catch (error) {
             return res.status(500).json({success:false,message:"Failed to create sub-section"})
@@ -67,7 +67,7 @@ const updateSubSection = async(req,res) =>{
             videoUrl : uploadDetails.secure_url || subSection.videoUrl,
         },{new:true})
 
-        return res.status(200).json({success:true,message:"SubSection created Successfully"})
+        return res.status(200).json({success:true,message:"SubSection created Successfully", data:updatedSubSection})
 
     } catch (error) {
         return res.status(500).json({success:false,message:"Failed to update sub-section"})
@@ -91,10 +91,10 @@ const deleteSubSection = async(req,res) =>{
     if(!subSection){
         return res.status(400).json({success:false,message:'Subsection not found'})
     }
-    const updateSection = await Section.findById(sectionId).populate({path:'subSection'})
-      return res.status(200).json({success:true,message:"Deleted Sub-section successfully"})
+    const updateSubSection = await Section.findById(sectionId).populate({path:'subSection'})
+      return res.status(200).json({success:true,message:"Deleted Sub-section successfully", data:updateSubSection})
   } catch (error) {
-    return res.status(500).json({success:false,message:"Failed To delete sub-section"})
+    return res.status(500).json({success:false,message:"Failed To delete sub-section" })
   }
 }
 
