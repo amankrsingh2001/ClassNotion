@@ -46,7 +46,6 @@ const sectionValidation = zod.object({
 const subSectionValidation = zod.object({
     title:zod.string(),
     description:zod.string(),
-    timeDuration:zod.string(),
 })
 
 

@@ -10,12 +10,13 @@ const ThumbnailUpload = ({
   setValue,
   getValues,
   viewData,
-  editData
+  editData 
 }) => {
   const [file, setFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
-  const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
+
+  {/* Edit data is the previous video data in edit mode */}
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -58,6 +59,19 @@ const ThumbnailUpload = ({
     }
   }
 
+
+  //Load the previous data in edit mode
+useEffect(()=>{
+  if(editData && !file){
+    setMediaPreview(
+      <video className="w-full h-full object-contain">
+        <source src={editData} type="video/mp4"/>
+      </video>
+    )
+  }
+},[editData, file])
+
+
   useEffect(() => {
     register(name, {
       required: true,
@@ -79,7 +93,7 @@ const ThumbnailUpload = ({
     <>
   
     <div className="bg-[rgb(44,51,63)] min-h-[200px]  rounded-md text-white gap-2 flex flex-col items-center justify-center">
-      {!file && (
+      {!mediaPreview && (
         <>
       
         <div
@@ -116,7 +130,7 @@ const ThumbnailUpload = ({
         </ul>
         </>
       )}
-      {file && (
+      {mediaPreview && (
         <div className="flex items-start gap-1">
           {mediaPreview}
           <button onClick={removeHandler}><RxCross2 className="text-[#EF476F]" /></button>

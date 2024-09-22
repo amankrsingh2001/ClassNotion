@@ -22,6 +22,8 @@ import PrivateRoute from './components/core/Auth/PrivateRoute';
 import Setting from "./components/core/Dashboard/Setting.jsx";
 import Cart from "./components/core/Dashboard/Cart/Cart.jsx";
 import AddCourse from "./components/core/Dashboard/AddCourse/AddCourse.jsx";
+import MyCourses from "./components/core/Dashboard/MyCourses.jsx";
+import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -58,7 +60,14 @@ const Router = createBrowserRouter([
           },{
             path:'add-course',
             element:<AddCourse/>
+          },{
+            path:'my-Courses',
+            element:<MyCourses/>
+          },{
+            path:'edit-course/:courseId',
+            element:<EditCourse/>
           }
+
         ]
       },
       {

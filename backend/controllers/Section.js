@@ -64,8 +64,6 @@ const deleteSection = async(req,res)=>{
        
        const {sectionId, courseId} = req.body
 
-        console.log(req.body.data)
-
         const existingSection = await Section.findById({_id:sectionId})
         if(!existingSection){
             return res.status(404).json({success:false, message:'Section not found'})
@@ -75,14 +73,9 @@ const deleteSection = async(req,res)=>{
                 courseContent: sectionId
             }
         }, { new: true })
-        await Section.findByIdAndDelete( sectionId )
-        const populatedCourse = await course.populate({
-            path: "courseContent", 
-            populate: {
-                path: "subSection" 
-            }
-        })
-        return res.status(200).json({ success:true,message:"Section deleted Successfully", data:populatedCourse})
+         const deletedSection =  await Section.findByIdAndDelete( sectionId )
+      
+        return res.status(200).json({ success:true,message:"Section deleted Successfully", data:deletedSection})
 
     } catch (error) {
         return res.status(500).json({success:false,message:error.message})

@@ -31,7 +31,7 @@ const courseSchema = new mongoose.Schema({
         }
     ],
     tag:{
-        type:[ String ],
+        type:[String],
         required:true
     },
     price:{
@@ -40,11 +40,6 @@ const courseSchema = new mongoose.Schema({
     },
     thumbnail:{
         type:String
-    },
-    status:{
-        type:String,
-        enum:["Upcoming","Draft","Approved","Published"],
-        default:"Draft"
     },
     Category:{
         type:mongoose.Schema.Types.ObjectId,
@@ -56,7 +51,14 @@ const courseSchema = new mongoose.Schema({
             ref:'User',
             required:true
         }
-    ]
+    ],
+    instructions:{
+        type:[String]
+    },
+    status:{
+        type:String,
+        enum:["Draft","Published"]
+    }
     
 
 })

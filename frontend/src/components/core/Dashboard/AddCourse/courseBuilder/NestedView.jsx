@@ -11,7 +11,7 @@ import { deleteSection, deleteSubSection } from '../../../../../services/courseD
 import { setCourse } from '../../../../../slices/courseSlice';
 
 
-const NestedView = ({handleChangeEditSectionName}) => {
+const NestedView = ({ handleChangeEditSectionName }) => {
 
   const {course} = useSelector(state => state.course)
   const {token} = useSelector(state => state.auth)
@@ -25,19 +25,30 @@ const NestedView = ({handleChangeEditSectionName}) => {
   
 
   const handleDeleteSection = async(sectionId,courseId, token) =>{
-    const data = {sectionId, courseId}
-      const result = await deleteSection(data, token)
-      if(result){
-        dispatch(setCourse(result))
-      }
-      setConfirmationModal(null)
+
+        const data = {sectionId, courseId}
+        const result = await deleteSection(data, token)
+          if(result){
+            const deletedSection = course.courseContent.filter((section)=>{
+            return (section._id !== result._id)  
+            })
+            const updatedCourseContent = {...course, courseContent:deletedSection}
+            dispatch(setCourse(updatedCourseContent))
+            setConfirmationModal(null)
+          }else {
+            toast.error("Failed to update the Section")
+          }
   }
 
   const handleDeleteSubSection = async (subSectionId, sectionId, token) =>{
-    const result = await deleteSubSection({subSectionId, sectionId, token})
-
+    const data = {subSectionId, sectionId}
+    const result = await deleteSubSection(data, token)
     if(result){
-        dispatch(setCourse(result))
+      const deletedSubSection = course.courseContent.map((section)=>{
+          return section._id === result._id? result :section
+      })
+      const deletedSubSectionData = {...course,courseContent:deletedSubSection}
+      dispatch(setCourse(deletedSubSectionData))
     }
     setConfirmationModal(null)
   }
@@ -84,7 +95,7 @@ const NestedView = ({handleChangeEditSectionName}) => {
             <div>
               {
                 section.subSection.map((data)=>{
-                  return( <div key={data._id} onClick={setViewSubSection(data)}
+                  return( <div key={data._id} onClick={()=>setViewSubSection(data)}
                       className='flex items-center justify-between gap-x-3 border-b-2'
                   > 
                 <div className='flex items-center gap-x-3'>
@@ -92,7 +103,9 @@ const NestedView = ({handleChangeEditSectionName}) => {
                    <p>{data.title}</p>
 
                    </div>
-                    <div className='flex items-center gap-x-3'>
+                    <div 
+                      onClick={(e)=>e.stopPropagation()}
+                    className='flex items-center gap-x-3'>
 
                       <button onClick={()=>setEditSubSection({...data, sectionId:section._id})}>
                       <MdEdit/>
@@ -103,7 +116,7 @@ const NestedView = ({handleChangeEditSectionName}) => {
                           text2:"Selected lecture will be deleted",
                           btn1Text:"Delete",
                           btn2Text:"Cancel",
-                          btn1Handler:() => handleDeleteSubSection(data._id, section._id),
+                          btn1Handler:() => handleDeleteSubSection(data._id, section._id,token),
                           btn2Hander:() => setConfirmationModal(null)
                         })
                       }>

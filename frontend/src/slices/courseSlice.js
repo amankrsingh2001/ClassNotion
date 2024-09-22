@@ -24,7 +24,7 @@ const courseSlice = createSlice({
         setPaymentLoading: (state,action) =>{
             state.paymentLoading = action.payload
         },
-        resetCourseState:(action, payload) =>{
+        resetCourseState:(state, action) =>{
             state.step = 1
             state.course = null
             state.editCourse = false

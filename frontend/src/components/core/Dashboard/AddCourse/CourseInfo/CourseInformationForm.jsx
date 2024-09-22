@@ -9,7 +9,7 @@ import { setCourse, setStep } from '../../../../../slices/courseSlice'
 import { COURSE_STATUS } from '../../../../../utils/constants'
 import CustomTag from './CustomTag'
 import ThumbnailUpload from './ThumbnailUpload'
-import { addCourseDetails } from '../../../../../services/courseDetail'
+import { addCourseDetails, editCourseAPI } from '../../../../../services/courseDetail'
 
 const CourseInformationForm = () => {
 
@@ -38,13 +38,13 @@ const CourseInformationForm = () => {
 
     if(editCourse){
       setValue("courseTitle", course.courseName)
-      setValue("courseShortDesc", course.courseShortDesc)
-      setValue("coursePrice", course.coursePrice)
-      setValue("courseTags", course.courseTag)
-      setValue("courseBenefits", course.courseWhatYouWillLearn)
-      setValue("courseCategories", course.category)
-      setValue("courseRequirements", course.couseInstructions)
-      setValue("courseImage", course.courseThumbnail)
+      setValue("courseShortDesc", course.courseDescription)
+      setValue("coursePrice", course.price)
+      setValue("courseTags", course.tag)
+      setValue("courseBenefits", course.whatYouWillLearn)
+      setValue("courseCategory", course.category)
+      setValue("courseRequirement", course.instructions)
+      setValue("courseImage", course.thumbnail)
     }
   }
 
@@ -53,55 +53,67 @@ const CourseInformationForm = () => {
   },[])
 
   const isFormUpdated = () =>{
+
     const currentValues = getValues()
+
+    console.log(currentValues,'This is the current Values')
+
     if(currentValues.courseTitle !== course.courseName ||
        currentValues.courseShortDesc !== course.courseDescription ||
-       currentValues.courseTitle !== course.courseName ||
-       currentValues.coursePrice !== course.coursePrice ||
-       currentValues.courseTags.toString() !== course.tag.toString() ||
+       currentValues.coursePrice !== course.price ||
+       currentValues.courseTag.toString() !== course.tag.toString() ||
        currentValues.courseBenefits !== course.WhatYouWillLearn ||
-       currentValues.courseCategory._id !== course.Category._id ||
+       currentValues.courseCategory._id !== course.category._id ||
        currentValues.courseImage !== course.thumbnail ||
-       currentValues.courseRequirement.toString() !== course.instruction.toString()
-       ){
+       currentValues.courseRequirement.toString() !== course.instructions.toString()
+       )
+       {
       return true
-    }else return false
+    }
+      return false
   }
 
   const onSubmit = async(data) =>{
+
     if(editCourse){
-      if(isFormUpdated){
+
+
+      if(isFormUpdated()){
         const currentValue = getValues()
         const formData = new FormData()
   
         formData.append("courseId", course._id)
+
+        console.log(data,"This is the current value")
+
         if(currentValue.courseTitle !== course.courseName){
           formData.append('courseName', data.courseTitle)
         }
         if(currentValue.courseShortDesc !== course.courseDescription){
-          formData.append('courseDescription', data.courseDescription)
+          formData.append('courseDescription', data.courseShortDesc)
         }
-        if(currentValue.coursePrice !== course.coursePrice){
+        if(currentValue.coursePrice !== course.price){
           formData.append('price', data.coursePrice)
         }
-        if(currentValue.courseTags !== course.courseTags){
-          formData.append('tag', data.courseTags)
-        }
+ 
         if(currentValue.courseBenefits !== course.WhatYouWillLearn){
-          formData.append('Benefits', data.courseBenefits)
+          formData.append('whatYouWillLearn', data.courseRequirement)
         }
-        if(currentValue.courseCategory._id !== course.category._id){
+
+        if(currentValue.courseCategory._id !== course.Category._id){
           formData.append('category', data.courseCategory)
         }
   
-        if(currentValue.courseRequirement.toString() !== course.instruction.toString()){
-          formData.append('instructions', JSON.stringify(data.courseInstruction))
+        if(currentValue.courseRequirement.toString() !== course.instructions.toString()){
+          formData.append('instructions', JSON.stringify(data.instructions))
         }
         if(currentValue.courseImage !== course.thumbnail){
-          formData.append('thumbnail', data.courseThumbnail)
+          formData.append('thumbnail', data.image)
         }
-        setLoading(true)
-        const result = await editCourse("Api", token);
+       
+
+
+        const result = await editCourseAPI(formData, token);
         setLoading(false);
         if(result){
 
@@ -115,17 +127,17 @@ const CourseInformationForm = () => {
     }
 
     const formData = new FormData();
+   
+
     formData.append('courseName', data.courseTitle)
     formData.append('courseDescription', data.courseShortDesc)
-    formData.append('price', data.coursePrice)
-    formData.append('courseTags', data.courseTags)
+    formData.append('price',data.coursePrice)
+    formData.append('courseTags', JSON.stringify(data.courseTag))
     formData.append('whatYouWillLearn', data.courseBenefits)
     formData.append('category', data.courseCategory)
-    formData.append('instructions', JSON.stringify(data.courseRequirement))
+    formData.append('instructions', JSON.stringify(data.instructions))
     formData.append('image', data.image)
     formData.append('status',COURSE_STATUS.DRAFT)
-
-    
 
     setLoading(true)
     const result = await addCourseDetails(formData, token)
@@ -232,7 +244,7 @@ const CourseInformationForm = () => {
           </div>
 
               <RequirementField
-                name= 'courseRequirement'
+                name= 'instructions'
                 label = "Requirements / Instructions"
                 register = {register}
                 errors = {errors}

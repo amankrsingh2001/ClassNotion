@@ -18,6 +18,7 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
   const {token} = useSelector( state => state.auth )
   const {course} = useSelector( state => state.course )
 
+
   useEffect(()=>{
     if(view || edit){
         setValue("lectureTitle", modalData.title)
@@ -41,51 +42,75 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
       const formData = new FormData()
 
       formData.append('sectionId', modalData.sectionId)
+
       formData.append('subSectionId', modalData._id)
 
       if(currentValues.lectureTitle !== modalData.title){
         formData.append('title', currentValues.lectureTitle);
       }
       if(currentValues.lectureDesc !== modalData.description){
-        formData.append('description', courseValues.lectureDesc)
+        formData.append('description', currentValues.lectureDesc)
       }
-      if(currentValues.lectureVide !== modalData.videoUrl){
+      if(currentValues.lectureVideo !== modalData.videoUrl){
         formData.append("video", currentValues.lectureVideo)
       }
 
-      // setLoading()
-      const result = await updateSubSection(data, token)
+      const result = await updateSubSection(formData, token)
+      console.log(result, "this is the updated result")
       if(result){
-        dispatch(setCourse(result))
-      }
+        const updateCourse = course?.courseContent.map((section)=>{
+            if(section._id === result._id){
+               return {...section = result}
+            }else{
+                return {...section}
+            }
+        })
+        
+
+       const courseNew =  {...course,courseContent:updateCourse}
+        dispatch(setCourse(courseNew))
+    }
       setModalData(null)
 
   }
 
   const onSubmit = async(data) =>{
-    console.log(data)
-      // if(view){
-      //   return;
-      // }
-      // if(edit){
-      //   if(!isFormUpdated){
-      //     toast.errors("No changes made to the form")
-      //   }else{
-      //     handleEditSubSection();
-      //   }
-      //   return
-      // }
-      // const formData = new FormData()
-      // formData.append('sectionId', modalData);
-      // formData.append('title', data.lectureTitle)
-      // formData.append('description', data.lectureDesc)
-      // formData.append('video', data.lectureVideo)
+      if(view){
+        return;
+      }
+      if(edit){
+        if(!isFormUpdated){
+          toast.errors("No changes made to the form")
+        }else{
+          handleEditSubSection();
+        }
+        return
+      }
 
-      // const result = await createSubSection(data, token)
-      // if(result){
-      //   dispatch(setCourse(result))
-      // }
-      // setModalData(null)
+
+      const formData = new FormData()
+
+      formData.append('sectionId', modalData);
+      formData.append('title', data.lectureTitle)
+      formData.append('description', data.lectureDesc)
+      formData.append('video', data.lectureVideo)
+
+
+      const result = await createSubSection(formData, token)
+
+      if(result){
+          const updateCourse = course?.courseContent.map((section)=>{
+              if(section._id === result._id){
+                 return {...section = result}
+              }else{
+                  return {...section}
+              }
+          })
+
+         const courseNew =  {...course,courseContent:updateCourse}
+          dispatch(setCourse(courseNew))
+      }
+      setModalData(null)
   }
 
   return (

@@ -3,11 +3,22 @@ import { categories, courseApi } from "./api"
 import { toast } from 'react-hot-toast';
 
 
-const {CREATE_COURSE_API,  CREATE_SECTION_API, UPDATE_COURSE_SECTION_API, DELETE_COURSE_SECTION_API,  DELETE_COURSE_SUB_SECTION_API, CREATE_SUB_SECTION_API, UPDATE_SUB_SECTION_API} = courseApi
+const {CREATE_COURSE_API, EDIT_COURSE_API, DELETE_COURSE_API ,GET_INSTRUCTOR_COURSES ,
+    COURSE_GET_FULL_COURSE_DETAILS,
+    CREATE_SECTION_API, UPDATE_COURSE_SECTION_API,
+    DELETE_COURSE_SECTION_API,  
+    DELETE_COURSE_SUB_SECTION_API,
+    CREATE_SUB_SECTION_API, UPDATE_SUB_SECTION_API} = courseApi
+
 const {CATEGORIES_API} = categories
 
 export const addCourseDetails = async(data, token) =>{
     let result = null
+
+    for(let [key, value] of data){
+        console.log(key, value,"**********")
+    }
+
     try {
       
         const response = await axios.post(CREATE_COURSE_API,  data, {
@@ -28,24 +39,36 @@ export const addCourseDetails = async(data, token) =>{
     return result
 }
 
-export const editCourse = async(data, token) =>{
-    let result = null
+export const editCourseAPI = async (data, token) => {
+    let result = null;
+
+  for(let [key, value] of data){
+    console.log(key,value, '***************')
+  }
     try {
-           const response =  await axios.post('', data, {
-            headers:{
-                "Authorization":`Bearer ${token}`
+        const response = await axios.post(EDIT_COURSE_API, data, {
+            headers: {
+                "Authorization": `Bearer ${token}`
             }
-           })
-           if(response?.data?.success){
-            throw new Error('Could Not Update course Details')
-           }
-           toast.success("Update Your Course Details")
-           result = response?.data?.data
+        });
+
+        // Fix the success condition
+        if (!response?.data?.success) {
+            throw new Error('Could Not Update course Details');
+        }
+
+        toast.success("Updated Your Course Details");
+        result = response?.data?.data;
+        console.log(result, "This is the sub section");
     } catch (error) {
-        toast.error(error.message)
+        toast.error(error.message);
+        console.error(error);
     }
-    return result
-}
+    return result;
+};
+
+
+
 
 export const category = async(data) =>{
     let result = null
@@ -98,7 +121,7 @@ export const updateSection = async(data, token) =>{
 
 export const deleteSection = async(data, token) =>{
     let result ;
-    console.log("this is running")
+   
     try {
         const {sectionId, courseId} = data
 
@@ -119,26 +142,7 @@ export const deleteSection = async(data, token) =>{
     return result
 }
 
-export const deleteSubSection = async(subSectionId,sectionId, token) =>{
-    let result ;
-    console.log("Now check this is running")
-    try {
-        const response = await axios.post(DELETE_COURSE_SUB_SECTION_API,{subSectionId, sectionId}, {
-            headers:{
-                "Authorization" : `Bearer ${token}`
-            }
-        })
 
-        if(response?.data?.success){
-            toast.success("Deleted section successfully")
-        }
-        //check while testing
-        result = response?.data?.data
-    } catch (error) {
-            toast.error(error.message)
-    }
-    return result
-}
 
 export const createSubSection = async(data, token) =>{
         let result;
@@ -162,6 +166,11 @@ export const createSubSection = async(data, token) =>{
 
 export const updateSubSection = async(data, token) =>{
     let result;
+
+    for(let [key, value] of data){
+            console.log(key, value)
+    }
+
     try {
         const response = await axios.post(UPDATE_SUB_SECTION_API, data, {
             headers:{
@@ -169,9 +178,86 @@ export const updateSubSection = async(data, token) =>{
             }
         })
 
-        result  
+        result  = response?.data?.data
     } catch (error) {
             toast.error("Something went wrong")
             console.log(error)
     }
+    return result;
+}
+
+
+
+export const deleteSubSection = async(data, token) =>{
+    let result ;
+
+    try {
+        const response = await axios.post(DELETE_COURSE_SUB_SECTION_API,data, {
+            headers:{
+                "Authorization" : `Bearer ${token}`
+            }
+        })
+
+        if(response?.data?.success){
+            toast.success("Deleted section successfully")
+        }
+        result = response?.data?.data
+        
+    } catch (error) {
+            toast.error(error.message)
+            console.log(error)
+    }
+    return result
+}
+
+
+export const getInstructorCourse = async(token) =>{
+    let result ;
+    try {
+        const response = await axios.get(GET_INSTRUCTOR_COURSES, {
+            headers:{
+                "Authorization":`Bearer ${token}`
+            }
+        })
+        result = response?.data?.data
+    } catch (error) {
+        console.log(error)
+        toast.error('Failed to fetch courses details')        
+    }
+    return result
+}
+
+export const deleteCourse = async(data, token)=>{
+    try {
+            console.log(data,"This is the courseId")
+
+        const response = await axios.post(DELETE_COURSE_API, { data },{
+            headers:{
+                "Authorization":`Bearer ${token}`
+            }
+        } )
+        if(response?.data?.success){
+            toast.success('Delete your course successfully')
+        }
+    } catch (error) {
+        toast.error("Something went wrong")
+        console.log(error)
+    }
+}
+
+export const getFullCourseDetail = async(courseId, token) =>{
+    let result ;
+
+    try {
+        const response = await axios.post(COURSE_GET_FULL_COURSE_DETAILS, {courseId}, {
+            headers:{
+                'Authorization':`Bearer ${token}`
+            }
+        })
+        result = response?.data?.data?.courseDetails
+    } catch (error) {
+        console.log(error) 
+        toast.error('Something went wrong')       
+    }
+    return result
 }

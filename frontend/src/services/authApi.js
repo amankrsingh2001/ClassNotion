@@ -92,7 +92,7 @@ export function setLogin(data, navigate) {
       toast.success("Logged In Successfully")
       navigate('/')
     } catch (error) {
-
+      console.log(error)
       toast.error(error.response.data.message)
       navigate('/login')
     }

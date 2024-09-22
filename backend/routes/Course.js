@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCourse, showAllCourses, getcourseDetail } = require('../controllers/Course');
+const { createCourse, showAllCourses, getcourseDetail, getFullCourseDetails, editCourse, getInstructorCourses, deleteCourses } = require('../controllers/Course');
 const { auth, isInstructor, isAdmin, isStudent } = require('../middlewares/auth.middleware');
 const { createSection, updateSection, deleteSection } = require('../controllers/Section');
 const { updateSubSection, deleteSubSection, createSubSection } = require('../controllers/SubSection');
@@ -8,6 +8,7 @@ const { createRating, getAverageRating, getAllRatingAndReview, getCourseRatingan
 const router = express.Router();
 
 router.post('/createCourse', auth, isInstructor, createCourse)
+
 
 //section
 
@@ -26,7 +27,15 @@ router.post('/addSubSection', auth, isInstructor, createSubSection)
 
 router.get('/getAllCourses', showAllCourses)
 
+router.post('/getCourseDetails', auth, getFullCourseDetails)
+
+router.post('/editCourse', auth, isInstructor, editCourse)
+
+router.get('/getInstructorCourses', auth, isInstructor, getInstructorCourses)
+
 router.post('/getCoursesDetails', getcourseDetail)
+
+router.post('/deleteCourse', deleteCourses)
 
 // Category router (only by Admin)
 
