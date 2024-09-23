@@ -24,6 +24,7 @@ import Cart from "./components/core/Dashboard/Cart/Cart.jsx";
 import AddCourse from "./components/core/Dashboard/AddCourse/AddCourse.jsx";
 import MyCourses from "./components/core/Dashboard/MyCourses.jsx";
 import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse.jsx";
+import Catalog from "./pages/Catalog.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -69,6 +70,9 @@ const Router = createBrowserRouter([
           }
 
         ]
+      },{
+        path:'catalog/:catalogName',
+        element:<Catalog/>
       },
       {
         path:'/contact-us',

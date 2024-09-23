@@ -1,7 +1,8 @@
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export const categories = {
-    CATEGORIES_API: BASE_URL + "course/showAllCategories"
+    CATEGORIES_API: BASE_URL + "course/showAllCategories",
+    CATALOGPAGEDATA_API : BASE_URL + 'course/getCategoryPageDetails'
 } 
 
 export const authApi = {

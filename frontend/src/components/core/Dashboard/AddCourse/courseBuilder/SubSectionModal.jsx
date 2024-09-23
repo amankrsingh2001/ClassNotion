@@ -5,6 +5,7 @@ import { createSubSection, updateSubSection } from '../../../../../services/cour
 import { setCourse } from '../../../../../slices/courseSlice'
 import { RxCross2 } from "react-icons/rx";
 import ThumbnailUpload from '../CourseInfo/ThumbnailUpload'
+import toast from 'react-hot-toast'
 
 const SubSectionModal = ({modalData, setModalData, add=false ,
   view = false,
@@ -27,9 +28,11 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
     }
   },[])
 
+  console.log(modalData, '**********')
+
   const isFormUpdated = () =>{
     const currentValues = getValues();
-      if((currentValues.lectureTitle !== modalData.title) || ( currentValues.lectureDesc !== modalData.description ) || (currentValues.lectureVide !== modalData.videoUrl)){
+      if((currentValues.lectureTitle !== modalData.title) || ( currentValues.lectureDesc !== modalData.description ) || (currentValues.lectureVideo !== modalData.videoUrl)){
         return true 
       } else{
         return false
@@ -56,7 +59,6 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
       }
 
       const result = await updateSubSection(formData, token)
-      console.log(result, "this is the updated result")
       if(result){
         const updateCourse = course?.courseContent.map((section)=>{
             if(section._id === result._id){
@@ -79,8 +81,8 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
         return;
       }
       if(edit){
-        if(!isFormUpdated){
-          toast.errors("No changes made to the form")
+        if(!isFormUpdated()){
+          toast.error("No changes made to the form")
         }else{
           handleEditSubSection();
         }

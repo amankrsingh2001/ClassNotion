@@ -53,7 +53,7 @@ const CoursesTable = ({courses, setCourses}) => {
                                     <p>{course.courseDescription}</p>
                                     <p>Created At:</p>
                                     {
-                                        course.status === COURSE_STATUS.DRAFT ?( <p className='text-pink-100'>DREFTED</p>) :( <p className='text-yellow-50'>PUBLISHED</p>)
+                                        course.status === COURSE_STATUS.DRAFT ?( <p className='text-pink-100'>Drafted</p>) :( <p className='text-yellow-50'>Published</p>)
                                     }
                                 </div>
                             </Td>
@@ -69,7 +69,7 @@ const CoursesTable = ({courses, setCourses}) => {
                                  onClick={()=>{navigate(`/dashboard/edit-course/${course._id}`)}}
                                 className='mr-[20px]'
                                  >
-                                    EDIT
+                                    Edit
                                 </button>
                                 <button 
                                     onClick={()=>{

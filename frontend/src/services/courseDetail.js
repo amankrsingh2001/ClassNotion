@@ -15,10 +15,6 @@ const {CATEGORIES_API} = categories
 export const addCourseDetails = async(data, token) =>{
     let result = null
 
-    for(let [key, value] of data){
-        console.log(key, value,"**********")
-    }
-
     try {
       
         const response = await axios.post(CREATE_COURSE_API,  data, {
@@ -42,9 +38,6 @@ export const addCourseDetails = async(data, token) =>{
 export const editCourseAPI = async (data, token) => {
     let result = null;
 
-  for(let [key, value] of data){
-    console.log(key,value, '***************')
-  }
     try {
         const response = await axios.post(EDIT_COURSE_API, data, {
             headers: {
@@ -77,7 +70,7 @@ export const category = async(data) =>{
 
             if(response.data.success){
                 result = response.data.allCategory
-            }
+            }  
         } catch (error) {
             toast.error(error.message)
         }
@@ -167,9 +160,6 @@ export const createSubSection = async(data, token) =>{
 export const updateSubSection = async(data, token) =>{
     let result;
 
-    for(let [key, value] of data){
-            console.log(key, value)
-    }
 
     try {
         const response = await axios.post(UPDATE_SUB_SECTION_API, data, {

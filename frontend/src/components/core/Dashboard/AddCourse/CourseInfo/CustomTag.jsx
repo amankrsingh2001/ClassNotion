@@ -5,6 +5,8 @@ const CustomTag = ({ label, name, placeholder, register, errors, setValue, getVa
   const [tagValue, setTagValue] = useState('');
   const [tags, setTags] = useState([]);
 
+
+
   const addTags = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
@@ -28,7 +30,12 @@ const CustomTag = ({ label, name, placeholder, register, errors, setValue, getVa
       required: true,
       validate: (value) => value.length > 0
     });
-  }, [register, name]);
+
+    const existingTags = getValues(name);
+    if (existingTags && existingTags.length > 0) {
+      setTags(existingTags); // Set existing tags when editing
+    }
+  }, [register, name, getValues]);
 
 
   

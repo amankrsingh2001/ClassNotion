@@ -14,12 +14,13 @@ import { addCourseDetails, editCourseAPI } from '../../../../../services/courseD
 const CourseInformationForm = () => {
 
   const dispatch = useDispatch()
-  const {course, editCourse} = useSelector(state=>state.course)
+  const {course, editCourse} = useSelector(state => state.course)
   const {register, handleSubmit, setValue, getValues, formState:{errors}} = useForm()
   const [loading, setLoading] = useState(false)
   const [courseCategories, setCourseCategories] = useState([])
   const { GET_ALL_COURSE_CATEGORY  } = courseApi
   const {token} = useSelector(state =>state.auth)
+
 
 
   const getCategories = async() =>{
@@ -42,7 +43,7 @@ const CourseInformationForm = () => {
       setValue("coursePrice", course.price)
       setValue("courseTags", course.tag)
       setValue("courseBenefits", course.whatYouWillLearn)
-      setValue("courseCategory", course.category)
+      setValue("courseCategory", course.Category)
       setValue("courseRequirement", course.instructions)
       setValue("courseImage", course.thumbnail)
     }
@@ -97,7 +98,7 @@ const CourseInformationForm = () => {
         }
  
         if(currentValue.courseBenefits !== course.WhatYouWillLearn){
-          formData.append('whatYouWillLearn', data.courseRequirement)
+          formData.append('whatYouWillLearn', data.courseBenefits)
         }
 
         if(currentValue.courseCategory._id !== course.Category._id){
@@ -228,6 +229,7 @@ const CourseInformationForm = () => {
             errors = {errors}
             setValue = {setValue}
             getValues = {getValues}
+            editData = {course.thumbnail}
           /> 
 
           

@@ -61,23 +61,17 @@ const Navbar = () => {
                       </p>
                       <MdOutlineKeyboardArrowDown className="text-white" />
 
-                      <div className="invisible flex flex-col z-20 text-white rounded-md translate-x-[-51%] translate-y-[20%] bg-richblack-600 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all duration-200 group-hover:opacity-100 lg:w-[300px]">
-                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-richblack-600"></div>
+                      <div className="invisible flex flex-col z-20 text-white rounded-md translate-x-[-51%] translate-y-[20%] bg-richblack-800 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all duration-200 group-hover:opacity-100 lg:w-[300px]">
+                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-richblack-800"></div>
                         {subLinks.length === 0 ? (
                           <div>Testing </div>
                         ) : (
-                          subLinks.map((links, index) => {
+                          subLinks?.filter((subLink)=>(subLink?.course?.length>0)).map((subLink, i)=>{
                             return (
-                              <Link
-                                to={`/catalog/${links.name
-                                  .split(" ")
-                                  .join("_")
-                                  .toLowerCase()}`}
-                                key={index}
-                              >
-                                <p className="px-4 py-2">{links.name}</p>
+                              <Link key={i} to={`/catalog/${subLink.name.split(' ').join("_").toLowerCase()}`}>
+                              <p className="px-8 py-4 font-inter text-[#F1F2FF] font-bold">{subLink.name}</p>
                               </Link>
-                            );
+                            )
                           })
                         )}
                       </div>

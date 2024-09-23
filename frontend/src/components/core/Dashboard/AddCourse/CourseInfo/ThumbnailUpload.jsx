@@ -31,10 +31,14 @@ const ThumbnailUpload = ({
     }
   };
 
+
+
   const handleFileInputChange = (e) => {
     const selectedFile = e.target.files[0];
     handleFile(selectedFile); // Resuing the logic in one function to make the code more redable
   };
+
+
 
   const handleFile = (file) =>{
     setFile(file);
@@ -61,15 +65,24 @@ const ThumbnailUpload = ({
 
 
   //Load the previous data in edit mode
-useEffect(()=>{
-  if(editData && !file){
-    setMediaPreview(
-      <video className="w-full h-full object-contain">
-        <source src={editData} type="video/mp4"/>
-      </video>
-    )
-  }
-},[editData, file])
+useEffect(() => {
+    if (editData && !file) {
+      const isVideo = editData.endsWith('.mp4') || editData.endsWith('.mov') || editData.endsWith('.webm') || editData.endsWith('.ogg');
+      if (isVideo) {
+        setMediaPreview(
+          <video className="w-full h-full object-contain" controls>
+            <source src={editData} type="video/mp4" />
+          </video>
+        );
+      } else {
+        setMediaPreview(
+          <img src={editData} alt="media" className="w-full h-full object-contain" />
+        );
+      }
+      setValue(name, editData);  // Set the edit data in the form
+    }
+  }, [editData, file, name, setValue]);
+
 
 
   useEffect(() => {
