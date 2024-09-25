@@ -37,3 +37,9 @@ export const courseApi = {
     UPDATE_SUB_SECTION_API :  BASE_URL + 'course/updateSubSection',
     GET_INSTRUCTOR_COURSES : BASE_URL + 'course/getInstructorCourses'
 }
+
+export const studentEndpoints = {
+    COURSE_PAYMENT_APP :BASE_URL + 'payment/capturePayment',
+    COURSE_VERIFY_API : BASE_URL + 'payment/verifyPayment',
+    SEND_PAYMENT_SUCCESS_EMAIL_API : BASE_URL + 'payment/sendPaymentSuccessEmail'
+}

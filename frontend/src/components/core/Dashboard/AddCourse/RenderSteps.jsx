@@ -27,7 +27,7 @@ const  RenderSteps = () => {
   return (
     <div className='w-full '>
         <div className='items-center justify-center'>
-            <div className='flex py-4' > {/* flex */}
+            <div className='flex py-4 px-6' > {/* flex */}
                 {steps.map((item, index)=>(
                     <div key={index}  className='w-[60%] flex items-center justify-center'>
                       <div className='rounded-full text-[#838894] w-full flex items-center justify-center relative'>
@@ -36,26 +36,33 @@ const  RenderSteps = () => {
                                   step>item.id ? (< FaCheck className=' mx-auto my-auto text-[#5d5e61]'/>) : (<p className=' mx-auto my-auto text-center'>{item.id}</p>)
                               }
                           </div>
+                          <div className=''>
                           {
-                            item.id!== 3 && (  <hr className={`${item.id === step-1 ? "border-[1px] border-yellow-50 w-[94%] border-dotted absolute left-36 z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute left-36 z-[1]"}`} />)
+                            item.id!== 3 && (  <hr className={`${item.id === step-1 ?
+                               "border-[1px] border-yellow-50 w-[94%] border-dotted absolute  left-52  z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute left-52 z-[1]"}`} />)
                           }
+                            </div>
+                         
                         
                       </div>
                     </div>
                 ))}
             </div>
         </div>
-      <div className='flex justify-around w-full '>
+
+
+     <div className='flex justify-around w-full  gap-1 '>
       {
             steps.map((item, index)=>{
             
                   return  <div key={index} className='w-[90%]  items-center'>
                     
-                        <p className={`text-lg text-center  ml-2 ${index === (step-1) ? "text-[#F1F2FF] ":(`${index<step?"text-yellow-50":"text-[#585D69]"}`)}`}>{item.title}</p>
+                        <p className={`text-lg text-center  ${index === (step-1) ? "text-[#F1F2FF] ":(`${index<step?"text-yellow-50":"text-[#585D69]"}`)}`}>{item.title}</p>
                     </div>
       
           })}
       </div>
+
       {
         step === 1 && <CourseInformationForm />
         

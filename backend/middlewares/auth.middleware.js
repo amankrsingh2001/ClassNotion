@@ -33,6 +33,7 @@ const isStudent = async( req,res,next ) =>{
             if(req.user.accountType !== "Student"){
                 res.status(401).json({message:false,message:"This is a protected route for Students only"})
             }
+            next()
         } catch (error) {
             return res.status(500).json({success:false,message:"User cannot be verified"})
         }

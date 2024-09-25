@@ -153,6 +153,7 @@ const editCourse = async (req, res) => {
 
 
 const getcourseDetail = async(req, res) =>{
+    console.log("this")
    
     try {
         const courseId =  req.body.courseId;

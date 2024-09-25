@@ -21,7 +21,8 @@ const EnrolledCourses = () => {
     const response = await axios.get(GET_ENROLLED_COURSES,{headers:{
       "Authorization": `Bearer ${token}`
     }})
-      setEnrolledCourses(response.data.data)
+    // console.log()
+      setEnrolledCourses(response.data.data.course)
 
   } 
 
@@ -70,7 +71,7 @@ const EnrolledCourses = () => {
               console.log(course,"***********")
               return <div key={index}>
                   <div>
-                    <img src={course?.thumbnauil}/>
+                    <img src={course?.thumbnail}/>
                     <div>
                       <p>Course Name</p>
                       <p>Course Description</p>

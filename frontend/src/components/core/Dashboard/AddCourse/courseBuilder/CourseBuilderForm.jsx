@@ -93,7 +93,7 @@ const CourseBuilderForm = () =>{
             setValue("sectionName", sectionName)
         }
 
-    return <div className="rounded-md border-richblack-300 border-2 bg-[#161D29] p-4 mt-8 flex flex-col gap-4">
+    return <div className="rounded-md w-11/12 border-richblack-300 border-2 bg-[#161D29] p-4 mt-8 flex flex-col gap-4">
             <p className='text-3xl mt-4 font-bold'>Course Builder</p>
             <form className='flex flex-col ' onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex flex-col gap-2 px-2' >

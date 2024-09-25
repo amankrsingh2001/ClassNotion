@@ -33,7 +33,7 @@ router.post('/editCourse', auth, isInstructor, editCourse)
 
 router.get('/getInstructorCourses', auth, isInstructor, getInstructorCourses)
 
-router.post('/getCoursesDetails', getcourseDetail)
+// router.post('/getCoursesDetails', getcourseDetail)
 
 router.post('/deleteCourse', deleteCourses)
 

@@ -53,12 +53,10 @@ const cartSlice = createSlice({
                 toast.success("Course remove from the cart")
             }
         },
-        resetCard(state, action){
+        resetCart(state, action){
             state.cart = []
             state.total = 0;
             state.totalItem = 0
-
-            //update the localStorage
 
             localStorage.removeItem('cart')
             localStorage.removeItem('total')
@@ -67,6 +65,6 @@ const cartSlice = createSlice({
     }
 })
 
-export const { addToCart, removeFromCart, resetCard } = cartSlice.actions
+export const { addToCart, removeFromCart, resetCart } = cartSlice.actions
 
 export default cartSlice.reducer

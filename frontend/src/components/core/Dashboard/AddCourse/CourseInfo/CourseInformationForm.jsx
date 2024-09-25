@@ -151,7 +151,7 @@ const CourseInformationForm = () => {
   }
 
   return (
-    <div className=' mt-4 p-6 '>
+    <div className=' mt-4 p-6 w-11/12'>
       <form onSubmit={handleSubmit(onSubmit)} className='rounded-md p-4 space-y-8 bg-[#161D29] border-[#2C333F] border-2 '
         encType="multipart/form-data"
       >

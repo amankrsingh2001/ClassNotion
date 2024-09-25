@@ -116,16 +116,16 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
   }
 
   return (
-    <div>
+    <div className="fixed w-11/12 inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
 
-      <div>
+      <div className="w-[700px]  rounded-lg border border-richblack-400 bg-richblack-800 p-6">
 
-        <div>
-            <p>{view && "Check out"} {edit && "Editing"} {add && "Adding"} Lecture</p>
-            <button onClick={() => {!loading ? setModalData(null):{}}}><RxCross2 /></button>
+        <div className='flex mt-8'>
+            <p className='font-bold text-3xl py-4'>{view && "Check out"} {edit && "Editing"} {add && "Adding"} Lecture</p>
+            <button className="text-[#EF476F] p-4" onClick={() => {!loading ? setModalData(null):{}}}><RxCross2 /></button>
         </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}  encType="multipart/form-data">
+      <form onSubmit={handleSubmit(onSubmit)} className='rounded-md p-4 space-y-8 bg-[#161D29] border-[#2C333F] border-2 '  encType="multipart/form-data">
 
           <ThumbnailUpload name="lectureVideo"
             label="lectureVideo"
@@ -136,24 +136,24 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
             viewData = {view? modalData.videoUrl : null}
             editData = {edit? modalData.videoUrl: null}
           />
-          <div>
-            <label htmlFor='lectureTitle'>Lecture Title</label>
+          <div  className='flex flex-col gap-2 px-2' >
+            <label className='font-[#F1F2FF]' htmlFor='lectureTitle'>Lecture Title</label>
             <input id='lectureTitle' 
               placeholder='Enter Lecture Titile'
               {...register("lectureTitle", {required:true})}
-              className='w-full text-black'
+              className='w-full p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
             />
             {
               errors.lectureTitle && (<span>Lecture Title is required</span>)
             }
           </div>
-          <div>
-            <label htmlFor="">Lecture Descritpion</label> 
+          <div className='flex flex-col gap-2 px-2'>
+            <label  className='font-[#F1F2FF]' htmlFor="lectureDescription">Lecture Descritpion</label> 
             <textarea
               id='lectureDescription'
               placeholder='Enter Lecture Description'
               {...register('lectureDesc', {required:true})}
-              className='w-full min-h-[130px] text-black'
+              className='min-h-[130px] w-full  p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
             />
             {
               errors.lectureDesc && (<span>
@@ -164,8 +164,9 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
 
           {
             !view && (
-              <div>
-                <button>{edit ? "Save Changes" : "Save"} </button>
+              <div className='flex gap-4'>
+                <button className='bg-yellow-50 p-2 text-richblack-800 rounded-md font-medium'>{edit ? "Save Changes" : "Save"} </button>
+                <button className='bg-white rounded-md text-richblack-800 p-2' onClick={()=>setModalData(null)} type='button'>Cancel</button>
               </div>
             )
           }
