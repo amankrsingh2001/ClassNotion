@@ -6,13 +6,10 @@ const { RatingAndReview } = require("../models/RatingAndReview");
 //create Rating And Review
 const createRating = async(req, res) =>{
 
-        //check is user is enrolled or not
-        //Check is user already reviewed or not 
-        // create rating
-        //update the course with rating and review
+      
         try {
             const {rating, review, courseId} = req.body;
-            const {userId} = req.user.id || req.authorization.id;
+            const userId = req.user.id || req.authorization.id;
 
             const courseDetail = await Course.findOne({_id:courseId},{studentsEnrolled:{$elemMatch:{$er:userId}}})
 
@@ -30,10 +27,10 @@ const createRating = async(req, res) =>{
             }
 
             const ratingReview = await RatingAndReview.create({
-                rating,
-                review,
-                courseId,
-                userId
+                rating:rating,
+                review:review,
+                course:courseId,
+                user:userId
             })
 
             const updateCourse = await Course.findByIdAndUpdate(courseId,{
@@ -42,11 +39,9 @@ const createRating = async(req, res) =>{
                 }
             },{ new:true })
 
-            console.log(updateCourse)
-
-            return res(200).json({success:true, message:"Rating and Review Created successfully"})
+            return res.status(200).json({success:true, message:"Rating and Review Created successfully"})
         } catch (error) {
-            return res.status(500).json({success:false,message:"Failed to create Rating and Review"})
+            return res.status(500).json({success:false,message:"Failed to create Rating and Review", error:error.message})
         }
 }
 
@@ -90,7 +85,7 @@ const getAllRatingAndReview = async(req,res)=>{
         try {
             const allReview = await RatingAndReview.find({}).sort({rating:"desc"}).populate({
                 path:"user",
-                select:"fistName lastName email image"
+                select:"firstName lastName email image"
             }).populate({
                 path:"course",
                 select:"courseName"

@@ -26,6 +26,8 @@ import MyCourses from "./components/core/Dashboard/MyCourses.jsx";
 import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import CourseDetail from './pages/CourseDetails';
+import ViewCourse from "./pages/ViewCourse.jsx";
+import VideoDetails from "./components/core/viewCourse/VideoDetails.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -77,6 +79,15 @@ const Router = createBrowserRouter([
       },{
         path:'courses/:courseId',
         element:<CourseDetail/>
+      }, {
+        path: "/view-course",
+        element: <PrivateRoute><ViewCourse /></PrivateRoute>,
+        children: [
+          {
+            path: ":courseId/section/:sectionId/sub-section/:subSectionId",
+            element: <VideoDetails />,
+          },
+        ],
       },
       {
         path:'/contact-us',

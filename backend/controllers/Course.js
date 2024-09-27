@@ -152,49 +152,70 @@ const editCourse = async (req, res) => {
 
 
 
-const getcourseDetail = async(req, res) =>{
-    console.log("this")
-   
+const getCourseDetails = async (req, res) => {
     try {
-        const courseId =  req.body.courseId;
-   
-        if(!courseId){
-            return res.status(402).json({success:false, message:"Failed to get the courseId"})
-        }
-        const courseDetails = await Course.find(
-            {_id:courseId})
-            .populate(
-                {
-                    path:"instructor",
-                    populate:{
-                        path:"additionalDetails",
-                    },
-                }
-            )
-            .populate("Category")
-            // .populate("ratingAndreviews")
-            .populate({
-                path:"courseContent",
-                populate:{
-                    path:"subSection",
-                },
-            })
-            .exec();
+      const { courseId } = req.body
+      const courseDetails = await Course.findOne({
+        _id: courseId,
+      })
+        .populate({
+          path: "instructor",
+          populate: {
+            path: "additionalDetails",
+          },
+          select: "-password", 
+        })
+        .populate("Category")
+        .populate("ratingAndReviews")
+        .populate({
+          path: "courseContent",
+          populate: {
+            path: "subSection",
+            select: "-videoUrl",
+          },
+        })
+        .exec()
+  
+      if (!courseDetails) {
+        return res.status(400).json({
+          success: false,
+          message: `Could not find course with id: ${courseId}`,
+        })
+      }
+  
+      // if (courseDetails.status === "Draft") {
+      //   return res.status(403).json({
+      //     success: false,
+      //     message: `Accessing a draft course is forbidden`,
+      //   });
+      // }
+  
+      let totalDurationInSeconds = 0
+      courseDetails.courseContent.forEach((content) => {
+        content.subSection.forEach((subSection) => {
+          const timeDurationInSeconds = parseInt(subSection.timeDuration)
+          totalDurationInSeconds += timeDurationInSeconds
+        })
+      })
+      
 
-
-
-        if(!courseDetails){
-            return res.status(402).json({success:false, message:"Failed to get the course"})
-        }
-   
-        return res.status(200).json({success:true,message:'Course sent successfully',data:{
-            courseDetails
-        }});
-        
+  
+      const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+  
+      return res.status(200).json({
+        success: true,
+        data: {
+          courseDetails,
+          totalDuration,
+        },
+      })
     } catch (error) {
-        return res.status(500).json({success:false, message:error.message})
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
     }
-}
+  }
 
 const getFullCourseDetails = async (req, res) => {
     try {
@@ -337,7 +358,7 @@ const deleteCourses = async(req, res) =>{
 
 
 module.exports = {
-    getcourseDetail,
+    getCourseDetails,
     createCourse,
     editCourse,
     showAllCourses,

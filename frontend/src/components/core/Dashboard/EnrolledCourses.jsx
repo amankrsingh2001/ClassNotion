@@ -7,6 +7,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { useNavigate } from 'react-router-dom';
 
 
+
 const EnrolledCourses = () => {
   const [enrolledCourses, setEnrolledCourses] = useState(null)
   const {token} = useSelector( state => state.auth )
@@ -22,6 +23,7 @@ const EnrolledCourses = () => {
       "Authorization": `Bearer ${token}`
     }})
     // console.log()
+    console.log(response,"This is the response")
       setEnrolledCourses(response.data.data.course)
 
   } 
@@ -67,18 +69,20 @@ const EnrolledCourses = () => {
       </div>
       {/* card Data */}
           {
-            enrolledCourses.map((course , index)=>{
-              console.log(course,"***********")
-              return <div key={index}>
-                  <div>
-                    <img src={course?.thumbnail}/>
-                    <div>
-                      <p>Course Name</p>
-                      <p>Course Description</p>
+            enrolledCourses.map((course , index, arr)=>{
+              return <div key={index}  className={`text-white flex items-center border border-richblack-700 ${
+                index === arr.length - 1 ? "rounded-b-lg" : "rounded-none"
+              }`}>
+                  <div onClick={()=>navigate(`/view-course/${course?._id}/section/${course?.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`)} className="flex  cursor-pointer items-center gap-4 px-5 py-3" >
+                    <img src={course?.thumbnail} alt="course_img"
+                  className="h-14 w-14 rounded-lg object-cover" />
+                    <div  className="flex max-w-xs flex-col gap-2">
+                      <p className="font-semibold">Course Name</p>
+                      <p className="text-xs text-richblack-300">Course Description</p>
                     </div>
                   </div>
-                  <div>{course?.totalDuration}</div>
-                  <div>
+                  <div className="w-1/4 px-2 py-3">{course?.totalDuration}</div>
+                  <div  className="flex w-1/5 flex-col gap-2 px-2 py-3">
                     <p>Progress: {course.progressPercentage || 0}</p>
                     <ProgressBar completed={course.progressPercentage || 0}
                     height='8px'

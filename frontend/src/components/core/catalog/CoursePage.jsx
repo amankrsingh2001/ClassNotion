@@ -7,6 +7,12 @@ import { CiClock2 } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { buyCourse } from "../../../services/studentFeaturesAPI";
+import toast from "react-hot-toast";
+import ConfirmationModal from '../../Common/ConfirmationModal';
+import { formatDate } from '../../../services/formatData';
+import copy from 'copy-to-clipboard';
+import { ACCOUNT_TYPE } from '../../../utils/constants';
+import { addToCart } from "../../../slices/cartSlice";
 
 const CoursePage = ({courseDetail}) =>{
   
@@ -16,6 +22,8 @@ const CoursePage = ({courseDetail}) =>{
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {courseId} = useParams()
+    const [confirmationModal, setConfirmationModal] = useState(null)
+    const [isStudentEnrolled, setIsStudentEnrolled] = useState(false)
 
     useEffect(() => {
         if (courseDetail?.ratingAndReviews) {
@@ -26,19 +34,61 @@ const CoursePage = ({courseDetail}) =>{
         }
       }, [courseDetail]);
 
-
+      
+      
     if(!courseDetail){
         return <p>Loading.....</p>
     }
 
+    const checkIsStudentEnrolled=()=>{
+        if(courseDetail?.studentsEnrolled.includes(user._id)){
+            setIsStudentEnrolled(true)
+        }
+    }
 
-    const addTocartHandler = () =>{
+    useEffect(()=>{
+        if(courseDetail && user){
+            checkIsStudentEnrolled()
+        }
+    },[courseDetail,user])
+    
+    const handleAddToCart = () =>{
+        if(user && (user.accountType === ACCOUNT_TYPE.INSTRUCTOR || user.accountType ===ACCOUNT_TYPE.ADMIN) ){
+            toast.error("You are an instructor, You can buy a course")
+            return;
+        }if(token){
+            dispatch(addToCart(courseDetail))
+            return
+        }
+        setConfirmationModal({
+            text1:"You are not logged in",
+            text2:'Please login to add to cart',
+            btn1text:"Login",
+            btn2text:"Cancel",
+            btn1Handler:()=>navigate('/login'),
+            btn2Handler:()=>setConfirmationModal(null),
+        })
 
     }
 
+    const handleShare = () =>{
+        copy(window.location.href)
+        toast.success("Copied to clipboad")
+    }
+
     const handleBuyCourse = () =>{
+        if(!token){
+            setConfirmationModal({
+                text1:'You are not logged In',
+                text2:'Please login to purchase the course',
+                btn1Text:'Login',
+                btn2Text:'Cancel',
+                btn1Handler:()=>navigate('/login'),
+                btn2Handler:()=>setConfirmationModal(null),
+            })
+        }
         if(token){
-            buyCourse( [courseId],token, user, navigate, dispatch)
+            buyCourse([courseId],token, user, navigate, dispatch)
         }
 
     }
@@ -57,7 +107,7 @@ const CoursePage = ({courseDetail}) =>{
                     <p className="py-4">Create by {courseDetail?.instructor.firstName || "Teacher"} {courseDetail?.instructor.lastName || "Teacher"}</p>
 
                     <div className="flex gap-8 py-2">
-                        <p className='text-center'><IoMdInformationCircleOutline  className="inline mb-[2px]"/> Created At{}</p>
+                        <p className='text-center'><IoMdInformationCircleOutline  className="inline mr-2 mb-[2px]"/>{`Created At ${formatDate( courseDetail?.updatedAt )}`}</p>
                         <p className='' > <IoIosGlobe className="inline mb-[2px]"/> English</p>
                     </div>
 
@@ -73,13 +123,18 @@ const CoursePage = ({courseDetail}) =>{
                 <div className="bg-[#2C333F] rounded-md p-4 flex flex-col gap-4">
 
                 <p className="text-3xl py-4">Rs. {courseDetail?.price}</p>
-
+            {
+                isStudentEnrolled?(<button onClick={()=>navigate('/dashboard/enrolled-courses')} className="bg-yellow-25 rounded-md text-richblue-700 p-2 font-semibold">Go to course</button>):(
                 <div className="flex flex-col gap-3">
-                <button onClick={addTocartHandler} className="bg-yellow-25 rounded-md text-richblue-700 p-2 font-semibold">Add to Cart</button>
-                <button onClick={()=>handleBuyCourse()} className="bg-richblack-800 rounded-md text-white p-2">Buy Now</button>
-
-                </div>
-                       
+                    <button onClick={()=>handleAddToCart()} className="bg-yellow-25 rounded-md text-richblue-700 p-2 font-semibold">Add to Cart</button>
+                    <button onClick={()=>handleBuyCourse()} className="bg-richblack-800 rounded-md text-white p-2">Buy Now</button>
+                 </div>
+            )
+                
+                    
+                            
+            }
+               
                  <p className="text-center text-[#DBDDEA] text-sm">30-days Money Back Gurantee</p>
                     <div className="flex flex-col gap-2 py-2">
                         <p className="font-semibold">This course include:</p>
@@ -89,7 +144,7 @@ const CoursePage = ({courseDetail}) =>{
                         })
                     }
                     </div>
-                    <p className="text-yellow-50 text-center">Share</p>
+                    <button onClick={()=>handleShare()} className="text-yellow-50 text-center">Share</button>
 
                 </div>
                 
@@ -100,6 +155,9 @@ const CoursePage = ({courseDetail}) =>{
            
                   
         </div>
+        {
+            confirmationModal && <ConfirmationModal modalData={confirmationModal}/>
+        }
 
     </div>
 }

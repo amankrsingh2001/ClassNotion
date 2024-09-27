@@ -3,6 +3,7 @@ import { authApi, profileApi } from "./api";
 import { setSignUpData, setToken } from "../slices/authSlice";
 import { setUser } from "../slices/profileSlice";
 import toast from "react-hot-toast";
+import { resetCart } from "../slices/cartSlice";
 
 
 const { SENDOTP_API, SIGNUP_API, LOGIN_API, RESET_PASSWORD_TOKEN, RESET_PASSWORD, CHANGE_PASSWORD } = authApi;

@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getFullCourseDetail } from '../services/courseDetail';
+import { getNewCourseDetail } from '../services/courseDetail';
 import { useSelector } from 'react-redux';
 import CoursePage from '../components/core/catalog/CoursePage';
 import CourseContent from '../components/core/catalog/CourseContent';
@@ -15,9 +15,13 @@ const CourseDetail = () =>{
     const {token} = useSelector(state =>state.auth)
 
     const getCourseDetail = async() =>{
-        const response = await getFullCourseDetail(courseId, token)
+        // const response = await getFullCourseDetail(courseId, token)
+        const response = await getNewCourseDetail(courseId)
         setCourseDetail(response)
     }
+
+
+
 
     useEffect(()=>{
         if(courseId){

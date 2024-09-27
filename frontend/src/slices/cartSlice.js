@@ -3,7 +3,7 @@ import {toast} from 'react-hot-toast'
 
 const initialState = {
     cart :localStorage.getItem("cart")?JSON.parse(localStorage.getItem('cart')):[],
-    total:localStorage.getItem('total')?JSON.parse(localStorage.getItema('total')):0,
+    total:localStorage.getItem('total')?JSON.parse(localStorage.getItem('total')):0,
     totalItem : localStorage.getItem("totalItem") ? JSON.parse(localStorage.getItem('totalItem')):0
 }
 

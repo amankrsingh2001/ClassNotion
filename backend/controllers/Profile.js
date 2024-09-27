@@ -105,7 +105,18 @@ const updateDisplayPicture = async(req, res)=>{
 const getEnrolledCourse = async(req, res)=>{
     try {
         const userId = req.user.id || req.authorization.id;
-        const userDetail = await User.findOne({_id:userId}).populate("courses").exec()
+        const userDetail = await User.findOne({_id: userId})
+        .populate({
+          path: 'courses',
+          populate: {
+            path: 'courseContent',
+            populate:{
+                path:'subSection'
+            }
+          }
+        })
+        .exec();
+        console.log(userDetail,'THis is the userDetail')
         if(!userDetail){
             return res.status(400).json({success:false, message: `Could not found user with id: ${userId}`})
         }

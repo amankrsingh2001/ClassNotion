@@ -7,8 +7,9 @@ const {CREATE_COURSE_API, EDIT_COURSE_API, DELETE_COURSE_API ,GET_INSTRUCTOR_COU
     COURSE_GET_FULL_COURSE_DETAILS,
     CREATE_SECTION_API, UPDATE_COURSE_SECTION_API,
     DELETE_COURSE_SECTION_API,  
+    GET_COURSE_DETAIL,
     DELETE_COURSE_SUB_SECTION_API,
-    CREATE_SUB_SECTION_API, UPDATE_SUB_SECTION_API} = courseApi
+    CREATE_SUB_SECTION_API, CREATE_RATING_OF_COURSE, UPDATE_SUB_SECTION_API, UPDATE_COURSE_PROGRESS} = courseApi
 
 const {CATEGORIES_API} = categories
 
@@ -237,17 +238,64 @@ export const deleteCourse = async(data, token)=>{
 
 export const getFullCourseDetail = async(courseId, token) =>{
     let result ;
-
     try {
         const response = await axios.post(COURSE_GET_FULL_COURSE_DETAILS, {courseId}, {
             headers:{
                 'Authorization':`Bearer ${token}`
             }
         })
-        result = response?.data?.data?.courseDetails
+        result = response?.data?.data
+        console.log(result,"This is the result")
+       
     } catch (error) {
         console.log(error) 
         toast.error('Something went wrong')       
     }
     return result
+}
+
+export const getNewCourseDetail = async(courseId) =>{
+    let result;
+    try {
+        const response = await axios.post(GET_COURSE_DETAIL,{courseId})
+        result = response?.data?.data?.courseDetails
+    } catch (error) {
+        toast.error('Failed to fetch courseDetail')
+    }
+    return result
+}
+
+export const updateCourseProgress = async(data, token) =>{
+  try {
+    console.log(data,"This is the data")
+      const res = await axios.post(UPDATE_COURSE_PROGRESS, data, {
+          headers:{
+              "Authorization": `Bearer ${token}`
+          }
+      })
+  } catch (error) {
+        console.log(error, "Error in course Details")
+  }
+
+}
+
+
+export const createRating = async(data, token) =>{
+    let Success = false;
+    try {
+        const response = await axios.post(CREATE_RATING_OF_COURSE, data, {
+            headers:{
+                "Authorization":`Bearer ${token}`
+            }
+        })
+        if(response.data.success){
+            toast.success('Rating Created')
+            Success = true
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    return Success
+
+
 }

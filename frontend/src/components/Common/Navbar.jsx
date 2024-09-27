@@ -2,7 +2,7 @@ import { Link, matchPath, useLocation } from "react-router-dom";
 import logo from "../../assets/Logo/Logo-Full-Light.png";
 import { NavbarLinks } from "../../data/navbar-links";
 import { useSelector } from "react-redux";
-import { FaCartPlus } from "react-icons/fa";
+import { FiShoppingCart } from "react-icons/fi";
 import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { useEffect, useState } from "react";
 
@@ -97,7 +97,7 @@ const Navbar = () => {
         <div className="flex gap-2 items-center">
           {user && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
-              <FaCartPlus />
+             <FiShoppingCart className="text-white mr-4"/>
               {totalItem > 0 && <span>{totalItem}</span>}
             </Link>
           )}

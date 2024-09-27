@@ -6,6 +6,7 @@ import ReactStars from 'react-stars'
 import { FaRegStar } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { removeFromCart } from '../../../../slices/cartSlice'
+import { MdDeleteForever } from "react-icons/md";
 
 
 const RenderCartCourses = ({cart}) => {

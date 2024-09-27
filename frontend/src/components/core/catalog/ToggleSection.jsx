@@ -3,11 +3,7 @@ import { IoIosTv } from "react-icons/io";
 import { FaChevronUp } from "react-icons/fa";
 
 const ToggleSection = ({section}) => {
-    const [active, setActive] = useState(0)
-
-    const subSectionHandler = (id) =>{
-        setActive(id)
-    }
+  
 
 
   return (

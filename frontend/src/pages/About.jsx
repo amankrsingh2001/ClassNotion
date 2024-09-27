@@ -1,3 +1,4 @@
+import ReviewSlider from "../components/Common/ReviewSlider";
 import AboutCard from "../components/core/About.jsx/AboutCard";
 import AboutDetail from "../components/core/About.jsx/AboutDetail";
 import AboutGrid from "../components/core/About.jsx/AboutGrid";
@@ -118,6 +119,8 @@ const About = () => {
                 <AboutGrid/>
                 <ContactForm/>                
             </div>
+
+            <ReviewSlider/>
 
 
     </div>

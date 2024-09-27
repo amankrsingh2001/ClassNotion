@@ -1,10 +1,11 @@
 const express = require('express');
-const { createCourse, showAllCourses, getcourseDetail, getFullCourseDetails, editCourse, getInstructorCourses, deleteCourses } = require('../controllers/Course');
+const { createCourse, showAllCourses, getcourseDetail, getFullCourseDetails, editCourse, getInstructorCourses, deleteCourses, getCourseDetails } = require('../controllers/Course');
 const { auth, isInstructor, isAdmin, isStudent } = require('../middlewares/auth.middleware');
 const { createSection, updateSection, deleteSection } = require('../controllers/Section');
 const { updateSubSection, deleteSubSection, createSubSection } = require('../controllers/SubSection');
 const { createCategory, showAllCategory, categoryPageDetails } = require('../controllers/Category');
 const { createRating, getAverageRating, getAllRatingAndReview, getCourseRatingandReview } = require('../controllers/RatingAndReview');
+const {updateCourseProgress} = require('../controllers/courseProgress')
 const router = express.Router();
 
 router.post('/createCourse', auth, isInstructor, createCourse)
@@ -27,7 +28,9 @@ router.post('/addSubSection', auth, isInstructor, createSubSection)
 
 router.get('/getAllCourses', showAllCourses)
 
-router.post('/getCourseDetails', auth, getFullCourseDetails)
+router.post("/getCourseDetails", getCourseDetails)
+
+router.post('/getfullCourseDetails', auth, getFullCourseDetails)
 
 router.post('/editCourse', auth, isInstructor, editCourse)
 
@@ -36,6 +39,8 @@ router.get('/getInstructorCourses', auth, isInstructor, getInstructorCourses)
 // router.post('/getCoursesDetails', getcourseDetail)
 
 router.post('/deleteCourse', deleteCourses)
+
+router.post('/updateCourseProgress',auth, isStudent, updateCourseProgress)
 
 // Category router (only by Admin)
 

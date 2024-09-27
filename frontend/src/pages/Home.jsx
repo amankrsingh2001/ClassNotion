@@ -1,5 +1,5 @@
 import { FaArrowRight } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { HilightText } from "../components/core/HomePage/HilightText";
 import Cpabutton from "../components/core/HomePage/Cpabutton";
 import Banner from "../assets/Images/banner.mp4";
@@ -12,10 +12,15 @@ import CardImage from "../components/core/HomePage/CardImage";
 import { LogoCard } from "../components/core/HomePage/LogoCard";
 import CardData from '../data/CardData'
 import ExploreMore from "../components/core/HomePage/ExploreMore";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import ReviewSlider from "../components/Common/ReviewSlider";
 
 
 
 const Home = () => {
+  const {token} = useSelector(state => state.auth)
+  const navigate = useNavigate()
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -24,6 +29,14 @@ const Home = () => {
       mirror: false,
     });
   }, []);
+
+  const onClickHandler = () =>{
+    if(token){
+      toast.error('You are already logged in please logout and signup as a instructor')
+    }else{
+      navigate('/signup')
+    }
+  }
 
   return (
     <div>
@@ -34,14 +47,12 @@ const Home = () => {
         ></div>
 
         <div className="relative z-1 w-11/12  max-w-maxContent flex flex-col items-center">
-          <Link to={"/signup"}>
             <div className="group mt-16 shadow-[0px_1px_2px_0px_#fffefebc] p-1 mx-auto rounded-full bg-richblack-800 font-bold text-richblack-200 transition-all duration-200 hover:scale-105 w-fit">
               <div className="flex items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-                <button>Become an Instructor</button>
+                <button onClick={()=>onClickHandler()}>Become an Instructor</button>
                 <FaArrowRight />
               </div>
             </div>
-          </Link>
           {/*Heading section */}
           <div className="text-center font-semibold text-4xl animate-wiggle font-inter mt-7">
             Empower Your Future with
@@ -271,6 +282,7 @@ const Home = () => {
             </div>
 
        </div>
+            <ReviewSlider/>
 
     </div>
   );

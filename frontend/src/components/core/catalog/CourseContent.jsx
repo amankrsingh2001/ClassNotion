@@ -9,6 +9,7 @@ const CourseContent = ({ courseDetail }) => {
   const [subSectionCount, setSubSectionCount] = useState(0);
   const [subSectionActive, setSubSectionActive] = useState(null)
 
+
   // Function to calculate subsection count
 
   let count = 0
@@ -31,7 +32,7 @@ const CourseContent = ({ courseDetail }) => {
     }
   }, [courseDetail]);
 
-
+  
 
   const subSectionHandler = (id) =>{
      if(subSectionActive===id){
@@ -40,8 +41,6 @@ const CourseContent = ({ courseDetail }) => {
       setSubSectionActive(id)
      }
   }
-
-  
 
 
   return (
@@ -81,7 +80,12 @@ const CourseContent = ({ courseDetail }) => {
                       
                       </div>
 
-                      <div className={`${section._id===subSectionActive?"block":"hidden"} w-full`}>
+                      <div className={`
+                            transition-all duration-1000 ease-in-out
+                            ${section._id === subSectionActive ? "opacity-100 max-h-[1000px]" : "opacity-0 max-h-0"}
+                            overflow-hidden w-full
+                          `}
+                        >
                           <ToggleSection section = {section}/>
                         </div>
                         

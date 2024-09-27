@@ -28,14 +28,19 @@ export const courseApi = {
     CREATE_COURSE_API : BASE_URL + 'course/createCourse',
     EDIT_COURSE_API:BASE_URL+"course/editCourse",
     DELETE_COURSE_API:  BASE_URL + 'course/deleteCourse',
-    COURSE_GET_FULL_COURSE_DETAILS: BASE_URL + 'course/getCourseDetails',
+    GET_COURSE_DETAIL : BASE_URL +  'course/getCourseDetails',
+    COURSE_GET_FULL_COURSE_DETAILS: BASE_URL + 'course/getfullCourseDetails',
     CREATE_SECTION_API :BASE_URL + 'course/addSection',
     UPDATE_COURSE_SECTION_API : BASE_URL + 'course/updateSection',
     DELETE_COURSE_SECTION_API : BASE_URL + 'course/deleteSection',
     DELETE_COURSE_SUB_SECTION_API : BASE_URL + 'course/deleteSubSection',
     CREATE_SUB_SECTION_API : BASE_URL + 'course/addSubSection',
     UPDATE_SUB_SECTION_API :  BASE_URL + 'course/updateSubSection',
-    GET_INSTRUCTOR_COURSES : BASE_URL + 'course/getInstructorCourses'
+    GET_INSTRUCTOR_COURSES : BASE_URL + 'course/getInstructorCourses',
+    UPDATE_COURSE_PROGRESS : BASE_URL + 'course/updateCourseProgress',
+    CREATE_RATING_OF_COURSE : BASE_URL + 'course/createRating',
+    GET_ALL_REVIEWS : BASE_URL + 'course/getReviews'
+
 }
 
 export const studentEndpoints = {

@@ -9,11 +9,14 @@ const { User } = require("../models/User");
 const { default: mongoose } = require("mongoose");
 const { paymentSuccessEmail } = require("../mail/paymentSuccessEmail");
 const crypto = require('crypto'); 
+const { CourseProgress } = require("../models/CourseProgress");
 //capture the payment and initiate the razor pay order
 
 const capturePayment = async(req, res) => {
   const { courses } = req.body;
   const userId = req.userId;
+
+  const newCourses = courses.flat(1);
 
   if (courses.length === 0) {
       return res.json({ success: false, message: "Please provide Course Id" });
@@ -21,7 +24,8 @@ const capturePayment = async(req, res) => {
 
   let totalAmount = 0;
 
-  for (const course_id of courses) {
+  for (const course_id of newCourses) {
+    console.log(course_id,"***************")
       try {
           let course = await Course.findById(course_id);
           if (!course) {
@@ -118,9 +122,16 @@ const enrollStudents = async(courses, userId, res) =>{
           return res.status(500).json({success:false, message:"Course not found"})
       }
 
+      const courseProgress = await CourseProgress.create({
+        courseId:courseId,
+        userId:userId,
+        completedVideo:[]
+      })
+
       const enrolledStudent = await User.findByIdAndUpdate(userId,{
         $push:{
-          courses:courseId
+          courses:courseId,
+          courseProgress:courseProgress._id
         }
       },{new:true})
 

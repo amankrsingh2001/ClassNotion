@@ -38,14 +38,16 @@ const CourseInformationForm = () => {
     setLoading(false)
 
     if(editCourse){
-      setValue("courseTitle", course.courseName)
-      setValue("courseShortDesc", course.courseDescription)
-      setValue("coursePrice", course.price)
-      setValue("courseTags", course.tag)
-      setValue("courseBenefits", course.whatYouWillLearn)
-      setValue("courseCategory", course.Category)
-      setValue("courseRequirement", course.instructions)
-      setValue("courseImage", course.thumbnail)
+
+
+      setValue("courseTitle", course.courseDetails.courseName)
+      setValue("courseShortDesc", course.courseDetails.courseDescription)
+      setValue("coursePrice", course.courseDetails.price)
+      setValue("courseTags", course.courseDetails.tag)
+      setValue("courseBenefits", course.courseDetails.whatYouWillLearn)
+      setValue("courseCategory", course.courseDetails.Category)
+      setValue("courseRequirement", course.courseDetails.instructions)
+      setValue("courseImage", course.courseDetails.thumbnail)
     }
   }
 
