@@ -19,7 +19,8 @@ export const profileApi = {
     UPDATE_ABOUT_API : BASE_URL + "profile/updateProfile",
     GET_USER_INFO : BASE_URL + "profile/getUserDetails",
     DELETE_USER_ACCOUNT: BASE_URL + "profile/deleteProfile",
-    GET_ENROLLED_COURSES : BASE_URL + "profile/getEnrolledCourses"
+    GET_ENROLLED_COURSES : BASE_URL + "profile/getEnrolledCourses",
+    GET_INSTRUCTOR_API : BASE_URL + 'profile/getInstructorData'
 }
 
 export const courseApi = {
@@ -40,7 +41,7 @@ export const courseApi = {
     UPDATE_COURSE_PROGRESS : BASE_URL + 'course/updateCourseProgress',
     CREATE_RATING_OF_COURSE : BASE_URL + 'course/createRating',
     GET_ALL_REVIEWS : BASE_URL + 'course/getReviews'
-
+   
 }
 
 export const studentEndpoints = {

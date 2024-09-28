@@ -1,5 +1,5 @@
 import axios from "axios"
-import { categories, courseApi } from "./api"
+import { categories, courseApi, profileApi } from "./api"
 import { toast } from 'react-hot-toast';
 
 
@@ -12,6 +12,7 @@ const {CREATE_COURSE_API, EDIT_COURSE_API, DELETE_COURSE_API ,GET_INSTRUCTOR_COU
     CREATE_SUB_SECTION_API, CREATE_RATING_OF_COURSE, UPDATE_SUB_SECTION_API, UPDATE_COURSE_PROGRESS} = courseApi
 
 const {CATEGORIES_API} = categories
+const { GET_INSTRUCTOR_API } = profileApi
 
 export const addCourseDetails = async(data, token) =>{
     let result = null
@@ -298,4 +299,19 @@ export const createRating = async(data, token) =>{
     return Success
 
 
+}
+
+export const getInstructorData = async(token) =>{
+    let result = [];
+    try {
+            const response = await axios.get( GET_INSTRUCTOR_API ,{
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+            result = response?.data?.data
+    } catch (error) {
+        console.log("Get instructor Api error", error)
+    }
+    return result
 }

@@ -129,11 +129,38 @@ const getEnrolledCourse = async(req, res)=>{
     }
 }
 
+const instructorDashboard = async(req, res)=>{
+    try {
+        const userId = req.user.id || req.authorization.id
+        const courseDetails = await Course.find({instructor:userId})
+
+        const courseData = courseDetails.map((course)=>{
+            const totalStudentsEnrolled = course.studentsEnrolled.length
+            const totalAmountGenerated = totalStudentsEnrolled * course.price
+
+            //create the new object with additonal fiels
+            const courseDataWithStats = {
+                _id:course._id,
+                courseName: course.courseName,
+                courseDescription : course.courseDescription,
+                totalStudentsEnrolled,
+                totalAmountGenerated
+
+            }
+            return courseDataWithStats
+        })
+        return res.status(200).json({success:true, data:courseData})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({success:'false', message:"Internal sever error"})
+    }
+}
 
 module.exports = {
     updateProfile,
     deleteAccount,
     getUserDetails,
     updateDisplayPicture,
-    getEnrolledCourse
+    getEnrolledCourse,
+    instructorDashboard
 }

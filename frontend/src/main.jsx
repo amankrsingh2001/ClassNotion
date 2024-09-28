@@ -28,6 +28,7 @@ import Catalog from "./pages/Catalog.jsx";
 import CourseDetail from './pages/CourseDetails';
 import ViewCourse from "./pages/ViewCourse.jsx";
 import VideoDetails from "./components/core/viewCourse/VideoDetails.jsx";
+import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor.jsx";
 
 const Router = createBrowserRouter([
   {
@@ -70,6 +71,9 @@ const Router = createBrowserRouter([
           },{
             path:'edit-course/:courseId',
             element:<EditCourse/>
+          },{
+            path:'instructor',
+            element:<Instructor/>
           }
 
         ]
