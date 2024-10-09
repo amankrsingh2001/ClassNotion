@@ -10,22 +10,24 @@ const ShowCourseCard = ({course, height}) => {
         const count = GetAvgRating(course.ratingAndReviews);
         setAverageReviewCount(count);
     },[course])
+
+
   return (
-    <div>
+    <div className='py-4 w-full'>
         <Link to={`/courses/${course?._id}`}>
-                <div>
-                    <div>
-                        <img src={course?.thumbnail} alt={course?.courseName} className={`${height} w-full rounded object-cover`}/>
+                <div className='flex flex-col gap-4'>
+                    <div className=''>
+                        <img src={course?.thumbnail} alt={course?.courseName} className={`${height} w-full  rounded object-cover aspect-video h-full`}/>
                     </div>
-                    <div>
-                        <p>{course?.courseName}</p>
-                        <p> {course?.instructor?.firstName} { course?.instructor?.lastName}</p>
+                    <div className='flex flex-col gap-1'>
+                        <p className='text-[#F1F2FF]'>{course?.courseDescription}</p>
+                        <p className='text-[#838894]'>{course?.courseName}</p>
+                        <p className=''> {course?.instructor?.firstName} { course?.instructor?.lastName}</p>
                         <div className='flex gap-x-3'>
-                            <span>{avgReviewCount || 4}</span>
                             <RatingStars Review_Count={avgReviewCount}/>
                             <span>{course?.ratingAndReviews?.length || 4} Rating</span>
                         </div>
-                        <p>Rs: {course?.price}</p>
+                        <p className='font-bold text-xl'>Rs: {course?.price}</p>
                     </div>
                 </div>
         </Link>

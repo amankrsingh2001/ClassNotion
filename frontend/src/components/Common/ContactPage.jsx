@@ -23,7 +23,11 @@ const ContactPage = () =>{
     },[reset, isSubmitSuccessful])
 
 
-    return <div className='lg:w-[40%]  py-12 px-5 shadow-[3px_7px_5px_rgba(1,1,1,0.25)] border-[1px] border-richblack-200 rounded-xl m-10'>
+    return <div className='lg:w-[40%]  py-12 px-5 shadow-[3px_7px_5px_rgba(1,1,1,0.25)] border-[1px] border-richblack-700 rounded-xl m-10'>
+      <h1 className='text-[#F1F2FF] text-4xl mb-2 ml-2'>Got a Idea? We’ve got the skills. Let’s team up</h1>
+      <p className='text-[#838894] mb-4 ml-2'>
+      Tall us more about yourself and what you’re got in mind.
+      </p>
         <form onSubmit={handleSubmit(submitContact)}>
             <div className='flex flex-col gap-6 px-2'>
         <div className=" flex md:flex-row flex-col justify-between ">

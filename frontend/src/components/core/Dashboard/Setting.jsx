@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { updateAbout, UpdateDispayPicture } from "../../../services/authApi";
 import toast from "react-hot-toast";
 import countrycode from "../../../data/countrycode.json";
@@ -10,6 +10,7 @@ const Setting = () => {
   const { user } = useSelector((state) => state.profile);
   const [image, setImage] = useState(user?.image);
   const [file, setFile] = useState(null);
+  const inputRef = useRef(null)
 
   const [aboutData, setAboutData] = useState({
     dateOfBirth: "",
@@ -27,7 +28,6 @@ const Setting = () => {
 
   const aboutHandler = (e) => {
     e.preventDefault();
-    console.log(aboutData);
     dispatch(updateAbout(aboutData));
   };
 
@@ -59,7 +59,6 @@ const Setting = () => {
 
   const removeButtonHandler = () => {
     if (!file) {
-      console.log("You clicked me again");
       toast.error("Please add an Image first");
       return;
     }
@@ -68,7 +67,7 @@ const Setting = () => {
   };
 
   return (
-    <div className="text-white h-full flex flex-col  items-start  justify-center gap-8  w-[80%] p-4 ">
+    <div className="text-white h-full flex flex-col items-start justify-center gap-8 w-[80%] px-8 py-4 ">
       <h1 className="text-4xl font-medium">Profile</h1>
 
       <form
@@ -77,14 +76,17 @@ const Setting = () => {
       >
         <div className="image relative">
           <img
+          onClick={() => inputRef.current.click()}
             src={image}
             alt={`profile-${user.firstName}`}
-            className="aspect-square w-[78px] object-cover rounded-full"
+            className="aspect-square w-[78px] border-2 border-richblack-700 cursor-pointer object-cover rounded-full "
           />
+         
           <input
             id="image"
             type="file"
-            className="w-[40px] h-full top-8 left-4 absolute opacity-0"
+            ref = {inputRef}
+            className="w-[40px] h-full opacity-0"
             onChange={onChangeHandler}
           />
         </div>

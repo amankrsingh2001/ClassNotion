@@ -7,7 +7,7 @@ const Dashboard = () =>{
     return <div className="relative w-full flex min-h-[calc(100vh-3.5rem)]">
         <Sidebar/>
         <div className="h-full w-full overflow-auto">
-            <div className="mx-auto w-full max-w-maxContent py-10">
+            <div className="mx-auto w-full  py-10">
                 <Outlet/>
             </div>
         </div>

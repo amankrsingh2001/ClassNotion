@@ -6,6 +6,11 @@ import { COURSE_STATUS } from '../../../../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../../../Common/ConfirmationModal';
 import {  deleteCourse, getInstructorCourse } from '../../../../services/courseDetail';
+import { MdEdit } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { formatDate } from '../../../../services/formatData';
+import { FaClock } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
 
 
 
@@ -25,16 +30,17 @@ const CoursesTable = ({courses, setCourses}) => {
         setConfirmationModal(null)
 
     }
+   
 
   return (
-    <div>
-        <Table className='text-white border-white border-2'>
-            <Thead>
-                <Tr className=' border-richblack-400 border-2 gap-x-10 p-8'>
-                    <Th>Courses</Th>
-                    <Th>Duration</Th>
-                    <Th>Price</Th>
-                    <Th>Action</Th>
+    <div className='mb-40 w-11/12'>
+        <Table className='text-[#AFB2BF] '>
+            <Thead className='uppercase'>
+                <Tr className=' border-richblack-600  border gap-x-10 '>
+                    <Th className='text-start px-4 py-4'>Courses</Th>
+                    <Th className='text-start px-4 py-4'>Duration</Th>
+                    <Th className='text-start px-4 py-4'>Price</Th>
+                    <Th className='text-start px-4 py-4'>Action</Th>
                 </Tr>
             </Thead>
          <Tbody>
@@ -42,34 +48,36 @@ const CoursesTable = ({courses, setCourses}) => {
                 courses.length === 0 ? (<Tr>
                     <Td>No Courses Found</Td>
                 </Tr>):(
+                   
                     courses.map((course)=>{
-                      return ( <Tr key={course._id} className=' border-richblack-400 border-2 gap-x-10 p-8'>
-                            <Td className='flex gap-x-4'>
+                      return ( <Tr key={course._id} className='gap-x-10 p-8 border-b border-richblack-700'>
+                                     <Td className='flex gap-x-4 p-4'>
                                 <img src={course?.thumbnail}
-                                    className='h-[150px] w-[200px] rounded-lg object-cover'
+                                    className='w-[25%] aspect-video rounded-lg object-cover'
                                 />
-                                <div className='flex flex-col'>
-                                    <p>{course.courseName}</p>
-                                    <p>{course.courseDescription}</p>
-                                    <p>Created At:</p>
+                                <div className='flex flex-col gap-2'>
+                                    <h1 className='text-xl text-[#F1F2FF] capitalize font-inter'> {course.courseName}</h1>
+                                    <p className='text-sm capitalize'>{course.courseDescription}</p>
+                                    <p className='text-sm'>Created At : {`${formatDate(course.createdAt)}`} </p>
                                     {
-                                        course.status === COURSE_STATUS.DRAFT ?( <p className='text-pink-100'>Drafted</p>) :( <p className='text-yellow-50'>Published</p>)
+                                        course.status === COURSE_STATUS.DRAFT ?( <p className='flex  items-center gap-1 justify-center text-pink-100 bg-richblack-600 rounded-full px-4 text-sm w-fit py-1'><FaClock className='inline-block font-bold'/> Drafted</p>) :(
+                                             <p className='text-yellow-50 py-1  flex  items-center gap-1 justify-center bg-richblack-600 rounded-full px-4 text-sm w-fit'><FaCheckCircle className='inline'/> Published</p>)
                                     }
                                 </div>
                             </Td>
 
-                            <Td>
+                            <Td className='text-start px-4 py-4'>
                                 2hr 30min
                             </Td>
-                            <Td>
-                                {course.price}
+                            <Td className='text-start px-4 py-4'>
+                            ₹{course.price}
                             </Td>
-                            <Td >
+                            <Td className='text-start px-4 py-4'>
                                 <button
                                  onClick={()=>{navigate(`/dashboard/edit-course/${course._id}`)}}
                                 className='mr-[20px]'
                                  >
-                                    Edit
+                                    <MdEdit className='text-xl'/>
                                 </button>
                                 <button 
                                     onClick={()=>{
@@ -83,11 +91,12 @@ const CoursesTable = ({courses, setCourses}) => {
                                         })
                                     }}
                                 >
-                                    Delete
+                               <RiDeleteBin6Line className='text-xl'/>
                                 </button>
                             </Td>
                         </Tr>)
                     })
+                
                 )
             }
          </Tbody>
@@ -95,6 +104,7 @@ const CoursesTable = ({courses, setCourses}) => {
         {
             confirmationModal && <ConfirmationModal modalData={confirmationModal}/>
         }
+        
     </div>
   )
 }

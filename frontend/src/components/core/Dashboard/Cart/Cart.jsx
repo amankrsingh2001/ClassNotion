@@ -18,15 +18,18 @@ const Cart = () =>{
         }
     }, [user.accountType, navigate])
 
-    return <div className="text-white">
-        <h1 className="text-white text-3xl">Your Cart</h1>
-        <p>{totalItem} Courses in cart</p>
+    return <div className="text-[#F1F2FF]  min-h-[calc(100vh-12.5rem)] flex  flex-col gap-4 px-4 mt-8 mb-8 ">
+      <div className="w-11/12 px-8 flex flex-col gap-3">
+      <h1 className="text-white text-3xl">My WishList</h1>
+        <p className="mb-4">{totalItem} Courses in cart</p>
+        <hr className="border-[1px] border-richblack-800"/>
+      </div>
       {
-        total>0 ? (<>
-         <RenderCartCourses cart={cart}/> 
-        <RenderTotalAmount cart={cart}/>
-        </>
-        ) :(<p>Your Cart is Empty</p>)
+        total>0 ? (<div className="flex justify-around">
+            <RenderCartCourses cart={cart}/> 
+            <RenderTotalAmount cart={cart}/>
+        </div>
+        ) :(<p className="w-11/12 ml-10">Your Cart is Empty</p>)
        }
     </div>
 }

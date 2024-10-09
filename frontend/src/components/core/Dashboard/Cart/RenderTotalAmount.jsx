@@ -5,7 +5,7 @@ import { buyCourse } from '../../../../services/studentFeaturesAPI'
 import { useNavigate } from 'react-router-dom'
 
 const RenderTotalAmount = ({cart}) => {
-    const {total} = useSelector(state=>state.auth)
+    const {total} = useSelector(state=>state.cart)
     const {token} = useSelector(state=>state.auth)
     const {user} = useSelector(state=>state.profile)
     
@@ -20,11 +20,12 @@ const RenderTotalAmount = ({cart}) => {
 
     }
   return (
-    <div>
-        <p>Total:</p>
-        <p>Rs {total}</p>
+    <div className='flex flex-col bg-richblack-800 w-[22%] h-[220px]  px-12 py-6 rounded-md gap-3'>
+        <p className='text-sm'>  Total:</p>
+        <p className='text-3xl text-yellow-25'>Rs {total}</p>
+        <strike className="text-[#838894]">Rs {total + 500}</strike>
 
-        <IconBtn text="Buy now" onclick={()=>handlerBuyCourse()} customClasses={"w-full justify-center"}/>
+        <button onclick={()=>handlerBuyCourse()} className='text-black bg-yellow-50 p-2 rounded-md'>Buy Now</button>
     </div>
   )
 }

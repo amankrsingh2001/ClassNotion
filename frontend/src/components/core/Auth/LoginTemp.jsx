@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { HilightText } from "../HomePage/HilightText";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 import {  setLogin } from "../../../services/authApi";
 
@@ -17,6 +20,7 @@ const value = [
 const LoginTemp = ({ image, frame, title, description }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(true)
   const [active, setActive] = useState(0);
 
 
@@ -72,10 +76,11 @@ const submitHandler = (e) =>{
           <div className="w-full flex gap-4 py-6 flex-col">
             <form onSubmit={submitHandler}>
             <div className="flex flex-col ">
-              <label className="text-sm py-[6px]" for="email">
+              <label className="text-sm py-[6px]" htmlFor="email">
                 Email Address <span className="text-[#EF476F]"> *</span>
               </label>
               <input
+             
               value = {input.name}
               onChange={(e)=>setInput({...input, [e.target.name]:e.target.value})}
                 id="email"
@@ -84,11 +89,22 @@ const submitHandler = (e) =>{
                 className="p-3 bg-[#161D29] outline-none rounded-md text-[#999DAA]"
               />
             </div>
-            <div className="flex flex-col  ">
-              <label className="text-sm py-[6px]" for="password">
+            <div className="flex flex-col relative ">
+              <label className="text-sm py-[6px]" htmlFor="password">
                 Password<span className="text-[#EF476F]"> *</span>
               </label>
+              {
+                !showPassword ? (
+                <FaEye onClick={()=>{
+                  setShowPassword(!showPassword)
+                }} className="absolute right-5 bottom-12" />) :( 
+                  <FaEyeSlash className="absolute right-5 bottom-12" onClick={()=>{
+                    setShowPassword(!showPassword)
+                  }} />)
+              }
+             
               <input
+               type={showPassword?"password":'text'}
                 value = {input.name}
                 onChange={(e)=>setInput({...input, [e.target.name]:e.target.value})}
                 id="password"

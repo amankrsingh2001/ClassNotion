@@ -6,7 +6,6 @@ import { FiShoppingCart } from "react-icons/fi";
 import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { useEffect, useState } from "react";
 
-import { categories } from "../../services/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import toast from "react-hot-toast";
 import { category } from "../../services/courseDetail";
@@ -32,16 +31,18 @@ const Navbar = () => {
       setSubLinks(result);
     } catch (error) {
       toast.error('Something went wrong')
-      console.log("Failed to fetch the category list", error);
     }
   };
+
 
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   };
+  console.log(location)
+
 
   return (
-    <div className="h-14 flex justify-center items-center bg-richblack-900 border-b-richblack-700">
+    <div className={`h-14 flex justify-center items-center  border-b-richblack-700 ${ location.pathname.includes('catalog') || location.pathname.includes('dashboard')?'bg-richblack-800':'bg-richblack-900'}`}>
       <div className="w-11/12 flex max-w-maxContent items-center justify-between gap-2">
         <Link to={"/"}>
           <img src={logo} width={160} height={42} loading="lazy" />
@@ -98,7 +99,7 @@ const Navbar = () => {
           {user && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
              <FiShoppingCart className="text-white mr-4"/>
-              {totalItem > 0 && <span>{totalItem}</span>}
+              {totalItem > 0 && <span className=" absolute w-[16px] h-[16px] font-bold text-center bottom-2 left-3 bg-[#F1F2FF] rounded-full  text-xs text-black">{totalItem}</span>}
             </Link>
           )}
           {token === null && (

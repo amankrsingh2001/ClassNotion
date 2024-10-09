@@ -6,6 +6,7 @@ Chart.register(...registerables)
 
 const InstructorChart = ({ courses }) => {
     const [currChart, setCurrChart] = useState('students')
+    
 
     const getRandomColors = (numColors) =>{
         const colors = [];
@@ -46,15 +47,16 @@ const InstructorChart = ({ courses }) => {
     }
 
   return (
-    <div>
-        <p>Visualise</p>
-        <div className='flex gap-4'>
-            <button onClick={()=>setCurrChart('students')}>Student</button>
-            <button onClick={()=>setCurrChart('income')}>Income</button>
+    <div className='w-[40%] '>
+       
+        <div className='flex gap-4 w-fit'>
+        <p className='text-2xl text-[#F1F2FF] '>Visualise:-</p>
+            <button className={`${currChart === "students"? "bg-yellow-25 text-black rounded-md py-2 px-3": " py-2 px-3 bg-richblack-700 text-white rounded-md"}`} onClick={()=>setCurrChart('students')}>Student</button>
+            <button className={`${currChart === "income"? "bg-yellow-25 text-black rounded-md py-2 px-3": " py-2 px-3 bg-richblack-700 text-white rounded-md"}`} onClick={()=>setCurrChart('income')}>Income</button>
         </div>
 
-        <div>
-            <Pie data={currChart === "students" ? chartDataForStudents : chartDataForIncome}
+        <div className=' w-[100%] mt-6 aspect-square p-4 bg-gray-900 rounded-lg shadow-lg'>
+            <Pie  data={currChart === "students" ? chartDataForStudents : chartDataForIncome}
                 options={options}
             />
         </div>

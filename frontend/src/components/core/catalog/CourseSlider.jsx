@@ -9,12 +9,12 @@ import ShowCourseCard from './ShowCourseCard';
 
 const CourseSlider = ({ Courses = [] }) => {
   return (
-    <div>
+    <div className=''>
       {Courses?.length ? (
         <Swiper
         loop={true}
         slidesPerView={1}
-        spaceBetween={200}
+        spaceBetween={24}
           modules={[FreeMode, Pagination,Autoplay]}
           pagination={{
             dynamicBullets:true
@@ -35,7 +35,7 @@ const CourseSlider = ({ Courses = [] }) => {
           ))}
         </Swiper>
       ) : (
-        <p>No courses available</p>
+        <p className='py-4 px-12 text-yellow-50'>No courses available</p>
       )}
     </div>
   );

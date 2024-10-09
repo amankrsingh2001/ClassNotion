@@ -33,8 +33,6 @@ const showAllCategory = async(req,res) =>{
 const categoryPageDetails = async(req, res)=>{
     try {
         const categoryId =  req.body.categoryId
-        console.log(categoryId,"this is correct")
-
 
         const selectedCategory = await Category.findById(categoryId).populate({path:'course',
              match:{status:"Published"}, populate:"ratingAndReviews"}).exec()
@@ -43,8 +41,9 @@ const categoryPageDetails = async(req, res)=>{
             return res.status(404).json({success:false,
                  message:"Category not found"})
         }
+
         if(selectedCategory.course.length === 0){
-            console.log("No courses found for the selected category")
+
             return res.status(404).json({
                 success:false,
                 message:"No course found for the category",

@@ -85,8 +85,8 @@ const Home = () => {
             </Cpabutton>
           </div>
           {/* video section */}
-          <div className="my-40">
-            <video muted autoPlay loop className="rounded-lg drop-shadow-md">
+          <div className="mt-60 border-[20px] border-richblack-700 rounded-lg ">
+            <video muted autoPlay loop className="rounded-sm drop-shadow-md w-[62vw]">
               <source src={Banner}></source>
             </video>
           </div>

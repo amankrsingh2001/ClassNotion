@@ -23,7 +23,7 @@ const cartSlice = createSlice({
 
             state.cart.push(course)
             //Update the total quantity
-            state.toastItem++
+            state.totalItem++
             //update the total price
             state.total += course.price
             // update to localStorage
@@ -40,7 +40,7 @@ const cartSlice = createSlice({
 
             if(index>=0){
                 //If the course is found in the cart, remove it
-                state.toastItem--;
+                state.totalItem--;
                 state.total -= state.cart[index].price
                 state.cart.splice(index,1)
 

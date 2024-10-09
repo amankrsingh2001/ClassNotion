@@ -5,6 +5,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { profileApi } from "../../../services/api"
 import { setUser } from "../../../slices/profileSlice"
+import { FiEdit } from "react-icons/fi";
 
 
 
@@ -50,7 +51,11 @@ const Myprofile = () => {
                             <p className="text-[#838894] text-sm">{user.email}</p>
                             </div>
                         </div>
-                        <IconBtn  text="Edit" onclick={()=>{navigate('/dashboard/setting')}}/>
+                        
+                        <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')} >
+                                    Edit 
+                                    <FiEdit className="mt-[3px]"/>
+                             </IconBtn>
                        
                     </div>
 
@@ -61,16 +66,23 @@ const Myprofile = () => {
                             <p className="text-[#838894] text-sm">{user?.additionalDetails?.about || "Write something about Yourself"}</p>
                             </div>
                             
-                           
-                             {/*  {user?.additionalDetail?.about} fix the above one */}
-                             <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')}/>
+                             <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')} >
+                                    Edit 
+                                    <FiEdit className="mt-[3px]"/>
+                             </IconBtn>
+                                
                         </div>
                         {/* section 3 */}
                        
                         <div className="flex justify-between  flex-col gap-4 p-3 w-full  bg-richblack-800">
                             <div className="flex justify-between p-2 items-center">
                             <p className="text-xl text-[#F1F2FF] font-medium " >Personal Details</p>
-                            <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')}/>
+                            
+                            <IconBtn text="Edit" onclick={()=>navigate('/dashboard/setting')} >
+                                    Edit 
+                                    <FiEdit className="mt-[3px]"/>
+                             </IconBtn>
+                                
                             </div>
                             <div className="grid grid-cols-2 gap-5 p-3">
                             <div className="flex flex-col gap-1">

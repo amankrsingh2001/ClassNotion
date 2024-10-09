@@ -39,6 +39,7 @@ export const addCourseDetails = async(data, token) =>{
 
 export const editCourseAPI = async (data, token) => {
     let result = null;
+    console.log(data, "From the course detials api page")
 
     try {
         const response = await axios.post(EDIT_COURSE_API, data, {
@@ -81,6 +82,7 @@ export const category = async(data) =>{
 
 export const createSection = async(data, token) =>{
     let result = null
+    console.log(data,'This is the create section')
     try {
         const response = await axios.post(CREATE_SECTION_API,data, {
             headers:{

@@ -43,10 +43,10 @@ const EnrolledCourses = () => {
 
 
   return (
-    <div className='w-full flex flex-col items-center'>
-        <div className='w-[80%] flex flex-col p-4 justify-around gap-7'>
+    <div className='w-full flex flex-col items-center gap-4'>
+        <div className='w-11/12 flex flex-col p-4 justify-around gap-8'>
           <h1 className='text-white font-bold text-3xl'>Enrolled Courses</h1>
-          <div className='flex border-[1px] p-[4px] border-white w-[40%] rounded-full bg-richblack-600 justify-evenly'>
+          <div className='flex border-[1px]  border-white w-[22%] rounded-full bg-richblack-600 justify-evenly'>
             {
               COURSES_DATA.map((data, index)=>{
               return   <p onClick={() => setActive(index)} className={`py-2 px-4  cursor-pointer ${active === index ? "bg-richblack-900 text-white": "text-[#999DAA]  bg-[#2C333F]"
@@ -61,19 +61,20 @@ const EnrolledCourses = () => {
         </div>
 
         {
-             !enrolledCourses ? (<div>Loading...</div>) : (!enrolledCourses.length?(<p className='text-white text-start p-4 w-[80%]'>You have not enrolled in any Course yet</p>):<div>
-      <div className='text-white'>
-        <p>Course Name</p>
-        <p>Duration</p>
-        <p>Progress</p>
+             !enrolledCourses ? (<div>Loading...</div>) : (!enrolledCourses.length?(<p className='text-white text-start p-4 w-[80%]'>You have not enrolled in any Course yet</p>):<div className='w-11/12'>
+      <div className='text-white flex justify-between px-5 py-3 border-richblack-600 border-2 items-center'>
+        <p className='ml-12'>Course Name</p>
+        <p className='mr-16'>Duration</p>
+        <p className='mr-16'>Progress</p>
       </div>
       {/* card Data */}
           {
             enrolledCourses.map((course , index, arr)=>{
-              return <div key={index}  className={`text-white flex items-center border border-richblack-700 ${
+              return <div key={index}  className={`text-white flex justify-between items-center border border-richblack-700 ${
                 index === arr.length - 1 ? "rounded-b-lg" : "rounded-none"
               }`}>
-                  <div onClick={()=>navigate(`/view-course/${course?._id}/section/${course?.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`)} className="flex  cursor-pointer items-center gap-4 px-5 py-3" >
+                  <div onClick={()=>navigate(`/view-course/${course?._id}/section/${course?.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`)}
+                   className="flex justify-between cursor-pointer  gap-4 px-5 py-3" >
                     <img src={course?.thumbnail} alt="course_img"
                   className="h-14 w-14 rounded-lg object-cover" />
                     <div  className="flex max-w-xs flex-col gap-2">
@@ -81,11 +82,12 @@ const EnrolledCourses = () => {
                       <p className="text-xs text-richblack-300">Course Description</p>
                     </div>
                   </div>
-                  <div className="w-1/4 px-2 py-3">{course?.totalDuration}</div>
-                  <div  className="flex w-1/5 flex-col gap-2 px-2 py-3">
+                  <div className="w-1/4 py-3 text-center">{course?.totalDuration} 2hours 30min</div>
+                  <div  className="flex w-1/5 flex-col gap-2 items-center py-3">
                     <p>Progress: {course.progressPercentage || 0}</p>
                     <ProgressBar completed={course.progressPercentage || 0}
                     height='8px'
+                    width='88px'
                     isLabelVisible={false}/>
                   </div>
               </div>

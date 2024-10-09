@@ -23,10 +23,10 @@ const MyCourses = () =>{
         fetchCourses()
     },[])
 
-    return <div>
-        <div className="flex justify-between">
-            <h1 className="text-white">My Courses</h1>
-                <button className=" bg-yellow-50 rounded-md text-black" onClick={()=>(navigate('/dashboard/add-course'))}>Add Courses <IoAdd className="inline"/></button>
+    return <div className="flex flex-col items-center">
+        <div className="flex justify-between w-11/12  my-8">
+            <h1 className="text-[#F1F2FF] text-4xl font-medium font-inter">My Courses</h1>
+                <button className=" bg-yellow-50 px-4 rounded-md text-black" onClick={()=>(navigate('/dashboard/add-course'))}>Add Courses <IoAdd className="inline"/></button>
         </div>
 
         {

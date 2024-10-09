@@ -11,17 +11,17 @@ const Footer = () => {
   const carrer = FooterLink2[2].links;
 
   return (
-    <div className="h-[728px] w-full bg-[#161D29] flex justify-center items-center ">
+    <div className="h-[728px] w-full  bg-[#161D29] flex justify-center items-center ">
       {" "}
       {/*Outer */}
-      <div className="w-[90%] h-[80%] flex flex-col gap-2">
+      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col gap-2">
         <div className="h-[90%] w-full drop-shadow-2xl flex flex-1 items-stretch">
           {" "}
           {/* Inner */}
           {/* Section 1 */}
-          <div className=" w-[50%] justify-evenly p-4 flex gap-4">
+          <div className=" w-[50%] justify-between py-4  flex gap-4">
             <div className=" gap-2 ">
-              <div className="flex text-[#C5C7D4] items-center p-2">
+              <div className="flex text-[#C5C7D4] items-center py-2">
                 <img className="h-6 mr-2" src={Logo} />
                 <p className="font-inter font-semibold">CLASS NOTION</p>
               </div>
@@ -89,10 +89,11 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <hr className="border-[1px] h-[96%] mt-6 border-[#2C333F]" />
+          <hr className="border-[1px] ml-12 mr-12 h-[96%] mt-6 border-[#2C333F]" />
           {/*Section 2 */}
-          <div className="flex justify-evenly w-[40%]">
-            <div className="p-4">
+
+          <div className="flex justify-between w-[48%] gap-4">
+            <div className="py-4">
               <h3 className="text-[#AFB2BF] font-semibold font-inter p-2">
                 Subjects
               </h3>
@@ -109,8 +110,7 @@ const Footer = () => {
                 <Block resource={Languages} />
               </div>
             </div>
-          </div>
-          <div className="p-4">
+            <div className="p-4">
             <h3 className="text-[#AFB2BF] font-semibold font-inter p-2">
               Carrer building
             </h3>
@@ -118,6 +118,8 @@ const Footer = () => {
               <Block resource={carrer} />
             </div>
           </div>
+          </div>
+         
         </div>
         <hr className="border-[1px]  mt-6 border-[#2C333F]" />
 

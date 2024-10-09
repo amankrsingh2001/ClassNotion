@@ -49,23 +49,27 @@ const PublishCourse = () => {
     }
 
   return (
-    <div className='rounded-md border-[1px] bg-richblack-700'>
-        <p>Publish Course</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
+    <div className='rounded-md border-[1px] bg-richblack-800 flex   flex-col justify-center items-start py-8 px-4 gap-4 mt-8'>
+        <p className='text-[#F1F2FF] text-3xl'>Publish Course</p>
+        <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
+           <div className='flex gap-4 justify-between'>
+           <div className=''>
                 <label htmlFor='public'>
                 <input type='checkbox' id='public'
                     {...register("public")}
-                    className='ml-3'
+                    className=' border-richblack-700 bg-transparent mr-2 accent-richblack-700'
                 />
                 Make this Course as Public
                 </label>
             </div>
-            <div className='flex justify-center gap-x-3'>
-                <button type='button' onClick={goBack} className='bg-richblack-400'>
+
+            <div className='text-[#6E727F] relative bottom-14 w-[40%] text-sm'>If you mark this course as public this course will be visible to all the students </div>
+           </div>
+            <div className='flex justify-center gap-x-3 w-full mt-8 items-center' >
+                <button type='button' onClick={goBack} className='bg-richblack-5 py-2 px-4 rounded-sm text-black'>
                     Back
                 </button>
-                <button>Save Changes</button>
+                <button className='bg-yellow-5 py-2 px-4 rounded-sm text-black'>Save Changes</button>
             </div>
         </form>
 

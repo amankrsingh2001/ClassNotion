@@ -38,8 +38,6 @@ const CourseInformationForm = () => {
     setLoading(false)
 
     if(editCourse){
-
-
       setValue("courseTitle", course.courseDetails.courseName)
       setValue("courseShortDesc", course.courseDetails.courseDescription)
       setValue("coursePrice", course.courseDetails.price)
@@ -60,15 +58,16 @@ const CourseInformationForm = () => {
     const currentValues = getValues()
 
     console.log(currentValues,'This is the current Values')
+    console.log(course,"This is the curse")
 
-    if(currentValues.courseTitle !== course.courseName ||
-       currentValues.courseShortDesc !== course.courseDescription ||
-       currentValues.coursePrice !== course.price ||
-       currentValues.courseTag.toString() !== course.tag.toString() ||
-       currentValues.courseBenefits !== course.WhatYouWillLearn ||
-       currentValues.courseCategory._id !== course.category._id ||
-       currentValues.courseImage !== course.thumbnail ||
-       currentValues.courseRequirement.toString() !== course.instructions.toString()
+    if(currentValues.courseTitle !== course.courseDetails.courseName ||
+       currentValues.courseShortDesc !== course.courseDetails.courseDescription ||
+       currentValues.coursePrice !== course.courseDetails.price ||
+       currentValues.courseTag.toString() !== course.courseDetails.tag.toString() ||
+       currentValues.courseBenefits !== course.courseDetails.WhatYouWillLearn ||
+       currentValues.courseCategory._id !== course.courseDetails.category._id ||
+       currentValues.courseImage !== course.courseDetails.thumbnail ||
+       currentValues.courseRequirement.toString() !== course.courseDetails.instructions.toString()
        )
        {
       return true
@@ -82,36 +81,37 @@ const CourseInformationForm = () => {
 
 
       if(isFormUpdated()){
+        
         const currentValue = getValues()
         const formData = new FormData()
   
-        formData.append("courseId", course._id)
+        formData.append("courseId", course.courseDetails._id)
 
-        console.log(data,"This is the current value")
+        console.log(currentValue, "This is the current value")
 
-        if(currentValue.courseTitle !== course.courseName){
+        if(currentValue.courseTitle !== course.courseDetails.courseName){
           formData.append('courseName', data.courseTitle)
         }
-        if(currentValue.courseShortDesc !== course.courseDescription){
+        if(currentValue.courseShortDesc !== course.courseDetails.courseDescription){
           formData.append('courseDescription', data.courseShortDesc)
         }
-        if(currentValue.coursePrice !== course.price){
+        if(currentValue.coursePrice !== course.courseDetails.price){
           formData.append('price', data.coursePrice)
         }
  
-        if(currentValue.courseBenefits !== course.WhatYouWillLearn){
+        if(currentValue.courseBenefits !== course.courseDetails.WhatYouWillLearn){
           formData.append('whatYouWillLearn', data.courseBenefits)
         }
 
-        if(currentValue.courseCategory._id !== course.Category._id){
+        if(currentValue.courseCategory._id !== course.courseDetails.Category._id){
           formData.append('category', data.courseCategory)
         }
   
-        if(currentValue.courseRequirement.toString() !== course.instructions.toString()){
+        if(currentValue.courseRequirement.toString() !== course.courseDetails.instructions.toString()){
           formData.append('instructions', JSON.stringify(data.instructions))
         }
-        if(currentValue.courseImage !== course.thumbnail){
-          formData.append('thumbnail', data.image)
+        if(currentValue.courseImage !== course.courseDetails.thumbnail){
+          formData.append('courseImage', data.image)
         }
        
 
@@ -130,7 +130,7 @@ const CourseInformationForm = () => {
     }
 
     const formData = new FormData();
-   
+      console.log(data,'This is the data')
 
     formData.append('courseName', data.courseTitle)
     formData.append('courseDescription', data.courseShortDesc)
@@ -144,6 +144,7 @@ const CourseInformationForm = () => {
 
     setLoading(true)
     const result = await addCourseDetails(formData, token)
+
     if(result){
      dispatch(setStep(2))
       dispatch(setCourse(result))
