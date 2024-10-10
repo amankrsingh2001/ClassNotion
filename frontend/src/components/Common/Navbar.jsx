@@ -95,7 +95,7 @@ const Navbar = () => {
           </ul>
         </nav>
         <div className="flex gap-2 items-center">
-          {user && user?.accountType !== "Instructor" && (
+          {token && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
              <FiShoppingCart className="text-white mr-4"/>
               {totalItem > 0 && <span className=" absolute w-[16px] h-[16px] font-bold text-center bottom-2 left-3 bg-[#F1F2FF] rounded-full  text-xs text-black">{totalItem}</span>}
