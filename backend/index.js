@@ -26,7 +26,8 @@ app.use(express.json());
 app.use(cookieParse());
 
 app.use(cors({
-    origin:'*'
+    origin:'https://class-notion.vercel.app',
+    credentials:true
 }))
 
 app.use(fileUpload({ 
