@@ -26,8 +26,7 @@ app.use(express.json());
 app.use(cookieParse());
 
 app.use(cors({
-    origin:'*',
-    credentials:true
+    origin:'*'
 }))
 
 app.use(fileUpload({ 
