@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParse());
 
 app.use(cors({
-    origin:'http://localhost:5173',
+    origin:'https://class-notion.vercel.app/',
     credentials:true
 }))
 
