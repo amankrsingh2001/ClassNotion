@@ -19,13 +19,13 @@ const CardImage = () => {
     <div className='w-10/12 p-6 flex justify-center'>
        <div className='flex w-[90%] justify-center items-center relative '>
        <div data-aos = "fade-left" className='absolute z-[0] drop-shadow-2xl left-[80px]'>
-          <img className='' src='../src/assets/Images/Know_your_progress.png'/>
+          <img className='' src='/assets/Images/Know_your_progress.png'/>
         </div>
         <div data-aos = "fade-down" className='relative z-[1] drop-shadow-2xl'>
-          <img src='../src/assets/Images/Compare_with_others.png'/>
+          <img src='/assets/Images/Compare_with_others.png'/>
         </div>
         <div data-aos = "fade-right" className='right-[30px] drop-shadow-2xl z-[2] absolute'>
-          <img src='../src/assets/Images/Plan_your_lessons.svg'/>
+          <img src='/assets/Images/Plan_your_lessons.svg'/>
         </div>
        </div>
 

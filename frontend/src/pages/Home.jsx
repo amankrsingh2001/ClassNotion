@@ -2,7 +2,6 @@ import { FaArrowRight } from "react-icons/fa6";
 import {  useNavigate } from "react-router-dom";
 import { HilightText } from "../components/core/HomePage/HilightText";
 import Cpabutton from "../components/core/HomePage/Cpabutton";
-import Banner from "../assets/Images/banner.mp4";
 import CodeBlock from "../components/core/HomePage/CodeBlock";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -43,7 +42,7 @@ const Home = () => {
       {/*Section-1 */}
       <div className="mx-auto relative flex flex-col w-screen items-center text-white justify-between">
         <div
-          className={`absolute z-[0] top-0 h-screen left-0 w-full  overflow-hidden bg-[url(../src/assets/Images/image.jpg)] bg-cover bg-no-repeat opacity-50`}
+          className={`absolute z-[0] top-0 h-screen left-0 w-full  overflow-hidden bg-[url(/assets/Images/image.jpg)] bg-cover bg-no-repeat opacity-50`}
         ></div>
 
         <div className="relative z-1 w-11/12  max-w-maxContent flex flex-col items-center">
@@ -87,7 +86,7 @@ const Home = () => {
           {/* video section */}
           <div className="mt-60 border-[20px] border-richblack-700 rounded-lg ">
             <video muted autoPlay loop className="rounded-sm drop-shadow-md w-[62vw]">
-              <source src={Banner}></source>
+              <source src={'/assets/Images/banner.mp4'}></source>
             </video>
           </div>
 
@@ -163,7 +162,7 @@ const Home = () => {
      
 
       <div className="bg-pure-greys-5 text-black">
-        <div className="h-[310px] bg-[url(../src/assets/Images/bghome.svg)] mt-12 bg-contain ">
+        <div className="h-[310px] bg-[url(/assets/Images/bghome.svg)] mt-12 bg-contain ">
           <div className="w-11/12 h-2/3 max-w-maxContent flex  justify-center items-center gap-5 mx-auto">
             <div className="flex flex-row gap-7 mt-12 items-center justify-center text-white ">
               <Cpabutton active={true} linkto={"/signup"}>
@@ -212,7 +211,7 @@ const Home = () => {
 
                     <div className="bg-[linear-gradient(123.77deg,#1FA2FF_-6.46%,#12D8FA_59.04%,#A6FFCB_124.53%)] opacity-[30%] blur-xl rounded-[45%] left-[-14px] absolute z-[-1] h-[80%] w-[108%] p-4"></div>
                     <div className="">
-                      <img  src='../src/assets/Images/TimelineImage.png'/>
+                      <img  src='/assets/Images/TimelineImage.png'/>
                     </div>
                     <div className="absolute  z-[10] bottom-[-40px] drop-shadow-xl gap-4 px-8 py-5 bg-[#014A32] flex">
                       
@@ -253,7 +252,7 @@ const Home = () => {
 
             <div data-aos='fade-left' className="w-[40%]  relative flex justify-center p-10">
                   <div className="w-full  z-[2] ">
-                      <img  src="../src/assets/Images/Instructor.png"/>
+                      <img  src="/assets/Images/Instructor.png"/>
                     </div>  
 
                     <div className="bg-white w-[85%] h-[85%] absolute top-[24px] left-[24px]">

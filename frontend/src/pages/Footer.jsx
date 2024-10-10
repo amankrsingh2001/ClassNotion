@@ -1,5 +1,5 @@
 import { Block } from "../components/Common/Block";
-import Logo from "../assets/Logo/Logo-Small-Light.png";
+
 import { FaYoutube, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 import {footerData, Plans, Community, FooterLink2} from "../data/footer-links";
 
@@ -22,7 +22,7 @@ const Footer = () => {
           <div className=" w-[50%] justify-between py-4  flex gap-4">
             <div className=" gap-2 ">
               <div className="flex text-[#C5C7D4] items-center py-2">
-                <img className="h-6 mr-2" src={Logo} />
+                <img className="h-6 mr-2" src={'/assets/Logo/Logo-Small-Light.png'} />
                 <p className="font-inter font-semibold">CLASS NOTION</p>
               </div>
               <div className="m-2 text-[#6E727F]">

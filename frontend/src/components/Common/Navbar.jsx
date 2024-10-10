@@ -1,5 +1,4 @@
 import { Link, matchPath, useLocation } from "react-router-dom";
-import logo from "../../assets/Logo/Logo-Full-Light.png";
 import { NavbarLinks } from "../../data/navbar-links";
 import { useSelector } from "react-redux";
 import { FiShoppingCart } from "react-icons/fi";
@@ -45,7 +44,7 @@ const Navbar = () => {
     <div className={`h-14 flex justify-center items-center  border-b-richblack-700 ${ location.pathname.includes('catalog') || location.pathname.includes('dashboard')?'bg-richblack-800':'bg-richblack-900'}`}>
       <div className="w-11/12 flex max-w-maxContent items-center justify-between gap-2">
         <Link to={"/"}>
-          <img src={logo} width={160} height={42} loading="lazy" />
+          <img src={"/assets/Logo/Logo-Full-Light.png"} width={160} height={42} loading="lazy" />
         </Link>
 
         <nav>

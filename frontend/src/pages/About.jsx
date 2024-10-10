@@ -35,13 +35,13 @@ const About = () => {
 
           <div className="flex lg:flex-row flex-col justify-evenly border-2 gap-2  lg:gap-4 lg:absolute bottom-[-80px]">
             <div className="">
-              <img src="../src/assets/Images/aboutus1.webp" />
+              <img src="/assets/Images/aboutus1.webp" />
             </div>
             <div className="">
-              <img src="../src/assets/Images/aboutus2.webp" />
+              <img src="/assets/Images/aboutus2.webp" />
             </div>
             <div className="">
-              <img src="../src/assets/Images/aboutus3.webp" />
+              <img src="/assets/Images/aboutus3.webp" />
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ const About = () => {
             }
           />
           <div className="lg:w-[40%] w-full">
-          <img className="lg:w-full w-full p-4 md:p-0" src="../src/assets/Images/FoundingStory.png" />
+          <img className="lg:w-full w-full p-4 md:p-0" src="/assets/Images/FoundingStory.png" />
           </div>
         </div>
       </section>
