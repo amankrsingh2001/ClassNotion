@@ -13,15 +13,11 @@ require("dotenv").config()
 
 
 const signUp = async (req,res) =>{
-   try {
      const createPayload = req.body;
      const parserPayload = signUpValidation.safeParse(createPayload)
      if( !parserPayload.success ){
          return res.status(400).json({success:false,message:"Please enter valid Credentials"})
      }
-   } catch (error) {
-        console.log(error,'Error aa rha hai')
-   }
     try {
         const {
             firstName,
@@ -33,7 +29,6 @@ const signUp = async (req,res) =>{
             contactNumber="",
             otp
          } = req.body
-         console.log(req.body)
          
          // password and confpass check 
          if(password != confirmPassword){
@@ -45,7 +40,6 @@ const signUp = async (req,res) =>{
          }  
     
          const recentOtp = await Otp.find({email}).sort({createdAt:-1}).limit(1);
-         console.log(recentOtp)
 
          if( recentOtp[0].otp.length == 0 ){
             return res.status(400).json({success:false,message:'OTP not found'})
@@ -80,7 +74,6 @@ const signUp = async (req,res) =>{
 
          res.status(200).json({success:true,message:"User created",user:newUser})
     } catch (error) {
-        console.log(error)
         return res.status(500).json({success:false,message:error.message})
     }
 
@@ -134,7 +127,6 @@ const login = async(req,res)=>{
          })
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({success:false,message:"Login failed, please try again"})
     }
 }
@@ -168,7 +160,6 @@ const sendOtp = async (req,res) =>{
       res.status(200).json({success:true,message:"Otp sent successfully"})
       
   } catch (error) {
-        console.log(error);
         res.status(500).json({success:false,message:error.message})
   }
      
@@ -178,7 +169,6 @@ const sendOtp = async (req,res) =>{
 const changePassword = async (req,res) =>{
     //get data from req.body
     const createPayload = req.body
-    console.log(req.body)
     const userDetails = req.authorization || req.user
     const parsePayload = changePasswordValidation.safeParse(createPayload)
 

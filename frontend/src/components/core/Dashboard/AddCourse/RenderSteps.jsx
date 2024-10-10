@@ -38,8 +38,8 @@ const  RenderSteps = () => {
                           </div>
                           <div className=''>
                           {
-                            item.id!== 3 && (  <hr className={`${item.id === step-1 ?
-                               "border-[1px] border-yellow-50 w-[94%] border-dotted absolute  left-52  z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute left-52 z-[1]"}`} />)
+                            item.id!== 3 && (  <hr className={`${item.id <= step-1 ?
+                               "border-[1px] border-yellow-50 w-[94%] border-dotted absolute    z-[1]":"border-[1px] border-[#AFB2BF] w-[94%] border-dotted absolute  z-[1]"}`} />)
                           }
                             </div>
                          

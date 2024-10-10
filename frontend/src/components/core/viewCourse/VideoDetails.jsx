@@ -86,7 +86,6 @@ const VideoDetails = () => {
         const currentSectionIndex = courseSection.findIndex(
             (data) => data._id === sectionId
         )
-        console.log(currentSectionIndex,"This is the current section index")
     
         const noOfSubSections = courseSection[currentSectionIndex].subSection.length;
     
@@ -144,10 +143,8 @@ const VideoDetails = () => {
         setLoading(false)
     }
     
-    
-
   return (
-    <div className='text-white'>
+    <div className='text-white relative z-0'>
         {
             !videoData ? (<div>No data found</div>) : (
                 <Player 
@@ -162,18 +159,22 @@ const VideoDetails = () => {
 
                 {
                     videEnded && (
-                        <div>
-                            {
+                        <div className='border-2 border-white  flex gap-5'>
+                            <div className='absolute flex top-1/2 left-1/3 z-10  gap-4'>
+                           {
                               !completedLecture.includes(subSectionId) && (
-                                <button className='w-[50px] h-[50px] bg-yellow-50 text-black' onClick={()=>handleLectureCompletion()}>Mark As Completed</button>
+                                <button className='px-2 py-3 rounded-md text-2xl  bg-caribbeangreen-400 text-black w-fit' onClick={()=>handleLectureCompletion()}>Mark As Completed</button>
                             ) 
                             }
 
 
-                                <button className='bg-white w-[50px] h-[50px] text-black' onClick={()=>{
+                                <button className=' px-2 py-3 rounded-md text-2xl  bg-richblack-800 w-fit   text-white z-10' onClick={()=>{
                                     if(playerRef?.current){
                                         playerRef.current?.seek(0)
                                 setVideoEnded(false)}}}>Rewatch</button>
+
+                            </div>
+                           
                                 <div className='bg-white'>
                                    {
                                     !isFirstVideo() &&  (
@@ -191,8 +192,11 @@ const VideoDetails = () => {
                 </Player>
             )
         }
-        <h1>{videoData?.title}</h1>
-        <p>{videoData?.description}</p>
+        <div className='mt-8 flex flex-col gap-2'>
+        <h1 className='text-xl'>{videoData?.title}</h1>
+        <p className='text-[#818186]'>{videoData?.description}</p>
+        </div>
+      
     </div>
   )
 }

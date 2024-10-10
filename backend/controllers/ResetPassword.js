@@ -25,7 +25,6 @@ const bcrypt = require('bcrypt')
             await mailSender(email,"Password Reset Link",`Password Reset Link ${url}`)
             return res.status(200).json({success:true,message:"Email sent successFully, Please check email and change your password"})
         } catch (error) {
-            console.log(error)
             return res.status(400).json({success:false,message:"Failed to Reset Password"})
         }
     }
@@ -49,11 +48,10 @@ const bcrypt = require('bcrypt')
 
              const salt = 10;
              const hashedPassword = await bcrypt.hash(password,salt);
-
              await User.findOneAndUpdate({ token },{ password : hashedPassword },{ new:true })
+
              return res.status(200).json({success:true,message:"Password Reset Successfully"})
         } catch (error) {
-            console.log(error)
             return res.status(500).json({success:false,message:'Something went wrong'})
         }
     }

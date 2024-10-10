@@ -14,8 +14,7 @@ export const getCatalogPageData = async(categoryId) =>{
             }
              result = response?.data?.data
         } catch (error) {
-            console.log(error)
-            toast.error(error.message)
+            toast.error('No courses of the selected category avilable')
 
         }
         return result;

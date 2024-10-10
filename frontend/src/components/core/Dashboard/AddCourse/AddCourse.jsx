@@ -16,15 +16,15 @@ const AddCourse = () => {
     },[user.accountType, navigate])
 
   return (
-    <div className=' text-white p-4'>
-       <div className='flex gap-2 justify-between '>
-       <div className='flex flex-col w-[65%]  gap-8 '>
+    <div className=' text-white'>
+       <div className='flex justify-around  '>
+       <div className='flex flex-col w-[65%] gap-4 ml-6'>
             <h1 className='text-4xl text-[#F1F2FF] font-medium'>Add course</h1>
             <div className='flex'>
                 <RenderSteps/>
             </div>
         </div>
-        <div className='border-2 border-[#2C333F] flex bg-[#161D29] rounded-lg flex-col gap-3 px-4 py-5 h-[40%] w-[34%]'>
+        <div className='border-2 border-[#2C333F] flex bg-[#161D29] rounded-lg flex-col gap-3 px-4 py-5 h-[40%] w-[25%]'>
             <p className='text-xl font-bold text-[#F1F2FF]'><span><BsLightningChargeFill className='text-yellow-100 inline-block'/></span> Code Upload tips</p>
             <ul className='flex flex-col gap-3 text-sm list-disc px-4 py-2 text-[#F1F2FF]'>
                 <li>Set the Course Price option or make it free.</li>

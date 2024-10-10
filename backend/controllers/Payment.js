@@ -25,7 +25,6 @@ const capturePayment = async(req, res) => {
   let totalAmount = 0;
 
   for (const course_id of newCourses) {
-    console.log(course_id,"***************")
       try {
           let course = await Course.findById(course_id);
           if (!course) {
@@ -38,7 +37,6 @@ const capturePayment = async(req, res) => {
           }
           totalAmount += course.price;
       } catch (error) {
-          console.log(error);
           return res.status(500).json({ success: false, message: error.message });
       }
   }
@@ -76,9 +74,6 @@ const verifyPayment = async (req, res) => {
 
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courses } = req.body;
   const userId = req.user.id || req.authorization;
-
-  console.log(razorpay_order_id,"This is the orderId ", razorpay_payment_id,"this is the payment id", razorpay_signature, courses,"Signature id",'This is the code')
-
 
   // Validate that required fields are present
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !courses || !userId) {
@@ -138,9 +133,7 @@ const enrollStudents = async(courses, userId, res) =>{
       //send mail to student
 
       const emailResponse = await mailSender(enrolledStudent.email, `Successfully enrolled into ${enrolledCourse.courseName}`,courseEnrollmentEmail(enrolledCourse.courseName, `${enrollStudents.firstName}`))
-      console.log("Email sent successfully", emailResponse.response)
      } catch (error) {
-      console.log(error)
       return res.status(500).json({success:false, message:error.message})
      }
     }
@@ -167,7 +160,6 @@ const sendPaymentSuccessEmail = async (req, res) => {
       // Respond immediately to the client
       return res.status(200).json({ success: true, message: "Email is being sent" });
   } catch (error) {
-      console.log(error, "Error in sending mail");
       return res.status(500).json({ success: false, message: error.message || "Internal Server Error" });
   }
 }
@@ -275,7 +267,6 @@ module.exports = {
 //     };
 //     try {
 //       const paymentResponse = await instance.orders.create(options);
-//       console.log(paymentResponse);
 //       return res
 //         .status(200)
 //         .json({
@@ -294,7 +285,6 @@ module.exports = {
 //         .json({ success: false, message: "Could not initiate order" });
 //     }
 //   } catch (error) {
-//     console.log(error);
 //     return res.status(500).json({ success: false, message: error.message });
 //   }
 // };
@@ -310,7 +300,6 @@ module.exports = {
 
 //         const digest = shaSum.digest("hex");
 //         if(signature == digest ){
-//             console.log("Payment is Authorized")
 
 //             const {courseId, userId} = req.body.payload.payment.entity.notes;
             

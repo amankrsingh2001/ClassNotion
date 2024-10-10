@@ -20,8 +20,7 @@ const ViewCourse = () =>{
 
     const setCourseSpecificDetails = async() =>{
         const courseData = await getFullCourseDetail(courseId, token)
-        
-            console.log(courseData,"This is the course Data")
+
 
         if(courseData){
             dispatch(setCourseSection(courseData.courseDetails.courseContent));

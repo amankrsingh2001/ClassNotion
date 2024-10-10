@@ -37,18 +37,21 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
 
   return (
         <>
-          <div className='text-white w-[25%]'>
+          <div className='text-white w-[22%] flex flex-col gap-3 '>
             {/* for buton and heading*/}
-            <div>
-              <div onClick={()=>{navigate('/dashboard/enrolled-courses')}}>
+            <div className=' px-4'>
+              <div className='flex   justify-between mb-6'>
+              <button className='py-2 px-3 rounded-md hover:scale-110 text-md bg-yellow-25 text-black' onClick={()=>{navigate('/dashboard/enrolled-courses')}}>
                 Back
+              </button>
+     
+                {/* <button className='bg-richblack-800 py-2 px-3 hover:scale-110  rounded-md text-md' onClick={()=>setReviewModal(true)}>Add Review</button> */}
+
               </div>
-              <div>
-                <button onClick={()=>setReviewModal(true)}>Add Review</button>
-              </div>
+             
               <div>
                 {/* for heading and title */}
-                <p>{courseEntireData?.courseName}</p>
+                <p className='text-[#F1F2FF] font-inter text-2xl'>{courseEntireData?.courseName}</p>
                 {/* <p>{completedLectures?.length}/ {totalNoOfLectures}</p> */}
               </div>
             </div>
@@ -58,35 +61,36 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
               {
                 courseSection.map((course, index)=>{
 
-                   return ( <div
+                   return (
+                     <div
                       onClick={()=>setActiveStatus(course?._id)}
                       key={index}
-                      className='text-white cursor-pointer'
+                      className='text-[#bfc0c4] mb-4 cursor-pointer flex flex-col gap-3'
                     >
                       {/* section */}
                       <div>
-                        <div>{course?.sectionName}</div>
+                        <div className='text-xl px-4'>{course?.sectionName}</div>
                          {/* Add arrow icon here */}
                       </div>
                      
                       {/* subSections */}
-                      <div className='text-white'>
+                      <div className='text-white '>
                         {
                           activeStatus === course?._id && (
-                            <div className='text-white'>
+                            <div className='text-white '>
                               {
                                 course.subSection.map((topic, index)=>{
                                   return (
                                       <div
                                       key={index}
                                       onClick={()=>{navigate(`/view-course/${courseEntireData?._id}/section/${course?._id}/sub-section/${topic?._id}`)}}
-                                        className={`flex gap-3 cursor-pointer  p-5 ${videoBarActive === topic._id?"bg-yellow-50 text-black":"bg-richblue-900 text-white "}`}
+                                        className={`flex gap-3 cursor-pointer p-4 ${videoBarActive === topic._id?"bg-yellow-50 text-black":"bg-richblue-900 text-white "}`}
                                       >
                                         <input type='checkbox'
                                           checked = {completedLecture.includes(topic?._id)}
                                           onChange={()=>{}}
                                         />
-                                        <span>{topic.title}</span>
+                                        <span className=''>{topic.title}</span>
                                       </div>
                                   )
                                 })
@@ -95,7 +99,8 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
                           )
                         }
                       </div>
-                    </div>)
+                    </div>
+                    )
                 })
               }
             </div>

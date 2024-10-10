@@ -1,12 +1,14 @@
 import {useForm} from 'react-hook-form'
 import Countrycode from '../../data/countrycode.json'
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 const ContactPage = () =>{
     const {register, handleSubmit, reset, formState:{errors, isSubmitSuccessful}} = useForm()
 
     const submitContact = (data) =>{
-        console.log(data)
+        toast.success("We will contact you sortly")
+        return;
     }
 
     useEffect(()=>{

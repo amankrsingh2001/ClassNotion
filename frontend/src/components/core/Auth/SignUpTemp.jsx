@@ -45,7 +45,6 @@ const SignUpTemp = ({ frame, code }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log('clikced')
     const signUpData = { ...formData, accountType: value[active].value };
 
     const {password, confirmPassword} = signUpData;

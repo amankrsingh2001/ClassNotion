@@ -44,7 +44,7 @@ const Setting = () => {
       dispatch(UpdateDispayPicture(formData));
       setFile(null);
     } catch (error) {
-      console.log("Failed again", error);
+      throw(error)
     }
   };
 

@@ -51,7 +51,6 @@ export async function buyCourse(courses, token, userDetails, navigate, dispatch)
                 email: userDetails.email
             },
             handler: async function (response) {
-                console.log("Payment Response:", response);
                 await sendPaymentSuccessEmail(response, orderId, amount, token);
                 const paymentData = { ...response, courses, orderId };
                 await verifyPayment(paymentData, token, navigate, dispatch);
@@ -63,10 +62,8 @@ export async function buyCourse(courses, token, userDetails, navigate, dispatch)
         paymentObject.open();
         paymentObject.on("payment.failed", function (response) {
             toast.error("Oops, payment failed");
-            console.error(response.error);
         });
     } catch (error) {
-        console.error("Payment Error:", error);
         toast.error('Could not process payment. Please try again.');
     } finally {
         toast.dismiss(toastId);
@@ -83,13 +80,11 @@ async function sendPaymentSuccessEmail(response, orderId, amount, token) {
             headers: { "Authorization": `Bearer ${token}` }
         });
     } catch (error) {
-        console.error("Email Sending Error:", error);
         toast.error('Failed to send payment confirmation email.');
     }
 }
 
 async function verifyPayment(bodyData, token, navigate, dispatch) {
-    console.log("this is running")
     try {
         const response = await axios.post(COURSE_VERIFY_API, bodyData, {
             headers: { "Authorization": `Bearer ${token}` }
@@ -103,7 +98,6 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
         navigate('/dashboard/enrolled-courses');
         dispatch(resetCart());
     } catch (error) {
-        console.error("Payment Verification Error:", error);
         toast.error('Could not verify payment. Please try again.');
     }
 }

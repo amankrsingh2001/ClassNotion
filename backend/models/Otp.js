@@ -21,7 +21,6 @@ async function sendVerificationEmail(email,otp) {
     try {
             const mailResponse = await mailSender(email,"Verificaton email from Class Notion",otp)
     } catch (error) {
-            console.log("Error occured while sending mail", error.message)
             throw error
     }
 }

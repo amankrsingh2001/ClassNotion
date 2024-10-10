@@ -29,8 +29,7 @@ const CourseBuilderForm = () =>{
         const onSubmit = async(data) =>{
             setLaoding(true)
             let result;
-            console.log(data,"**************")
-            console.log(course)
+
             if(editSectionName){
                 result = await updateSection({ sectionName:data.sectionName, sectionId : editSectionName, courseId:course._id }, token)
                 if(result){

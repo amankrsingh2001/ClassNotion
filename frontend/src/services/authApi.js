@@ -1,6 +1,6 @@
 import axios from "axios";
 import { authApi, profileApi } from "./api";
-import { setSignUpData, setToken } from "../slices/authSlice";
+import { setLoading, setSignUpData, setToken } from "../slices/authSlice";
 import { setUser } from "../slices/profileSlice";
 import toast from "react-hot-toast";
 import { resetCart } from "../slices/cartSlice";
@@ -12,6 +12,8 @@ const {  UPDATE_DISPLAY_API, UPDATE_ABOUT_API } = profileApi
 
 export function otpApi(email, navigate) {
   return async (dispatch) => {
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       const response = await axios.post(
         SENDOTP_API,
@@ -22,9 +24,10 @@ export function otpApi(email, navigate) {
       toast.success('OTP sent successfully')
       navigate("/verify-email");
     } catch (error) {
-      console.log(error, "This is the error"); // remove console
       toast.error(error.response.data.message)
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   };
 }
 
@@ -32,6 +35,8 @@ export function otpApi(email, navigate) {
 
 export function signup(data, navigate) {
   return async (dispatch) => {
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     const {
       firstName,
       lastName,
@@ -59,16 +64,16 @@ export function signup(data, navigate) {
       );
 
       if (!response.data.success) {
-        console.log("Failed to get Response",response.response);
         toast.error('')
       }
       toast.success("User Created Successfully")
       navigate("/login");
     } catch (error) {
-      console.log(error.message); //Remove console
       toast.error('Something Went Wrong ')
       navigate("/signup");
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   };
 }
 
@@ -77,6 +82,8 @@ export function signup(data, navigate) {
 
 export function setLogin(data, navigate) {
   return async (dispatch) => {
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       const { email, password } = data;
       const response = await axios.post(
@@ -93,33 +100,37 @@ export function setLogin(data, navigate) {
       toast.success("Logged In Successfully")
       navigate('/')
     } catch (error) {
-      console.log(error)
       toast.error(error.response.data.message)
       navigate('/login')
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   };
 }
 
 export function resetPasswordToken(email, setSentEmail){
   return async(dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       const response =await axios.post(RESET_PASSWORD_TOKEN, {email})
-      console.log(response)
       setSentEmail(true)
       if(!response.data.success){
         toast.error('Failed to sent Email')
       }
       toast.success('Email sent successfully')
     } catch (error) {
-        console.log(error) //remove console
         toast.error("Something Went Wrong")
     }
-   
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   }
 }
 
 export function resetPassword(password, confirmPassword, token, navigate){
   return async(dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
       try {
         const response = await axios.post(RESET_PASSWORD, {password, confirmPassword, token})
 
@@ -130,14 +141,17 @@ export function resetPassword(password, confirmPassword, token, navigate){
         toast.success('Reset password successfully')
         navigate('/confirmChange')
       } catch (error) {
-          console.log(error, error.message) //remove console
           toast.error('Something went wrong')
       }
+      dispatch(setLoading(false))
+      toast.dismiss(toastId)
   } 
 }
 
 export function logOut(navigate){
   return async(dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       dispatch(setToken(null))
       dispatch(setSignUpData(null))
@@ -147,16 +161,19 @@ export function logOut(navigate){
       toast.success("Logged out successfully")
       navigate('/')
     } catch (error) {
-      console.log(error)
       toast.error("Something went wrong")
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   }
 }
 
 export function UpdateDispayPicture(formData){
     return async(dispatch)=>{
+      const toastId = toast.loading("Loading...")
+        dispatch(setLoading(true))
       try{
-
+        
         const File = formData
         const token = localStorage.getItem('token')
         const response = await axios.put(UPDATE_DISPLAY_API, File,{
@@ -172,14 +189,18 @@ export function UpdateDispayPicture(formData){
         localStorage.setItem('user',JSON.stringify(data));
         toast.success("Profile updated")
       }catch(error){
-        console.log(error)
         toast.error("Something went wrong")
       }
+      dispatch(setLoading(false))
+      toast.dismiss(toastId)
     }
+    
 } 
 
 export function updateAbout(aboutData){
   return async(dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       const {
         contactNumber,
@@ -204,14 +225,17 @@ export function updateAbout(aboutData){
           toast.success("Successfully Updated your About")
         }
     } catch (error) {
-      console.log(error)
       toast.error('Something went Wrong')
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   }
 }
 
 export function changeNewPassword(formData){
   return async(dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
     try {
       const {password, newPassword} = formData;
       const token = localStorage.getItem('token')
@@ -227,8 +251,9 @@ export function changeNewPassword(formData){
           toast.success("Updated Password successfully")
         }
     } catch (error) {
-        console.log(error)
         toast.error('Something went wrong')
     }
+    dispatch(setLoading(false))
+    toast.dismiss(toastId)
   }
 }

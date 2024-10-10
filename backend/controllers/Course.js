@@ -220,7 +220,7 @@ const getCourseDetails = async (req, res) => {
 const getFullCourseDetails = async (req, res) => {
     try {
       const courseId  = req.body.courseId
-      console.log(courseId, "This is course Id")
+
 
       const userId = req.user.id
       const courseDetails = await Course.findOne({
@@ -246,8 +246,7 @@ const getFullCourseDetails = async (req, res) => {
         courseID: courseId,
         userId: userId,
       })
-  
-      console.log("courseProgressCount : ", courseProgressCount)
+
   
       if (!courseDetails) {
         return res.status(400).json({

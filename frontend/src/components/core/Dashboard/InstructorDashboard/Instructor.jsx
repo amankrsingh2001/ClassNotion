@@ -41,11 +41,11 @@ const Instructor = () => {
 
   return (
     <div className=" w-11/12 p-12">
-      <div className="">
-        <h1 className="text-3xl text-[#F1F2FF]">
+      <div className="flex justify-center flex-col items-center border-b-[1px] border-[#F1F2FF]">
+        <h1 className="text-4xl text-[#F1F2FF]">
           {user.firstName} {user.lastName}
         </h1>
-        <p className="text-[#838894] text-sm mt-3 mb-3">
+        <p className="text-[#838894] text-md mt-3 mb-3">
           Let's start something new
         </p>
       </div>
@@ -53,8 +53,8 @@ const Instructor = () => {
       {loading ? (
         <div className="">Loading...</div>
       ) : courses.length > 0 ? (
-        <div className="">
-          <div className=" flex justify-between gap-3 flex-wrap sm:flex-nowrap">
+        <div className="text-white">
+          <div className=" flex justify-between gap-3 mt-8 flex-wrap sm:flex-nowrap">
             <InstructorChart courses={instructorData} />
             <div className="w-[30%] flex flex-col gap-5 mt-6 relative top-12">
               <p className="text-4xl text-[#F1F2FF] text-center">Statistic</p>
@@ -81,20 +81,21 @@ const Instructor = () => {
           <div>
             {/* Render 3 courses */}
             <div>
-              <div>
-                <p>Your Courses</p>
+              <div className="flex justify-between items-center mt-12">
+                <p className="text-[#F1F2FF] text-2xl">Your Courses</p>
                 <Link to={"/dashboard/my-courses"}>
-                  <p>View All</p>
+                  <p className="text-right cursor-pointer text-richblack-200  hover:underline hover:text-yellow-25">View All</p>
                 </Link>
               </div>
-              <div>
+              <div className="flex mt-12 gap-4 ">
                 {courses.slice(0, 3).map((course) => {
                   return (
-                    <div key={course._id}>
-                      <img src={course?.thumbnail} />
-                      <div>
-                        <p>{course.courseName}</p>
-                        <div>
+                    <div key={course._id}  className="w-[40%] rounded-md hover:bg-richblack-800 p-2 border border-richblack-800">
+                      <img src={course?.thumbnail} className="w-[100%] aspect-video object-cover rounded-md"/>
+                      <div className="flex flex-col gap-3 mt-2 px-2">
+                        <p className="text-xl text-[#F1F2FF] capitalize font-inter">{course.courseName}</p>
+                        <p className="capitalize text-sm text-[#c5c5cb]">{course.courseDescription.length>200?course.courseDescription.slice(0,200):course.courseDescription} </p>
+                        <div className="flex  gap-3 text-[#838791] mb-4">
                           <p>{course?.studentsEnrolled.length} Students</p>
                           <p> | </p>
                           <p>Rs: {course?.price}</p>

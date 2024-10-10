@@ -7,20 +7,14 @@ const { uploadOnCloudinary } = require('../utils/imageUploader');
 const updateProfile = async(req,res) =>{
     try {
         const {dateOfBirth="" ,about="", contactNumber="", gender, profession} = req.body
-        console.log("************************", about)
-
         const userId = req.user.id || req.authorization.id;
 
-        
         //user Profile
         const userDetails = await User.findById(userId)
         
         const profileId = userDetails.additionalDetails;
 
-        console.log(profileId)
-
         const profileDetails = await Profile.findById(profileId)
-        console.log(profileDetails)
         
 
         profileDetails.dateOfBirth = dateOfBirth;
@@ -61,6 +55,8 @@ const deleteAccount = async(req,res) =>{
             }
         },{new:true})
 
+        await Course.findByIdAndDelete(courses);
+
         await User.findByIdAndDelete(id)
 
         return res.status(200).json({succss:true,message:"User Deleted Successfully"})
@@ -89,7 +85,6 @@ const updateDisplayPicture = async(req, res)=>{
 
 
         const userId = req.user.id;
-        console.log(userId)
         const image = await uploadOnCloudinary(displayPicture,process.env.FOLDER_NAME,1000,1000)
         const updateProfile = await User.findByIdAndUpdate(userId,{
             image:image.secure_url
@@ -116,7 +111,6 @@ const getEnrolledCourse = async(req, res)=>{
           }
         })
         .exec();
-        console.log(userDetail,'THis is the userDetail')
         if(!userDetail){
             return res.status(400).json({success:false, message: `Could not found user with id: ${userId}`})
         }
@@ -151,7 +145,6 @@ const instructorDashboard = async(req, res)=>{
         })
         return res.status(200).json({success:true, data:courseData})
     } catch (error) {
-        console.log(error)
         return res.status(500).json({success:'false', message:"Internal sever error"})
     }
 }

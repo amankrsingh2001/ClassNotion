@@ -12,8 +12,6 @@ const RenderTotalAmount = ({cart}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    console.log(cart)
-
     const handlerBuyCourse = () =>{
         const courseId = cart.map((course)=>course._id)
         buyCourse([courseId],token, user, navigate, dispatch)

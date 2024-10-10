@@ -28,8 +28,6 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
     }
   },[])
 
-  console.log(modalData, '**********')
-
   const isFormUpdated = () =>{
     const currentValues = getValues();
       if((currentValues.lectureTitle !== modalData.title) || ( currentValues.lectureDesc !== modalData.description ) || (currentValues.lectureVideo !== modalData.videoUrl)){

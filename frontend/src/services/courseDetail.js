@@ -31,7 +31,6 @@ export const addCourseDetails = async(data, token) =>{
             result = response?.data?.data
         
     } catch (error) {
-            console.log(error)
             toast.error(error.response.data.message)
     }
     return result
@@ -39,8 +38,6 @@ export const addCourseDetails = async(data, token) =>{
 
 export const editCourseAPI = async (data, token) => {
     let result = null;
-    console.log(data, "From the course detials api page")
-
     try {
         const response = await axios.post(EDIT_COURSE_API, data, {
             headers: {
@@ -55,10 +52,8 @@ export const editCourseAPI = async (data, token) => {
 
         toast.success("Updated Your Course Details");
         result = response?.data?.data;
-        console.log(result, "This is the sub section");
     } catch (error) {
         toast.error(error.message);
-        console.error(error);
     }
     return result;
 };
@@ -82,7 +77,6 @@ export const category = async(data) =>{
 
 export const createSection = async(data, token) =>{
     let result = null
-    console.log(data,'This is the create section')
     try {
         const response = await axios.post(CREATE_SECTION_API,data, {
             headers:{
@@ -110,7 +104,6 @@ export const updateSection = async(data, token) =>{
         result = response?.data?.data
     } catch (error) {
         toast.error('Failed to update section')
-        console.log(error)
     }
     return result
 }
@@ -134,7 +127,6 @@ export const deleteSection = async(data, token) =>{
         result = response?.data?.data
     } catch (error) {
             toast.error(error.message)
-            console.log(error)
     }
     return result
 }
@@ -156,7 +148,6 @@ export const createSubSection = async(data, token) =>{
 
         } catch (error) {
                 toast.error('Something went wrong')
-                console.log(error)
         }
         return result;
 }
@@ -175,7 +166,6 @@ export const updateSubSection = async(data, token) =>{
         result  = response?.data?.data
     } catch (error) {
             toast.error("Something went wrong")
-            console.log(error)
     }
     return result;
 }
@@ -199,7 +189,6 @@ export const deleteSubSection = async(data, token) =>{
         
     } catch (error) {
             toast.error(error.message)
-            console.log(error)
     }
     return result
 }
@@ -215,7 +204,6 @@ export const getInstructorCourse = async(token) =>{
         })
         result = response?.data?.data
     } catch (error) {
-        console.log(error)
         toast.error('Failed to fetch courses details')        
     }
     return result
@@ -223,8 +211,6 @@ export const getInstructorCourse = async(token) =>{
 
 export const deleteCourse = async(data, token)=>{
     try {
-            console.log(data,"This is the courseId")
-
         const response = await axios.post(DELETE_COURSE_API, { data },{
             headers:{
                 "Authorization":`Bearer ${token}`
@@ -235,7 +221,6 @@ export const deleteCourse = async(data, token)=>{
         }
     } catch (error) {
         toast.error("Something went wrong")
-        console.log(error)
     }
 }
 
@@ -248,10 +233,7 @@ export const getFullCourseDetail = async(courseId, token) =>{
             }
         })
         result = response?.data?.data
-        console.log(result,"This is the result")
-       
     } catch (error) {
-        console.log(error) 
         toast.error('Something went wrong')       
     }
     return result
@@ -270,14 +252,13 @@ export const getNewCourseDetail = async(courseId) =>{
 
 export const updateCourseProgress = async(data, token) =>{
   try {
-    console.log(data,"This is the data")
       const res = await axios.post(UPDATE_COURSE_PROGRESS, data, {
           headers:{
               "Authorization": `Bearer ${token}`
           }
       })
   } catch (error) {
-        console.log(error, "Error in course Details")
+        toast.error('Failed to update course')
   }
 
 }
@@ -296,7 +277,7 @@ export const createRating = async(data, token) =>{
             Success = true
         }
     } catch (error) {
-        console.log(error)
+        toast.error('Failed to create rating')
     }
     return Success
 
@@ -313,7 +294,7 @@ export const getInstructorData = async(token) =>{
             })
             result = response?.data?.data
     } catch (error) {
-        console.log("Get instructor Api error", error)
+        toast.error('Failed to Get instructor data')
     }
     return result
 }

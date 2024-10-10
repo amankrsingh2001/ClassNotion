@@ -22,8 +22,6 @@ const EnrolledCourses = () => {
     const response = await axios.get(GET_ENROLLED_COURSES,{headers:{
       "Authorization": `Bearer ${token}`
     }})
-    // console.log()
-    console.log(response,"This is the response")
       setEnrolledCourses(response.data.data.course)
 
   } 

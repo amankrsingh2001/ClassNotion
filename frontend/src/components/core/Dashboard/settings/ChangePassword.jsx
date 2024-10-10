@@ -33,7 +33,6 @@ const submitHandler = (e)=>{
         toast.error('New password cannot be same as Current password')
         return;
     }
-    console.log(formData)
     dispatch(changeNewPassword(formData))
     
 }

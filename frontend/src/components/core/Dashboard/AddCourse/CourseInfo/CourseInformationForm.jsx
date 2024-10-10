@@ -57,8 +57,8 @@ const CourseInformationForm = () => {
 
     const currentValues = getValues()
 
-    console.log(currentValues,'This is the current Values')
-    console.log(course,"This is the curse")
+
+
 
     if(currentValues.courseTitle !== course.courseDetails.courseName ||
        currentValues.courseShortDesc !== course.courseDetails.courseDescription ||
@@ -86,8 +86,6 @@ const CourseInformationForm = () => {
         const formData = new FormData()
   
         formData.append("courseId", course.courseDetails._id)
-
-        console.log(currentValue, "This is the current value")
 
         if(currentValue.courseTitle !== course.courseDetails.courseName){
           formData.append('courseName', data.courseTitle)
@@ -130,7 +128,6 @@ const CourseInformationForm = () => {
     }
 
     const formData = new FormData();
-      console.log(data,'This is the data')
 
     formData.append('courseName', data.courseTitle)
     formData.append('courseDescription', data.courseShortDesc)

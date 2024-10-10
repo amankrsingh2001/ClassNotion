@@ -6,7 +6,6 @@ function getRandomInt(max){
 }
 
 const createCategory = async(req,res) =>{
-    console.log(req.body)
     const createPayload = req.body
     const parserPayload = createCategoryValidation.safeParse(createPayload)
     try {
