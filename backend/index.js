@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParse());
 
 app.use(cors({
-    origin:'https://class-notion.vercel.app/',
+    origin:'*',
     credentials:true
 }))
 
