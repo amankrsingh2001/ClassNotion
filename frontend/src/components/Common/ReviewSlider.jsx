@@ -34,7 +34,7 @@ const ReviewSlider = () => {
     <div className='text-white w-full flex flex-col mb-20 lg:h-[400px] items-center p-12 gap-4 '>
         <p className='text-center text-richblack-500 text-4xl'>Review From other learner</p>
 
-    <div className='h-[190px] max-w-maxContent gap-4'>
+    <div className='h-[190px] = w-11/12 gap-4'>
         <Swiper
 
             slidesPerView={4}
@@ -51,7 +51,7 @@ const ReviewSlider = () => {
                 reviews.map((review, index)=>{
                     return(
                         <SwiperSlide key={index}    className="p-4 rounded-md  hover:bg-[#332B2A]" style={{transition:"all 100ms 250ms ease-in-out "}}>
-                            <div className='flex  gap-5 p-4 text-md mt-4'>
+                            <div className='  w-fit flex gap-5 p-4 text-md mt-4'>
                             <img className='w-[60px] h-[60px] rounded-full object-cover' src={review?.user?.image ? review?.user?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${review?.user?.firstName} ${review?.user?.lastName}`} alt='profile pic'/>
                                 <div className='flex flex-col gap-1'>   
                                 <p className='text-[#acadb1] font-bold text-md'>{review?.user?.firstName} {review?.user?.lastName}</p>

@@ -45,7 +45,7 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
                 Back
               </button>
      
-                {/* <button className='bg-richblack-800 py-2 px-3 hover:scale-110  rounded-md text-md' onClick={()=>setReviewModal(true)}>Add Review</button> */}
+                <button className='bg-richblack-800 py-2 px-3 hover:scale-110  rounded-md text-md' onClick={()=>setReviewModal(true)}>Add Review</button>
 
               </div>
              
