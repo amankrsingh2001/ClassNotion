@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import toast from "react-hot-toast";
+import { ImCross } from "react-icons/im";
+import { TiThMenu } from "react-icons/ti";
 import { category } from "../../services/courseDetail";
 
 
@@ -17,7 +19,7 @@ const Navbar = () => {
   const { totalItem } = useSelector((state) => state.cart);
   const location = useLocation();
   const [subLinks, setSubLinks] = useState([]);
-
+  const [navbarCont, setNavbarCont] = useState(false);
   useEffect(() => {
     fetchSubLinks();
   }, []);
@@ -42,13 +44,17 @@ const Navbar = () => {
 
   return (
     <div className={`h-14 flex justify-center items-center  border-b-richblack-700 ${ location.pathname.includes('catalog') || location.pathname.includes('dashboard')?'bg-richblack-800':'bg-richblack-900'}`}>
-      <div className="w-11/12 flex max-w-maxContent items-center justify-between gap-2">
+      <div className="w-11/12 flex max-w-maxContent bg-inherit  items-center justify-between gap-2">
         <Link to={"/"}>
           <img src={"/assets/Logo/Logo-Full-Light.png"} width={160} height={42} loading="lazy" />
         </Link>
+        {
+         navbarCont?<ImCross className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px]  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/> :<TiThMenu className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px]  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/>
 
-        <nav>
-          <ul className="flex md:flex-row flex-col gap-4 mr-4">
+        }
+       
+        <nav className={navbarCont?` absolute flex items-center justify-center top-[55px] z-10 p-4 left-[0px] w-full bg-inherit ${ location.pathname.includes('catalog') || location.pathname.includes('dashboard')?'bg-richblack-800':'bg-richblack-900'}`:'hidden sm:block'} >
+          <ul className="flex sm:flex-row flex-col  sm:gap-4 gap-6 sm:p-0 py-8 mr-4">
             {NavbarLinks.map((item, index) => {
               return (
                 <li key={index}>
@@ -94,7 +100,7 @@ const Navbar = () => {
             })}
           </ul>
         </nav>
-        <div className="flex lg:flex-row gap-2 items-center">
+        <div className="sm:flex hidden   lg:flex-row gap-2 items-center">
           {token && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
              <FiShoppingCart className="text-white mr-4"/>
@@ -103,14 +109,14 @@ const Navbar = () => {
           )}
           {token === null && (
             <Link to="/login">
-              <button className="text-richblack-50 text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
+              <button className="text-richblack-50  text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
                 Login
               </button>
             </Link>
           )}
           {token === null && (
             <Link to="/signup">
-              <button className="text-richblack-50 text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
+              <button className="text-richblack-50 md:inline-block hidden text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
                 Sign Up
               </button>
             </Link>
