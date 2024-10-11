@@ -16,8 +16,8 @@ const CardImage = () => {
   }, []);
 
   return (
-    <div className='w-10/12 p-6 flex justify-center'>
-       <div className='flex w-[90%] justify-center items-center relative '>
+    <div className='sm:w-10/12 w-11/12 p-6 flex justify-center'>
+       <div className='flex sm:w-[90%] sm:flex-row  justify-center items-center relative '>
        <div data-aos = "fade-left" className='absolute z-[0] drop-shadow-2xl left-[80px]'>
           <img className='' src='/assets/Images/Know_your_progress.png'/>
         </div>

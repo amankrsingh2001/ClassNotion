@@ -42,9 +42,9 @@ const submitHandler = (e) =>{
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
-      <div className="w-11/12 flex justify-around ">
+      <div className="w-11/12 flex justify-around lg:flex-row flex-col ">
         {/**Section 1 */}
-        <div className=" w-[40%] p-12 text-white ">
+        <div className="  p-12 text-white ">
           <div className="p-2 flex flex-col">
             <h1 className="text-4xl py-2">{title}</h1>
             <p className="text-md w-full text-[#AFB2BF]">
@@ -133,12 +133,12 @@ const submitHandler = (e) =>{
         </div>
 
         {/*section2 */}
-        <div className="w-[45%] flex relative top-14">
-          <div className="w-[full] drop-shadow-xl relative z-[1] mx-auto">
+        <div className="w-[45%]  flex relative top-14">
+          <div className="w-[full] hidden lg:block drop-shadow-xl relative z-[1] mx-auto">
             <img className="" src={image} />
           </div>
 
-          <div className="w-[full] absolute right-[36px] top-[24px] z-0">
+          <div className="w-[full] hidden lg:block absolute right-[52px] top-[24px] z-0">
             <img className="" src={frame} />
           </div>
         </div>

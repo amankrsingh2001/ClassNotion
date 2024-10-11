@@ -41,31 +41,29 @@ const Home = () => {
     <div>
       {/*Section-1 */}
       <div className="mx-auto relative flex flex-col w-screen items-center text-white justify-between">
-        <div
-          className={`absolute z-[0] top-0 h-screen left-0 w-full  overflow-hidden bg-[url(/assets/Images/image.jpg)] bg-cover bg-no-repeat opacity-50`}
-        ></div>
+        <div className={`absolute z-[0] top-0 h-screen left-0 w-full  overflow-hidden bg-[url(/assets/Images/image.jpg)] bg-cover bg-no-repeat opacity-50`}></div>
 
-        <div className="relative z-1 w-11/12  max-w-maxContent flex flex-col items-center">
-            <div className="group mt-16 shadow-[0px_1px_2px_0px_#fffefebc] p-1 mx-auto rounded-full bg-richblack-800 font-bold text-richblack-200 transition-all duration-200 hover:scale-105 w-fit">
-              <div className="flex items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-                <button onClick={()=>onClickHandler()}>Become an Instructor</button>
+        <div className="relative  z-1 w-11/12  max-w-maxContent flex flex-col lg:items-center items-start mt-8">
+            <div className="group mt-16  shadow-[0px_1px_2px_0px_#fffefebc] p-1 sm:mx-auto rounded-full bg-richblack-800 font-bold text-richblack-200 transition-all duration-200 hover:scale-105 w-fit">
+              <div className="flex  items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
+                <button  onClick={()=>onClickHandler()}>Become an Instructor</button>
                 <FaArrowRight />
               </div>
             </div>
           {/*Heading section */}
-          <div className="text-center font-semibold text-4xl animate-wiggle font-inter mt-7">
+          <div className="lg:text-center text-start font-semibold text-4xl animate-wiggle font-inter mt-7">
             Empower Your Future with
             <HilightText text={"Coding Skills"} style={"sky"} />
           </div>
 
-          <div className="mt-4 text-[#838894] w-[70%] animate-wiggleNext text-lg font-inter font-medium text-center">
+          <div className="mt-4 text-[#838894] sm:w-[70%] text-lg animate-wiggleNext lg:text-lg font-inter font-medium lg:text-center text-start">
             With our online coding courses, you can learn at your own pace, from
             anywhere in the world, and get access to a wealth of resources,
             including hands-on projects, quizzes, and personalized feedback from
             instructors.
           </div>
 
-          <div className="flex justify-center gap-7 mt-8">
+          <div className="flex justify-center self-center gap-7 mt-8">
             <Cpabutton
               active={true}
               linkto={"/signup"}
@@ -84,14 +82,14 @@ const Home = () => {
             </Cpabutton>
           </div>
           {/* video section */}
-          <div className="mt-60 border-[20px] border-richblack-700 rounded-lg ">
-            <video muted autoPlay loop className="rounded-sm drop-shadow-md w-[62vw]">
+          <div className="md:mt-60 mt-10 border-[20px] border-richblack-700 rounded-lg ">
+            <video muted autoPlay loop className="rounded-sm  drop-shadow-md md:w-[62vw]">
               <source src={'/assets/Images/banner.mp4'}></source>
             </video>
           </div>
 
           {/*Code section 1 */}
-          <div data-aos="fade-right">
+          <div data-aos="fade-right flex flex-col ">
             <CodeBlock
               position={"lg:flex-row"}
               heading={
@@ -155,7 +153,9 @@ const Home = () => {
             />
           </div>
         </div>
+        <div className="px-4">
               <ExploreMore />
+        </div>
       </div>
       {/*Section-1 */}
 
@@ -180,25 +180,27 @@ const Home = () => {
         </div>
 
         <div className="mx-auto w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-7">
-              <div className="flex flex-row gap-5 mb-10 mt-[95px]">
+              <div className="flex flex-col md:flex-row gap-5 mb-10 mt-[95px]">
 
-                <div data-aos="fade-right" className="text-4xl font-semibold w-[45%]">
+                <div data-aos="fade-right" className="text-4xl font-semibold md:w-[45%]">
                 Get the skills you need for a <HilightText text={'job that is in demand'}/>
                 </div>
 
-                <div data-aos="fade-left" className="flex flex-col gap-10 w-[40%] items-start">
+                <div data-aos="fade-left" className="flex flex-col gap-10 md:w-[40%] items-start">
                   <p className="text-[16px]">
                   The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.
                   </p>
-                  <Cpabutton active={true}>
-                      <div>Learn More</div>
-                  </Cpabutton>
-              </div>     
+                 
+              </div>   
+
+              <Cpabutton active={true}>
+                      <div className="sm:w-fit ">Learn More</div>
+              </Cpabutton>
           </div>
 
 
 
-          <div className="w-11/12 flex flex-row justify-between">
+          <div className="w-11/12 flex lg:flex-row flex-col justify-between">
                 <div data-aos='fade-right' className="flex flex-col p-6 justify-center">
                 {
                   CardData.map((cardValue)=>{
@@ -248,9 +250,9 @@ const Home = () => {
          </div>
        </div>
 
-       <div className="w-11/12 text-white flex justify-evenly items-center">
+       <div className="w-full text-white self-center flex flex-col sm:flex-row  lg:justify-evenly items-center">
 
-            <div data-aos='fade-left' className="w-[40%]  relative flex justify-center p-10">
+            <div data-aos='fade-left' className="sm:w-[40%] p-4 border-1   relative flex justify-center sm:p-10">
                   <div className="w-full  z-[2] ">
                       <img  src="/assets/Images/Instructor.png"/>
                     </div>  
@@ -261,7 +263,7 @@ const Home = () => {
             </div>
 
             {/*second Section */}
-            <div data-aos='fade-right' className=" gap-6 flex flex-col w-[28%] " >
+            <div data-aos='fade-right' className=" gap-6 p-4 flex flex-col sm:w-[28%] " >
                 <div className="text-4xl">
                   Become an <br/> <HilightText text={'Instructor'}/>
                 </div>

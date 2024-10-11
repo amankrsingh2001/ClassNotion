@@ -2,7 +2,7 @@ import { IoChatbox } from "react-icons/io5";
 import { FaEarthAsia } from "react-icons/fa6";
 
 const ContactInfo = () =>{
-    return <div className="w-[25%] flex mt-12 rounded-lg relative left-20 bg-richblack-800  p-2">
+    return <div className="w-fit  flex mt-12 rounded-lg relative left-10 lg:left-20 bg-richblack-800  p-2">
         <div className="flex flex-col gap-4 p-4">
             <div className="flex flex-col gap-1">
                 <div className="flex flex-row items-center gap-3">

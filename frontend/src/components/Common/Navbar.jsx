@@ -48,7 +48,7 @@ const Navbar = () => {
         </Link>
 
         <nav>
-          <ul className="flex gap-4 mr-4">
+          <ul className="flex md:flex-row flex-col gap-4 mr-4">
             {NavbarLinks.map((item, index) => {
               return (
                 <li key={index}>
@@ -94,7 +94,7 @@ const Navbar = () => {
             })}
           </ul>
         </nav>
-        <div className="flex gap-2 items-center">
+        <div className="flex lg:flex-row gap-2 items-center">
           {token && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
              <FiShoppingCart className="text-white mr-4"/>
@@ -103,14 +103,14 @@ const Navbar = () => {
           )}
           {token === null && (
             <Link to="/login">
-              <button className="text-richblack-50 rounded-md border-2 text-sm  border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
+              <button className="text-richblack-50 text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
                 Login
               </button>
             </Link>
           )}
           {token === null && (
             <Link to="/signup">
-              <button className="text-richblack-50 rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
+              <button className="text-richblack-50 text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
                 Sign Up
               </button>
             </Link>

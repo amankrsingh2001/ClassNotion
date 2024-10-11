@@ -9,7 +9,7 @@ const CourseCard = ({data, index, setActive, active}) => {
     }
 
   return (
-        <div onClick={()=>changeActive()} className={`w-[20%] ${index === active?"bg-white drop-shadow-[10px_12px_rgba(235,219,52)]":"bg-[#161D29] drop-shadow-[1px_2px_rgba(112,110,110)]"}  cursor-pointer flex flex-col justify-around p-3 hover:bg-white hover:drop-shadow-[10px_12px_rgba(235,219,52)] group transition-colors duration-150`}>
+        <div onClick={()=>changeActive()} className={`md:w-[20%]  ${index === active?"bg-white drop-shadow-[10px_12px_rgba(235,219,52)]":"bg-[#161D29] drop-shadow-[1px_2px_rgba(112,110,110)]"}  cursor-pointer flex flex-col justify-around p-3 hover:bg-white hover:drop-shadow-[10px_12px_rgba(235,219,52)] group transition-colors duration-150`}>
             <div className='py-6 '>
             <h3 className={`p-4 px-2 text-start group-hover:text-black ${index === active?'text-black':'text-white'} text-lg`}>{ data.heading }</h3>
             <p className={`text-sm py-4 px-2 mb-8 text-start text-[#838894]`}>{data.description}</p>

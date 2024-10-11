@@ -34,11 +34,11 @@ const ExploreMore = () => {
           Learn to build anything you can imagine
         </p>
 
-        <div className="flex rounded-full mx-auto w-fit bg-richblack-800 m-4  border-richblack-100 border-[1px] px-2 py-1">
+        <div className="flex rounded-full mx-auto w-fit  bg-richblack-800  border-richblack-100 border-[1px] px-2 py-1">
           {tabName.map((el, index) => {
             return (
               <div
-                className={`text-[12px] flex flex-row items-center gap-2 ${
+                className={`text-[12px] flex flex-row items-center gap-2${
                   currentTab === el
                     ? "bg-richblack-900 text-richblack-5 font-medium"
                     : "text-[#838894] "
@@ -52,7 +52,7 @@ const ExploreMore = () => {
           })}
         </div>
       </div>
-      <div className="justify-center  gap-10  text-white flex flex-row drop-shadow-xl relative  bottom-[-80px]">
+      <div className="justify-center  gap-10  text-[#F1F2FF] flex flex-col sm:flex-row drop-shadow-xl relative  bottom-[-80px]">
         {courses.map((el, index) => {
           return <CourseCard key={index} setActive={setActive} active={active} index={index} data={el} />;
         })}

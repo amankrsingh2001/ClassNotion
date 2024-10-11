@@ -11,11 +11,11 @@ const Footer = () => {
   const carrer = FooterLink2[2].links;
 
   return (
-    <div className="h-[728px] w-full  bg-[#161D29] flex justify-center items-center ">
+    <div className="h-fit w-full  bg-[#161D29] flex justify-center items-center ">
       {" "}
       {/*Outer */}
-      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col gap-2">
-        <div className="h-[90%] w-full drop-shadow-2xl flex flex-1 items-stretch">
+      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col  gap-2">
+        <div className="h-[90%] w-full drop-shadow-2xl  flex flex-1 lg:flex-nowrap lg:flex-row flex-col items-stretch">
           {" "}
           {/* Inner */}
           {/* Section 1 */}
@@ -89,7 +89,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <hr className="border-[1px] ml-12 mr-12 h-[96%] mt-6 border-[#2C333F]" />
+          <div className="border-l-[1px] ml-12 mr-12 mt-8 hidden lg:block border-[#2C333F]" />
           {/*Section 2 */}
 
           <div className="flex justify-between w-[48%] gap-4">
@@ -121,9 +121,10 @@ const Footer = () => {
           </div>
          
         </div>
+
         <hr className="border-[1px]  mt-6 border-[#2C333F]" />
 
-        <div className="flex justify-between pt-6">
+        <div className="flex justify-between pt-6 mb-10">
           <div className="flex text-xs gap-2 text-[#AFB2BF]">
             <p>Privacy Policy</p>
             <p>Cookie Policy</p>

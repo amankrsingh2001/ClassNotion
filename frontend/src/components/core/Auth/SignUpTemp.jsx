@@ -73,9 +73,9 @@ const SignUpTemp = ({ frame, code }) => {
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
-      <div className="w-11/12 flex justify-around items-center ">
+      <div className="w-11/12 flex flex-col lg:flex-row justify-around items-center ">
         {/**Section 1 */}
-        <div className=" w-[40%] px-12  text-white ">
+        <div className=" lg:w-[40%]  px-12  text-white ">
           <div className="p-2 flex flex-col">
             <h1 className="text-3xl mb-4">{data.title}</h1>
             <p className="text-md w-full text-[#AFB2BF]">
@@ -119,7 +119,9 @@ const SignUpTemp = ({ frame, code }) => {
                     name="firstName"
                     placeholder="First Name"
                     type="text"
+
                     className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                    required
                   />
                 </div>
 
@@ -150,6 +152,7 @@ const SignUpTemp = ({ frame, code }) => {
                   type="text"
                   className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
                   autoComplete="email"
+                  required
                 />
               </div>
 
@@ -157,10 +160,10 @@ const SignUpTemp = ({ frame, code }) => {
                 <label className="text-sm py-[6px]" htmlFor="contactNumber">
                   Phone Number <span className="text-[#EF476F]"> *</span>
                 </label>
-                <div className="flex md:flex-row flex-col gap-2 justify-between">
+                <div className="flex md:flex-row flex-col gap-1 justify-between">
                   <div className="md:w-[18%]">
                     <select
-                      className="bg-[#161D29]  md:w-full w-[60%]  text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
+                      className="bg-[#161D29] w-full   text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
                       defaultValue="+91"
                     >
                       {code.map((it, index) => {
@@ -177,6 +180,7 @@ const SignUpTemp = ({ frame, code }) => {
                       type="number"
                       placeholder="123 456 789"
                       className="p-3 bg-[#161D29] w-full outline-none rounded-lg text-[#999DAA]"
+                      required
                     />
                   </div>
                 </div>
@@ -194,8 +198,9 @@ const SignUpTemp = ({ frame, code }) => {
                       name="password"
                       placeholder="Enter password"
                       type={`${showPassword ? "text" : "password"}`}
-                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] w-full"
                       autoComplete="new-password"
+                      required
                     />
                     <FaRegEye
                       className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
@@ -215,8 +220,9 @@ const SignUpTemp = ({ frame, code }) => {
                       name="confirmPassword"
                       placeholder="Enter Password"
                       type={`${showConfirmPassword ? "text" : "password"}`}
-                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] w-full"
                       autoComplete="confirm-newPassword"
+                      required
                     />
                     <FaRegEye
                       className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
@@ -236,14 +242,14 @@ const SignUpTemp = ({ frame, code }) => {
 
         {/*section2 */}
         <div className="w-[45%] justify-center flex relative ">
-          <div className="w-[75%] drop-shadow-xl relative z-[1] overflow-hidden mx-auto">
+          <div className="w-[75%] hidden lg:block drop-shadow-xl relative z-[1] overflow-hidden mx-auto">
             <img
               className="w-full aspect-square object-cover"
               src={data.image}
             />
           </div>
 
-          <div className="w-[75%]  absolute right-14 overflow-hidden top-[24px] z-0">
+          <div className="w-[75%] hidden lg:block absolute right-14 overflow-hidden top-[24px] z-0">
             <img className="w-full aspect-square object-cover" src={frame} />
           </div>
         </div>
