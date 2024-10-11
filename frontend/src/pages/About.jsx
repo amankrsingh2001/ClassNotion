@@ -33,7 +33,7 @@ const About = () => {
             </div>
           </div>
 
-          <div className="flex lg:flex-row flex-col justify-evenly border-2 gap-2  lg:gap-4 lg:absolute bottom-[-80px]">
+          <div className="flex lg:flex-row flex-col justify-evenly border-2 gap-2 lg:gap-4 lg:relative bottom-[-80px]">
             <div className="">
               <img src="/assets/Images/aboutus1.webp" />
             </div>
