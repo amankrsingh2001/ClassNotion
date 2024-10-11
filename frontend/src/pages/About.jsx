@@ -12,9 +12,9 @@ const About = () => {
           <div className="w-11/12  flex flex-col py-10 justify-around lg:gap-12 gap-8 lg:items-center mt-20 ">
             <p className="text-[#999DAA]">About us</p>
 
-            <div className="flex flex-col justify-between  items-center gap-10">
-              <div className="flex flex-col lg:items-center gap-1">
-                <h1 className="lg:text-4xl text-2xl lg:text-center font-inter text-[#f1f2ff] tracking-light">
+            <div className="flex flex-col lg:justify-between  lg:items-center gap-10">
+              <div className="flex flex-col xl:items-center items-start gap-1">
+                <h1 className="lg:text-4xl text-2xl xl:text-center  font-inter text-[#f1f2ff] tracking-light text-start">
                   Driving Innovation in Online Education for a
                 </h1>
                 <h1 className="bg-clip-text text-transparent from-[#E65C00] to-[#F9D423] [background-image:linear-gradient(118.41deg,#E65C00_-6.05%,#F9D423_106.11%)] text-2xl font-bold lg:text-4xl tracking-wide">

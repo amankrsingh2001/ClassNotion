@@ -49,7 +49,7 @@ const Navbar = () => {
           <img src={"/assets/Logo/Logo-Full-Light.png"} width={160} height={42} loading="lazy" />
         </Link>
         {
-         navbarCont?<ImCross className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px]  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/> :<TiThMenu className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px]  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/>
+         navbarCont?<ImCross className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px] ${token && "order-2 "}  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/> :<TiThMenu className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px] ${token && "order-2 "}  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/>
 
         }
        
@@ -100,16 +100,17 @@ const Navbar = () => {
             })}
           </ul>
         </nav>
-        <div className="sm:flex hidden   lg:flex-row gap-2 items-center">
+
+        <div className={`sm:flex lg:flex-row gap-2  items-center  ${token ?"flex order-1  ml-auto sm:ml-0":'hidden'}`}>
           {token && user?.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
-             <FiShoppingCart className="text-white mr-4"/>
+             <FiShoppingCart className="text-white mr-4 md:inline-block hidden "/>
               {totalItem > 0 && <span className=" absolute w-[16px] h-[16px] font-bold text-center bottom-2 left-3 bg-[#F1F2FF] rounded-full  text-xs text-black">{totalItem}</span>}
             </Link>
           )}
           {token === null && (
             <Link to="/login">
-              <button className="text-richblack-50  text-nowrap rounded-md border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
+              <button className="text-richblack-50 text-nowrap rounded-md  sm:inline-block hidden border-2 text-sm border-richblack-700 px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-richblack-800">
                 Login
               </button>
             </Link>
