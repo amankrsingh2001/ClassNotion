@@ -14,6 +14,8 @@ import ExploreMore from "../components/core/HomePage/ExploreMore";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import ReviewSlider from "../components/Common/ReviewSlider";
+import { ContainerScroll } from "../components/ui/ContainerScroll";
+
 
 
 
@@ -22,9 +24,9 @@ const Home = () => {
   const navigate = useNavigate()
   useEffect(() => {
     AOS.init({
-      duration: 1000,
+      duration: 500,
       delay: 0,
-      offset: 400,
+      offset: 20,
       mirror: false,
     });
   }, []);
@@ -82,10 +84,11 @@ const Home = () => {
             </Cpabutton>
           </div>
           {/* video section */}
-          <div className="md:mt-60 mt-10 border-[20px] border-richblack-700 rounded-lg ">
-            <video muted autoPlay loop className="rounded-sm  drop-shadow-md md:w-[62vw]">
+          <div className="md:mt-60 w-full mt-10 overflow-hidden relative  rounded-lg box-shadow ">
+          <ContainerScroll children={  <video muted autoPlay loop className="rounded-[28px] w-full drop-shadow-md ">
               <source src={'/assets/Images/banner.mp4'}></source>
-            </video>
+            </video>}/>
+          
           </div>
 
           {/*Code section 1 */}
