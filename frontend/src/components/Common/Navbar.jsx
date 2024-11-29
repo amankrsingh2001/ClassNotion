@@ -67,18 +67,27 @@ const Navbar = () => {
                       </p>
                       <MdOutlineKeyboardArrowDown className="text-white" />
 
-                      <div className="invisible flex flex-col z-20 text-white rounded-md translate-x-[-51%] translate-y-[20%] bg-richblack-800 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all duration-200 group-hover:opacity-100 lg:w-[300px]">
-                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-richblack-800"></div>
+                      <div className="invisible flex flex-col z-20 text-white divide-y-reverse rounded-md translate-x-[-51%] translate-y-[20%] bg-style-blue absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all duration-200 group-hover:opacity-100 lg:w-[300px]">
+                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-style-blue"></div>
                         {subLinks.length === 0 ? (
-                          <div>Testing </div>
-                        ) : (
-                          subLinks?.filter((subLink)=>(subLink?.course?.length>0)).map((subLink, i)=>{
+                            <div className=" animate-pulse p-6">
+
+                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700 mb-2.5"></div>
+                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700 mb-2.5"></div>
+                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700"></div>
+                        </div>
+                        ) : 
+                        (
+                          subLinks?.filter((subLink)=>(subLink?.course?.length>0)).map((subLink, i, allLinks)=>{
                             return (
-                              <Link key={i} to={`/catalog/${subLink.name.split(' ').join("_").toLowerCase()}`}>
-                              <p className="px-8 py-4 font-inter text-[#F1F2FF] font-bold">{subLink.name}</p>
+                              <Link  className={`${i !==allLinks.length-1? "border-b border-[#666262]":''} `} key={i} to={`/catalog/${subLink.name.split(' ').join("_").toLowerCase()}`}>
+                              <p className="px-8 py-4 font-mono text-[#F1F2FF] font-semibold text-xs">{subLink.name}</p>
+
                               </Link>
+
                             )
                           })
+                        
                         )}
                       </div>
                     </div>

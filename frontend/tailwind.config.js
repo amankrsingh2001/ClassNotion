@@ -130,6 +130,9 @@ export default {
       },
     },
     extend: {
+      colors: {
+        'style-blue':'#0E111D'
+      },
       maxWidth: {
         maxContent: "1260px",
         maxContentTab: "650px"
