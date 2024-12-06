@@ -49,7 +49,7 @@ const Sidebar = () =>{
                 className='text-sm font-medium text-richblack-300'
                 > <div className='flex px-8 py-2 flex-row items-center gap-x-2'>
                 <VscSignOut className='text-lg'/>
-                <span className='text-white' >Logout</span>
+                <span className='text-white'>Logout</span>
             </div></button>
                
             </div> 

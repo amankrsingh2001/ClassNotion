@@ -20,7 +20,7 @@ const bcrypt = require('bcrypt')
                 new:true
             })
             
-            const url = `http://localhost:5173/update-password/${token}`
+            const url = `https://class-notion.vercel.app//update-password/${token}`
     
             await mailSender(email,"Password Reset Link",`Password Reset Link ${url}`)
             return res.status(200).json({success:true,message:"Email sent successFully, Please check email and change your password"})
