@@ -64,7 +64,7 @@ const Home = () => {
   return (
 
     <>
-      <div className="min-h-screen bg-[url('assets/Images/landing.png')] text-white py-12">
+      <div className="min-h-screen bg-[url('/public/assets/Images/landing.png')] text-white py-12">
         <div className="container mx-auto px-4 flex flex-col items-center justify-start gap-10">
           <button
             onClick={onClickHandler}
