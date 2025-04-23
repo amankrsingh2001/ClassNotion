@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const Dashboard = () =>{
     //fix loading 
 
-    return <div className="relative w-full flex min-h-[calc(100vh-3.5rem)]">
+    return <div className="relative w-screen h-screen flex">
         <Sidebar/>
         <div className="h-full w-full overflow-auto">
             <div className="mx-auto w-full  py-10">

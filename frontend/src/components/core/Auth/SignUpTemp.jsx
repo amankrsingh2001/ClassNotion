@@ -9,6 +9,9 @@ import { useDispatch } from "react-redux";
 import { setSignUpData } from '../../../slices/authSlice'
 import { toast } from 'react-hot-toast';
 import { otpApi } from "../../../services/authApi";
+import {motion} from "motion/react"
+import { AnimatePresence } from "framer-motion";
+import { IoMdArrowBack } from "react-icons/io";
 
 const SignUpTemp = ({ frame, code }) => {
   const [active, setActive] = useState(0);
@@ -72,13 +75,20 @@ const SignUpTemp = ({ frame, code }) => {
   if (!data) return;
 
   return (
-    <div className="w-screen min-h-screen bg-richblack-900 flex items-center justify-center">
+    <AnimatePresence >
+
+    
+    <div className="w-screen min-h-screen bg-[url(/public/assets/Images/alblal.png)] flex items-center justify-center">
       <div className="w-11/12 flex flex-col lg:flex-row justify-around items-center ">
         {/**Section 1 */}
-        <div className=" lg:w-[40%]  px-12  text-white ">
+        <div className=" lg:w-[35%]  p-10  text-white bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl ">
+           
           <div className="p-2 flex flex-col">
-            <h1 className="text-3xl mb-4">{data.title}</h1>
-            <p className="text-md w-full text-[#AFB2BF]">
+            <motion.h1 key={data.title} initial={{ x: 200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -200 }}
+            transition={{ duration: 0.3 }}  className="text-xl mb-4 text-center ">{data.title}</motion.h1>
+            <p className="text-md w-full text-[#AFB2BF] text-center text-xs">
               {data.description}
               <HilightText
                 font={"font-edu-sa"}
@@ -86,15 +96,15 @@ const SignUpTemp = ({ frame, code }) => {
               />
             </p>
           </div>
-          <div className="flex items-start py-4 ">
-            <div className="flex bg-[#2C333F] justify-between rounded-full py-[2px] px-1 gap-4 shadow-[0px_2px_1px_#434744]  border-[#2C333F]">
+          <div className="flex justify-center py-2 ">
+            <motion.div className="flex bg-yellow-800 w-full justify-between rounded-full   gap-2   border-[#2C333F] ">
               {value.map((element, index) => {
                 return (
                   <p
                     onClick={(e) => chagneActive(e, index)}
-                    className={`py-2 px-4 cursor-pointer ${
+                    className={`py-2  w-full text-center cursor-pointer transition-all duration-300 ${
                       active === index
-                        ? "bg-richblack-900 text-white"
+                        ? "bg-black text-white"
                         : "text-[#999DAA] bg-[2C333F]"
                     } hover:bg-black rounded-full`}
                     key={index}
@@ -103,42 +113,41 @@ const SignUpTemp = ({ frame, code }) => {
                   </p>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
 
           <form onSubmit={submitHandler}>
-            <div className="w-full flex  py-3 flex-col">
-              <div className="flex md:flex-row flex-col justify-between ">
-                <div className="flex flex-col md:w-[47%]">
-                  <label htmlFor="firstName " className="text-sm py-[6px]">
-                    First Name
+            <div className="w-full flex  py-3 flex-col space-y-2">
+              
+              <div className="flex flex-col ">
+                  <label htmlFor="firstName " className="text-sm py-[3px]">
+                    First Name   <span className="text-[#EF476F]"> *</span>
                   </label>
                   <input
                     onChange={changeHandler}
                     id="firstName"
                     name="firstName"
-                    placeholder="First Name"
+                    placeholder="Jhon"
                     type="text"
 
-                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                    className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full "
                     required
                   />
                 </div>
 
-                <div className="flex flex-col md:w-[50%] ">
-                  <label htmlFor="lastName" className="text-sm py-[6px]">
-                    Last Name
+                <div className="flex flex-col  ">
+                  <label htmlFor="lastName" className="text-sm py-[3px]">
+                    Last Name  <span className="text-[#EF476F]"> *</span>
                   </label>
                   <input
                     onChange={changeHandler}
                     id="lastName"
                     name="lastName"
-                    placeholder="Last Name"
+                    placeholder="Doe"
                     type="text"
-                    className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] md:w-full"
+                    className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
                   />
                 </div>
-              </div>
 
               <div className="flex flex-col ">
                 <label className="text-sm py-[6px]" htmlFor="email">
@@ -148,26 +157,68 @@ const SignUpTemp = ({ frame, code }) => {
                   onChange={changeHandler}
                   id="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder="user@email.com"
                   type="text"
-                  className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
+                  className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
                   autoComplete="email"
                   required
                 />
               </div>
 
-              <div className="flex flex-col">
+             
+              <div className="flex flex-col ">
+                  <label htmlFor="password" className="text-sm py-[6px]">
+                    Password  <span className="text-[#EF476F]"> *</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      onChange={changeHandler}
+                      id="password"
+                      name="password"
+                      placeholder="your secret password"
+                      type={`${showPassword ? "text" : "password"}`}
+                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
+                      autoComplete="new-password"
+                      required
+                    />
+                    <FaRegEye
+                      className="cursor-pointer absolute  right-3 top-3 text-[#999DAA]"
+                      onClick={passwordHandler}
+                    />
+                  </div>
+                </div>
+              <div className="flex flex-col  ">
+                  <label htmlFor="confirmPassword" className="text-sm py-[6px]">
+                    Confirm Password  <span className="text-[#EF476F]"> *</span>
+                  </label>
+                  <div className="">
+                    <input
+                      onChange={changeHandler}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="your secret password"
+
+                      type={`${showConfirmPassword ? "text" : "password"}`}
+                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
+                      autoComplete="confirm-newPassword"
+                      required
+                    />
+                    
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
                 <label className="text-sm py-[6px]" htmlFor="contactNumber">
                   Phone Number <span className="text-[#EF476F]"> *</span>
                 </label>
                 <div className="flex md:flex-row flex-col gap-1 justify-between">
                   <div className="md:w-[18%]">
                     <select
-                      className="bg-[#161D29] w-full   text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
-                      defaultValue="+91"
+                      className="px-3 py-2.5 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
+                      
                     >
                       {code.map((it, index) => {
-                        return <option key={index}>{it.code}</option>;
+                        return <option  key={index}>{`${it.code}-${it.country}`}</option>;
                       })}
                     </select>
                   </div>
@@ -177,84 +228,37 @@ const SignUpTemp = ({ frame, code }) => {
                       onChange={changeHandler}
                       id="contactNumber"
                       name="contactNumber"
-                      type="number"
-                      placeholder="123 456 789"
-                      className="p-3 bg-[#161D29] w-full outline-none rounded-lg text-[#999DAA]"
+                      type="tel"
+                      placeholder="999 999 9999"
+                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
                       required
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="flex md:flex-row flex-col justify-between ">
-                <div className="flex flex-col md:w-[47%] ">
-                  <label htmlFor="password" className="text-sm py-[6px]">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      onChange={changeHandler}
-                      id="password"
-                      name="password"
-                      placeholder="Enter password"
-                      type={`${showPassword ? "text" : "password"}`}
-                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] w-full"
-                      autoComplete="new-password"
-                      required
-                    />
-                    <FaRegEye
-                      className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
-                      onClick={passwordHandler}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col md:w-[50%] ">
-                  <label htmlFor="confirmPassword" className="text-sm py-[6px]">
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      onChange={changeHandler}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder="Enter Password"
-                      type={`${showConfirmPassword ? "text" : "password"}`}
-                      className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA] w-full"
-                      autoComplete="confirm-newPassword"
-                      required
-                    />
-                    <FaRegEye
-                      className="cursor-pointer absolute  right-3 top-4 text-[#999DAA]"
-                      onClick={confirmPasswordHandler}
-                    />
-                  </div>
-                </div>
-              </div>
            
             </div>
 
             <div>
-              <button type="submit" className="w-full p-4 rounded-md bg-yellow-50 text-black">Submit</button>
+            <motion.button  
+            whileHover={{ scale: 1, background:"#fff",color:"#0F0F0F", boxShadow:"0px 0px 3px rgb(255,255,255)", transition:{duration:0.5, type:"spring", stiffness:200} }}
+            whileTap={{scale:0.7}}
+            type="submit" 
+            className="w-full px-4 mt-3 py-3 rounded-xl bg-[#381700] text-white"
+            >Signup</motion.button>
             </div>
           </form>
+          <button onClick={()=>navigate('/login')} className="inline-block my-auto text-sm mt-2"><IoMdArrowBack className="text-end inline-block text-sm" /> Account already Exist</button>
+        
         </div>
 
-        {/*section2 */}
-        <div className="w-[45%] justify-center flex relative ">
-          <div className="w-[75%] hidden lg:block drop-shadow-xl relative z-[1] overflow-hidden mx-auto">
-            <img
-              className="w-full aspect-square object-cover"
-              src={data.image}
-            />
-          </div>
+      
 
-          <div className="w-[75%] hidden lg:block absolute right-14 overflow-hidden top-[24px] z-0">
-            <img className="w-full aspect-square object-cover" src={frame} />
-          </div>
-        </div>
+       
       </div>
     </div>
+    </AnimatePresence>
   );
 };
 

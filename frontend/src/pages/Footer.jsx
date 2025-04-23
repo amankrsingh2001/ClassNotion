@@ -11,10 +11,10 @@ const Footer = () => {
   const carrer = FooterLink2[2].links;
 
   return (
-    <div className="h-fit w-full  bg-[#161D29] flex justify-center items-center ">
+    <div className="h-fit w-full border-t-[#e4a51c] drop-shadow-2xl border-[1px] flex justify-center items-center pl-3 ">
       {" "}
       {/*Outer */}
-      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col  gap-2">
+      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col  gap-2  mt-28">
         <div className="h-[90%] w-full drop-shadow-2xl  flex flex-1 lg:flex-nowrap lg:flex-row flex-col items-stretch">
           {" "}
           {/* Inner */}

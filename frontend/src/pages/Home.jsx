@@ -1,5 +1,5 @@
 import { FaArrowRight } from "react-icons/fa6";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HilightText } from "../components/core/HomePage/HilightText";
 import Cpabutton from "../components/core/HomePage/Cpabutton";
 import CodeBlock from "../components/core/HomePage/CodeBlock";
@@ -9,19 +9,17 @@ import { useEffect } from "react";
 import LearningLanguage from "../components/core/HomePage/LearningLanguage";
 import CardImage from "../components/core/HomePage/CardImage";
 import { LogoCard } from "../components/core/HomePage/LogoCard";
-import CardData from '../data/CardData'
+import CardData from "../data/CardData";
 import ExploreMore from "../components/core/HomePage/ExploreMore";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import ReviewSlider from "../components/Common/ReviewSlider";
 import { ContainerScroll } from "../components/ui/ContainerScroll";
-
-
-
+import { motion } from "motion/react";
 
 const Home = () => {
-  const {token} = useSelector(state => state.auth)
-  const navigate = useNavigate()
+  const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   useEffect(() => {
     AOS.init({
       duration: 500,
@@ -31,179 +29,229 @@ const Home = () => {
     });
   }, []);
 
-  const onClickHandler = () =>{
-    if(token){
-      toast.error('You are already logged in please logout and signup as a instructor')
-    }else{
-      navigate('/signup')
+  const onClickHandler = () => {
+    if (token) {
+      toast.error(
+        "You are already logged in please logout and signup as a instructor"
+      );
+    } else {
+      navigate("/signup");
     }
-  }
+  };
+
+  const variants = {
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.5,
+      },
+    },
+  };
+
+  const innerh1 = {
+    hidden: { x: -300, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 2.7, type:"spring",
+      stiffness:200 } },
+  };
+  const innerh3 = {
+    hidden: { x: 200, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 2.2 , type:"spring",
+      stiffness:300} },
+  };
 
   return (
-    <div>
-      {/*Section-1 */}
-      <div className="mx-auto relative flex flex-col w-screen items-center text-white justify-between">
-        <div className={`absolute z-[0] top-0 h-screen left-0 w-full  overflow-hidden bg-[url(/assets/Images/image.jpg)] bg-cover bg-no-repeat opacity-50`}></div>
 
-        <div className="relative  z-1 w-11/12  max-w-maxContent flex flex-col lg:items-center items-start mt-8">
-            <div className="group mt-16  shadow-[0px_1px_2px_0px_#fffefebc] p-1 sm:mx-auto rounded-full bg-richblack-800 font-bold text-richblack-200 transition-all duration-200 hover:scale-105 w-fit">
-              <div className="flex  items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-                <button  onClick={()=>onClickHandler()}>Become an Instructor</button>
-                <FaArrowRight />
-              </div>
+    <>
+      <div className="min-h-screen bg-[url('assets/Images/landing.png')] text-white py-12">
+        <div className="container mx-auto px-4 flex flex-col items-center justify-start gap-10">
+          <button
+            onClick={onClickHandler}
+            className="btn-animate px-4 py-2  rounded-3xl text-white mt-20"
+          >
+            Join as an Instructor
+          </button>
+
+          <motion.div
+            variants={variants}
+            initial="hidden"
+            animate="visible"
+            className="py-8 w-full md:w-[70%] px-4 bg-[#0F0F0F]/60 space-y-6 border-b-[0.5px] border-t-[0.5px] border-[#E5A317] overflow-hidden shadow-sm bg-blend-saturation rounded-2xl"
+          >
+            <motion.h1
+              variants={innerh1}
+              className="md:text-5xl text-2xl text-center font-semibold tracking-wide font-bask"
+            >
+              Empower Your Future with{" "}
+              <span className="bg-gradient-to-r from-[#E5A317] to-[#fff] text-transparent bg-clip-text">
+                Coding Skills
+              </span>
+            </motion.h1>
+            <motion.h3
+              variants={innerh3}
+              className="font-inter text-center py-3 hidden md:block w-[80%] mx-auto"
+            >
+              With our online coding courses, you can learn at your own pace,
+              from anywhere in the world, and get access to a wealth of
+              resources, including hands-on projects, quizzes, and personalized
+              feedback from instructors.
+            </motion.h3>
+          </motion.div>
+
+          <div className="w-[40%] flex flex-col sm:flex-row justify-center gap-4 sm:gap-12">
+            <motion.button
+              whileHover={{
+                scale: 1.1,
+                boxShadow: "0px 0px 3px rgb(255,255,255)",
+                transition: { duration: 0.5, type: "spring", stiffness: 200 },
+              }}
+              className="border-2 border-white p-2 px-3 rounded-3xl"
+            >
+              Learn More
+            </motion.button>
+            <motion.button
+              whileHover={{
+                scale: 1.2,
+                background: "#fff",
+                color: "#0F0F0F",
+                boxShadow: "0px 0px 3px rgb(255,255,255)",
+                transition: { duration: 0.5 },
+              }}
+              className="bg-white rounded-3xl py-2  px-3 text-[#0F0F0F] border-[2px] font-bask font-semibold border-[#0f0f0f]"
+            >
+              Book A Demo
+            </motion.button>
+          </div>
+
+          <div className="  p-4 rounded-2xl items-center justify-center gap-6  mt-8 flex flex-col md:flex-row">
+            <div className="w-full md:w-2/3 lg:w-1/3  rounded-tl-3xl rounded-br-3xl overflow-hidden">
+              <video
+                muted
+                autoPlay
+                loop
+                className="rounded-[28px] w-full h-full object-cover drop-shadow-md"
+              >
+                <source src={"/assets/Images/banner.mp4"} className=""></source>
+              </video>
             </div>
-          {/*Heading section */}
-          <div className="lg:text-center text-start font-semibold text-4xl animate-wiggle font-inter mt-7">
-            Empower Your Future with
-            <HilightText text={"Coding Skills"} style={"sky"} />
-          </div>
 
-          <div className="mt-4 text-[#838894] sm:w-[70%] text-lg animate-wiggleNext lg:text-lg font-inter font-medium lg:text-center text-start">
-            With our online coding courses, you can learn at your own pace, from
-            anywhere in the world, and get access to a wealth of resources,
-            including hands-on projects, quizzes, and personalized feedback from
-            instructors.
+            <div className="w-full md:w-1/2  p-4 text-white text-center md:text-left">
+             {/* pending */}
+            </div>
           </div>
-
-          <div className="flex justify-center self-center gap-7 mt-8">
-            <Cpabutton
-              active={true}
-              linkto={"/signup"}
-              shadow={"drop-shadow-xl"}
-            >
-              {" "}
-              Learn More{" "}
-            </Cpabutton>
-            <Cpabutton
-              active={false}
-              linkto={"/login"}
-              shadow={"drop-shadow-2xl"}
-            >
-              {" "}
-              Book A Demo{" "}
-            </Cpabutton>
-          </div>
-          {/* video section */}
-          <div className="md:mt-60 w-full mt-10 overflow-hidden relative  rounded-lg box-shadow ">
-          <ContainerScroll children={  <video muted autoPlay loop className="rounded-[28px] w-full drop-shadow-md ">
-              <source src={'/assets/Images/banner.mp4'}></source>
-            </video>}/>
-          
-          </div>
-
-          {/*Code section 1 */}
-          <div data-aos="fade-right flex flex-col ">
-            <CodeBlock
-              position={"lg:flex-row"}
-              heading={
-                <div className="text-4xl font-semibold">
-                  Unlock Your <HilightText text={"Coding Potential"} /> With our
-                  online Courses
-                </div>
-              }
-              subHeading={
-                "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
-              }
-              cpa1={{
-                btnText: "Try it yourself",
-                linkto: "/signup",
-                active: true,
-              }}
-              cpa2={{
-                btnText: "Learn more",
-                linkto: "/login",
-                active: false,
-              }}
-              codeBlock={`<!DOCTYPE html>  \n <head><title>Example</ \n title><linkrel="stylesheet"href="styles.css"> \n </head> \n <body> \n <h1> <a herf='/>Header</a> 
-                              </h1>
-                              <nav> <a herf="/three">Three<a/>
-                              </nav>
-                          `}
-              codeColor={"text-[yellow]"}
-              backgroundGradient={
-                "bg-[linear-gradient(123.77deg,#1FA2FF_-6.46%,#12D8FA_59.04%,#A6FFCB_124.53%)]"
-              }
-            />
-          </div>
-          <div data-aos="fade-left">
-            <CodeBlock
-              position={"lg:flex-row-reverse"}
-              heading={
-                <div className="text-4xl font-semibold">
-                  Start <HilightText text={"Coding In Seconds"} />
-                </div>
-              }
-              subHeading={`Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson.`}
-              cpa1={{
-                btnText: "Continue Lesson",
-                linkto: "/signup",
-                active: true,
-              }}
-              cpa2={{
-                btnText: "Learn more",
-                linkto: "/login",
-                active: false,
-              }}
-              codeBlock={`<!DOCTYPE html>  \n <head><title>Example</ \n title><linkrel="stylesheet"href="styles.css"> \n </head> \n <body> \n <h1> <a herf='/>Header</a> 
-                              </h1>
-                              <nav> <a herf="/three">Three<a/>
-                              </nav>
-                          `}
-              codeColor={"text-[white]"}
-              backgroundGradient={
-                "bg-[linear-gradient(123.77deg,#8A2BE2_-6.46%,#FFA500_59.04%,#F8F8FF_124.53%)]"
-              }
-            />
-          </div>
-        </div>
-        <div className="px-4">
-              <ExploreMore />
         </div>
       </div>
-      {/*Section-1 */}
+
+      <div className=" w-[80%] mx-auto px-24 flex  justify-center">
+        <CodeBlock
+          buttonBackground={"bg-[#A393BF] text-white"}
+          inActiveBackground={"bg-white text-[#A393BF]"}
+          position={"lg:flex-row flex-col"}
+          heading={
+            <div className="text-4xl font-semibold text-white ">
+              Unlock Your{" "}
+              <HilightText
+                color={
+                  "from-[#A293BF] to-[#C2B1E0] text-transparent bg-clip-text bg-gradient-to-r"
+                }
+                text={"Coding Potential"}
+              />{" "}
+              With our
+              <HilightText
+                color={
+                  "from-[#A293BF] to-[#C2B1E0] text-transparent bg-clip-text bg-gradient-to-r"
+                }
+                text={"Online Courses"}
+              />
+            </div>
+          }
+          subHeading={
+            "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
+          }
+          cpa1={{
+            btnText: "Try it yourself",
+            linkto: "/signup",
+            active: true,
+          }}
+          cpa2={{
+            btnText: "Learn more",
+            linkto: "/about",
+            active: false,
+          }}
+          codeBlock={`<!DOCTYPE html>  \n <head><title>Example</ \n title><linkrel="stylesheet"href="styles.css"> \n </head> \n <body> \n <h1> <a herf='/>Header</a>
+                              </h1>
+                              <nav> <a herf="/three">Three<a/>
+                              </nav>
+                          `}
+          codeColor={"text-[#A393BF]"}
+          backgroundGradient={
+            "bg-[linear-gradient(123.77deg,#1FA2FF_-6.46%,#73648A_59.04%,#A393BF_124.53%)]"
+          }
+        />
+   
+      </div>
+
+      <div className=" w-[80%] mx-auto px-24 flex justify-center">
+        <CodeBlock
+          inActiveBackground={"bg-white text-[#F7B1AB]"}
+          buttonBackground={"bg-[#F7B1AB] text-white"}
+          position={"lg:flex-row-reverse flex-col"}
+          heading={
+            <div className="text-4xl font-semibold text-white">
+              Start{" "}
+              <HilightText
+                color={
+                  "from-[#E9BCB7] to-[#e2bcb9] text-transparent bg-clip-text bg-gradient-to-r"
+                }
+                text={"Coding In Seconds"}
+              />
+            </div>
+          }
+          subHeading={`Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson.`}
+          cpa1={{
+            btnText: "Continue Lesson",
+            linkto: "/signup",
+            active: true,
+          }}
+          cpa2={{
+            btnText: "Learn more",
+            linkto: "/about",
+            active: false,
+          }}
+          codeBlock={`<!DOCTYPE html>  \n <head><title>Example</ \n title><linkrel="stylesheet"href="styles.css"> \n </head> \n <body> \n <h1> <a herf='/>Header</a>
+              </h1>
+              <nav> <a herf="/three">Three<a/>
+              </nav>
+          `}
+          codeColor={"text-[#F7B1AB]"}
+          backgroundGradient={
+            "bg-[linear-gradient(123.77deg,#8A2BE2_-6.46%,#A393BF_59.04%,#0F0F0F_124.53%)]"
+          }
+        />
+      </div>
+
+      <div className="px-4 mt-10">
+               <ExploreMore />
+         </div>
+          
+
+     <div className=" relative h-96 bg-contain flex justify-center items-center flex-col mt-28 " >
 
      
-
-      <div className="bg-pure-greys-5 text-black">
-        <div className="h-[310px] bg-[url(/assets/Images/bghome.svg)] mt-12 bg-contain ">
-          <div className="w-11/12 h-2/3 max-w-maxContent flex  justify-center items-center gap-5 mx-auto">
-            <div className="flex flex-row gap-7 mt-12 items-center justify-center text-white ">
-              <Cpabutton active={true} linkto={"/signup"}>
-                <div className="flex gap-1 items-center ">
-                  Explore Full Catalog
-                  <FaArrowRight />
-                </div>
-              </Cpabutton>
-
-              <Cpabutton active={false} linkto={"/signup"}>
-                <div className="flex gap-1 items-center ">Learn More</div>
-              </Cpabutton>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-7">
-              <div className="flex flex-col md:flex-row gap-5 mb-10 mt-[95px]">
-
-                <div data-aos="fade-right" className="text-4xl font-semibold md:w-[45%]">
-                Get the skills you need for a <HilightText text={'job that is in demand'}/>
-                </div>
-
-                <div data-aos="fade-left" className="flex flex-col gap-10 md:w-[40%] items-start">
-                  <p className="text-[16px]">
-                  The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.
-                  </p>
-                 
-              </div>   
-
-              <Cpabutton active={true}>
-                      <div className="sm:w-fit ">Learn More</div>
-              </Cpabutton>
-          </div>
+             <p className="text-4xl  font-bask bg-gradient-to-tr from-[#A393BF] to-white text-transparent bg-clip-text "> Get the skills you need for a job that is in demand </p> 
 
 
+                <div data-aos="fade-left" className="flex flex-col gap-10 md:w-[40%] items-start py-4">
+                   <p className="text-sm text-center text-white">
+                   The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.
+                   </p>
 
-          <div className="w-11/12 flex lg:flex-row flex-col justify-between">
+               </div>
+
+     </div>
+          <div className="w-full h-[70vh] flex justify-center items-center">
+          <div className="w-9/12 flex lg:flex-row flex-col justify-between">
                 <div data-aos='fade-right' className="flex flex-col p-6 justify-center">
                 {
                   CardData.map((cardValue)=>{
@@ -218,80 +266,46 @@ const Home = () => {
                     <div className="">
                       <img  src='/assets/Images/TimelineImage.png'/>
                     </div>
-                    <div className="absolute  z-[10] bottom-[-40px] drop-shadow-xl gap-4 px-8 py-5 bg-[#014A32] flex">
-                      
+                    <div className="absolute  z-[10] bottom-[-40px] drop-shadow-xl gap-4 px-8 py-5 bg-[#E4A51C] flex">
+
                           <div className="flex items-center gap-4 ">
-                            <p className="text-2xl text-white">10</p>
-                            <p className="text-[#05A77B] text-sm">Years <br/> Experience</p>
-                      
+                            <p className="text-2xl text-white">10+</p>
+                            <p className="text-black text-sm">Years <br/> Experience</p>
+
                         </div>
 
                           <div className="flex">
-                            <hr className="border-[1px] h-[90%] border-[#396c5e]"/>
+                            <hr className="border-[1px] h-[90%] border-black"/>
                           </div>
 
-     
                           <div className="flex items-center gap-4">
-                            <p className="text-2xl text-white">250</p>
-                            <p className="text-[#05A77B] text-sm text-nowrap">Types of <br/>Courses</p>
-               
+                            <p className="text-2x text-white text-center">250 </p>
+                            <p className="text-black text-sm text-nowrap">Types of <br/>Courses</p>
+
                         </div>
                     </div>
                   </div>
               </div>
+          </div>
+     
+          <div className="w-full flex flex-col items-center justify-center mt-12 ">
+        <CardImage/>
+
+           <div className="w-[80%] h-[100px] flex justify-center items-end mb-14">
+          <Cpabutton active={true}>
+                Learn More
+              </Cpabutton>
+          </div>
         </div>
-      </div>
 
-       <div className="w-full flex flex-col items-center justify-center bg-white ">
-       <LearningLanguage/>
-       <CardImage/>
-          
-          <div className="w-[80%] h-[100px] flex justify-center items-end mb-14">
-         <Cpabutton active={true}>
-               Learn More
-             </Cpabutton>
-         </div>
-       </div>
-
-       <div className="w-full text-white self-center flex flex-col sm:flex-row  lg:justify-evenly items-center">
-
-            <div data-aos='fade-left' className="sm:w-[40%] p-4 border-1   relative flex justify-center sm:p-10">
-                  <div className="w-full  z-[2] ">
-                      <img  src="/assets/Images/Instructor.png"/>
-                    </div>  
-
-                    <div className="bg-white w-[85%] h-[85%] absolute top-[24px] left-[24px]">
-                     
-                    </div>
-            </div>
-
-            {/*second Section */}
-            <div data-aos='fade-right' className=" gap-6 p-4 flex flex-col sm:w-[28%] " >
-                <div className="text-4xl">
-                  Become an <br/> <HilightText text={'Instructor'}/>
-                </div>
-                <p className="text-[#838894] text-sm">
-                Instructors from around the world teach millions of students on StudyNotion. We provide the tools and skills to teach what you love.
-                </p>
-                <div className="flex ">
-                <Cpabutton active={true}>
-                    Start Teaching Today
-                    <FaArrowRight className="inline m-2"/>
-                  </Cpabutton>
-                </div>
-                  
-                    
-
-
-            </div>
-
-       </div>
-            <ReviewSlider/>
-
-    </div>
+        <div className="w-full text-white self-center flex flex-col sm:flex-row  lg:justify-evenly items-center">
+</div>
+    </>
   );
 };
 
-{/**/}
+{
+  /**/
+}
 
 export default Home;

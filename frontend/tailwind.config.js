@@ -11,11 +11,14 @@ export default {
       inter: ["Inter", "sans-serif"],
       "edu-sa": ["Edu SA Beginner", "cursive"],
       mono: ["Roboto Mono", "monospace"],
+      poppins: ["Poppins", "sans-serif"],
+      bask: ["Baskerville", "cursive"],
     },
     colors: {
       white: "#fff",
       black: "#000",
       transparent: "#ffffff00",
+
       richblack: {
         5: "#F1F2FF",
         25: "#DBDDEA",
@@ -128,6 +131,9 @@ export default {
         800: "#171717",
         900: "#141414",
       },
+      "berry":{
+        100:"#693B93"
+      }
     },
     extend: {
       colors: {

@@ -98,7 +98,7 @@ export function setLogin(data, navigate) {
       dispatch(setToken(response.data.token))
       dispatch(setUser(response.data.user))
       toast.success("Logged In Successfully")
-      navigate('/')
+      navigate('/dashboard/my-profile')
     } catch (error) {
       toast.error(error.response.data.message)
       navigate('/login')

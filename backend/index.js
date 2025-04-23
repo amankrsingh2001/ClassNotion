@@ -49,5 +49,5 @@ app.get('/',(req,res)=>{
 })
 
 app.listen(PORT,()=>{
-    console.log("App is running at PORT")
+    console.log("App is running at PORT", PORT)
 })

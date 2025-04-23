@@ -30,6 +30,7 @@ import ViewCourse from "./pages/ViewCourse.jsx";
 import VideoDetails from "./components/core/viewCourse/VideoDetails.jsx";
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor.jsx";
 
+
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -108,7 +109,7 @@ const Router = createBrowserRouter([
       {
         path: "/verify-email",
         element: <VerifyEmail />,
-      },
+      }
     ],
   },
   {

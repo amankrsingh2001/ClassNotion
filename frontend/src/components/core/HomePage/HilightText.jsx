@@ -1,9 +1,10 @@
 import React from 'react'
 
-export const HilightText = ({text, font="font-inter"}) => {
+export const HilightText = ({text, font="font-inter", color}) => {
+  console.log(color)
   return (
-        <span className={`font-bold ${font} text-[#12D8FA]`}>
-           {" "} {text}
+        <span className={`${font} ${color}`}>
+          {text}
         </span>
   )
 }
