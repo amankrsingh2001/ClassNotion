@@ -96,7 +96,7 @@ const Navbar = () => {
 
                       <div className="invisible flex flex-col  text-[#0F0F0F] divide-y-reverse rounded-2xl z-[1001] translate-x-[-51%] translate-y-[20%] bg-[#fff] duration-200 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all group-hover:opacity-100 lg:w-fit whitespace-nowrap">
                         <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-[#fff] "></div>
-                        {subLinks.length === 0 ? (
+                        {subLinks && subLinks.length === 0 ? (
                             <div className=" animate-pulse p-6">
 
                             <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700 mb-2.5"></div>
