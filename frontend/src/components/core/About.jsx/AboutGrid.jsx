@@ -56,11 +56,11 @@ const AboutGrid = () =>{
                             <span aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 w-72 h-72 rounded-full bg-violet/25 blur-3xl" />
                             <p className="relative eyebrow">Why ClassNotion</p>
                             <div className="relative flex flex-col gap-5">
-                                <h2 className="h-display text-3xl md:text-5xl text-white">
+                                <h2 className="h-display text-3xl md:text-5xl text-foreground">
                                     {card.heading}{" "}
                                     <HilightText text={card.hilightText}/>
                                 </h2>
-                                <p className="text-white/55 text-base lg:text-lg max-w-lg">{card.description}</p>
+                                <p className="text-foreground/55 text-base lg:text-lg max-w-lg">{card.description}</p>
                                 <div>
                                     <Link to={card.BtnLink} className="btn btn-primary btn-lg">
                                         {card.BtnText} <FiArrowUpRight />
@@ -74,13 +74,13 @@ const AboutGrid = () =>{
                                     <span className="icon-circle-glass w-10 h-10">
                                         <Icon className="text-base" />
                                     </span>
-                                    <span className="text-sm font-medium text-white/35 tabular-nums">
+                                    <span className="text-sm font-medium text-foreground/35 tabular-nums">
                                         {String(card.order).padStart(2, "0")}
                                     </span>
                                 </div>
                                 <div className="mt-auto flex flex-col gap-2">
-                                    <h3 className="text-lg font-medium tracking-tight text-white leading-snug">{card.heading}</h3>
-                                    <p className="text-sm text-white/55 leading-relaxed">{card.description}</p>
+                                    <h3 className="text-lg font-medium tracking-tight text-foreground leading-snug">{card.heading}</h3>
+                                    <p className="text-sm text-foreground/55 leading-relaxed">{card.description}</p>
                                 </div>
                             </div>
                          )

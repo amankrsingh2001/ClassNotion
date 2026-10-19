@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signUpValue } from "../../../data/signUpData";
 import { value } from "../../../data/signUpData";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSignUpData } from "../../../slices/authSlice";
 import { toast } from "react-hot-toast";
 import { otpApi } from "../../../services/authApi";
-import { motion } from "motion/react";
 import { FiArrowRight, FiBookOpen, FiAward } from "react-icons/fi";
 
-import { AuthLayout, AuthHeading, EyeToggle, OrDivider } from "./LoginTemp";
+import { AuthLayout, AuthHeading, EyeToggle } from "./LoginTemp";
 
 // Per-account-type panel copy (presentation only)
 const PANELS = [
   {
     eyebrow: "Free to join",
-    headline: "Learn it. Build it. Own it.",
-    card: { title: "AI for Creators", duration: "18h 9m", rating: "4.7", videos: "16", progress: "1 of 5" },
     icon: FiBookOpen,
   },
   {
     eyebrow: "Teach on ClassNotion",
-    headline: "Teach what you love. Reach learners everywhere.",
-    card: { title: "Creative Sprint", duration: "6h 40m", rating: "4.9", videos: "14", progress: "Draft 2 of 5", status: "Live" },
     icon: FiAward,
   },
 ];
 
-const SignUpTemp = ({ frame, code }) => {
+const SignUpTemp = ({ code }) => {
   const [active, setActive] = useState(0);
-  const [data, setData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,21 +36,11 @@ const SignUpTemp = ({ frame, code }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const chagneActive = (e, index) => {
-    setActive(index);
-  };
+  const loading = useSelector((state) => state.auth.loading);
 
   const changeHandler = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  useEffect(() => {
-    const newValue = signUpValue.filter((it, index) => {
-      return index === active;
-    });
-    setData(newValue[0]);
-  }, [active]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -81,52 +64,28 @@ const SignUpTemp = ({ frame, code }) => {
     setShowPassword(!showPassword);
   };
 
-  if (!data) return;
-
   const panel = PANELS[active] ?? PANELS[0];
 
   return (
     <AuthLayout
-      image={data.image}
-      imageAlt={`${data.type} signing up`}
       panelKey={`signup-${active}`}
-      quote={{ eyebrow: panel.eyebrow, headline: panel.headline, sub: data.description }}
-      card={panel.card}
+      quote={{ eyebrow: panel.eyebrow }}
     >
-      <AuthHeading title="Create your account" subtitle="It takes less than a minute. Choose how you'll use ClassNotion." />
+      <AuthHeading title="Your next chapter." subtitle="Create your account. Start learning, or share what you know." />
 
-      {/* Account type segmented control */}
-      <div role="tablist" aria-label="Account type" className="segmented w-full mt-7 grid grid-cols-2">
+      <div className="auth-account-choices" role="group" aria-label="Account type">
         {value.map((element, index) => {
-          const Icon = PANELS[index]?.icon;
-          const isActive = active === index;
-          return (
-            <button
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={(e) => chagneActive(e, index)}
-              key={index}
-              className="segmented-item flex items-center justify-center"
-            >
-              {isActive && (
-                <motion.span
-                  layoutId="signup-seg"
-                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                  className="absolute inset-0 rounded-full segmented-item-active"
-                />
-              )}
-              <span className={`relative inline-flex items-center gap-2 ${isActive ? "text-white" : ""}`}>
-                {Icon && <Icon />}
-                {element.value}
-              </span>
-            </button>
-          );
+          const Icon = PANELS[index].icon;
+          return <button type="button" key={element.value} aria-pressed={active === index} onClick={() => setActive(index)} className={active === index ? 'is-selected' : ''}>
+            <span className="auth-account-icon"><Icon /></span>
+            <span>{index === 0 ? 'Student' : 'Apply to teach'}<small>{index === 0 ? 'I’m here to learn' : 'Profile & admin review'}</small></span>
+            <span className="auth-account-radio" />
+          </button>;
         })}
       </div>
 
       <form onSubmit={submitHandler} className="mt-6 space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label htmlFor="firstName" className="field-label">
               First name <span className="text-rose">*</span>
@@ -135,7 +94,8 @@ const SignUpTemp = ({ frame, code }) => {
               onChange={changeHandler}
               id="firstName"
               name="firstName"
-              placeholder="John"
+              autoComplete="given-name"
+              placeholder="First name"
               type="text"
               className="field"
               required
@@ -149,7 +109,9 @@ const SignUpTemp = ({ frame, code }) => {
               onChange={changeHandler}
               id="lastName"
               name="lastName"
-              placeholder="Doe"
+              autoComplete="family-name"
+              required
+              placeholder="Last name"
               type="text"
               className="field"
             />
@@ -164,8 +126,8 @@ const SignUpTemp = ({ frame, code }) => {
             onChange={changeHandler}
             id="email"
             name="email"
-            placeholder="user@email.com"
-            type="text"
+            placeholder="you@example.com"
+            type="email"
             className="field"
             autoComplete="email"
             required
@@ -177,10 +139,10 @@ const SignUpTemp = ({ frame, code }) => {
             Phone number <span className="text-rose">*</span>
           </label>
           <div className="flex gap-2">
-            <select aria-label="Country code" className="field w-[112px] shrink-0 px-3 cursor-pointer">
+            <select aria-label="Country code" defaultValue="India" className="field w-[128px] shrink-0 px-3 !pr-3 text-[13px] cursor-pointer">
               {code.map((it, index) => {
                 return (
-                  <option key={index} className="bg-surface">{`${it.code}-${it.country}`}</option>
+                  <option key={index} value={it.country} className="bg-surface">{`${it.code} ${it.country}`}</option>
                 );
               })}
             </select>
@@ -196,7 +158,7 @@ const SignUpTemp = ({ frame, code }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label htmlFor="password" className="field-label">
               Password <span className="text-rose">*</span>
@@ -206,9 +168,11 @@ const SignUpTemp = ({ frame, code }) => {
                 onChange={changeHandler}
                 id="password"
                 name="password"
-                placeholder="Password"
+                placeholder="Create password"
                 type={`${showPassword ? "text" : "password"}`}
                 className="field pr-12"
+                minLength={5}
+                maxLength={20}
                 autoComplete="new-password"
                 required
               />
@@ -217,16 +181,18 @@ const SignUpTemp = ({ frame, code }) => {
           </div>
           <div>
             <label htmlFor="confirmPassword" className="field-label">
-              Confirm <span className="text-rose">*</span>
+              Confirm password <span className="text-rose">*</span>
             </label>
             <div className="relative">
               <input
                 onChange={changeHandler}
                 id="confirmPassword"
                 name="confirmPassword"
-                placeholder="One more time"
+                placeholder="Repeat password"
                 type={`${showConfirmPassword ? "text" : "password"}`}
                 className="field pr-12"
+                minLength={5}
+                maxLength={20}
                 autoComplete="new-password"
                 required
               />
@@ -235,16 +201,14 @@ const SignUpTemp = ({ frame, code }) => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary btn-lg w-full !mt-8">
-          Create account <FiArrowRight />
+        <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary btn-lg w-full !mt-8 auth-submit">
+          {loading ? "Sending verification…" : "Create my account"} <FiArrowRight />
         </button>
       </form>
 
-      <OrDivider />
-
-      <p className="text-center text-sm text-white/55">
+      <p className="auth-signup-switch text-center text-sm text-foreground/55">
         Already have an account?{" "}
-        <Link to="/login" className="font-medium text-white hover:text-orchid transition">
+        <Link to="/login" className="font-medium text-foreground hover:text-orchid transition">
           Log in
         </Link>
       </p>

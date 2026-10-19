@@ -63,9 +63,9 @@ const CourseContent = ({ courseDetail }) => {
       <div className='flex flex-wrap items-end justify-between gap-4 mb-5'>
          <div>
            <h2 className='text-3xl md:text-4xl font-medium tracking-tight'>
-             Lessons <span className='text-white/35'>{subSectionCount}</span>
+             Lessons <span className='text-foreground/35'>{subSectionCount}</span>
            </h2>
-           <p className='mt-2 text-sm text-white/55'>
+           <p className='mt-2 text-sm text-foreground/55'>
              {courseDetail?.courseContent?.length || 0} sections
              {totalLength && <> · {totalLength} total</>}
            </p>
@@ -83,7 +83,7 @@ const CourseContent = ({ courseDetail }) => {
                   return (
                     <div
                       key={section._id}
-                      className={`rounded-[28px] border transition-colors ${isOpen ? 'bg-white/[0.06] border-white/15' : 'bg-white/[0.03] border-white/[0.07] hover:bg-white/[0.05]'}`}
+                      className={`rounded-[28px] border transition-colors ${isOpen ? 'bg-foreground/[0.06] border-foreground/15' : 'bg-foreground/[0.03] border-foreground/[0.07] hover:bg-foreground/[0.05]'}`}
                     >
                       <button
                         type='button'
@@ -91,16 +91,16 @@ const CourseContent = ({ courseDetail }) => {
                         aria-expanded={isOpen}
                         className='w-full flex items-center gap-4 p-3 pr-5 text-left'
                       >
-                        <span className={`grid place-items-center shrink-0 w-11 h-11 rounded-full text-sm font-semibold ${isOpen ? 'bg-white text-night' : 'bg-white/[0.08] border border-white/10 text-white'}`}>
+                        <span className={`grid place-items-center shrink-0 w-11 h-11 rounded-full text-sm font-semibold ${isOpen ? 'bg-foreground text-night' : 'bg-foreground/[0.08] border border-foreground/10 text-foreground'}`}>
                           {String(i + 1).padStart(2, '0')}
                         </span>
                         <span className='flex-1 min-w-0'>
                           <span className='block font-medium break-words'>{section?.sectionName}</span>
-                          <span className='block text-xs text-white/45 mt-0.5'>
+                          <span className='block text-xs text-foreground/45 mt-0.5'>
                             {n} {n === 1 ? 'lesson' : 'lessons'}{duration && ` · ${duration}`}
                           </span>
                         </span>
-                        <FiChevronDown className={`shrink-0 text-white/55 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                        <FiChevronDown className={`shrink-0 text-foreground/55 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                       </button>
 
                       <div className={`

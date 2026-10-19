@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 const {CREATE_COURSE_API, EDIT_COURSE_API, DELETE_COURSE_API ,GET_INSTRUCTOR_COURSES ,
     COURSE_GET_FULL_COURSE_DETAILS,
     CREATE_SECTION_API, UPDATE_COURSE_SECTION_API,
-    DELETE_COURSE_SECTION_API,  
+    DELETE_COURSE_SECTION_API,
     GET_COURSE_DETAIL,
     DELETE_COURSE_SUB_SECTION_API,
     CREATE_SUB_SECTION_API, CREATE_RATING_OF_COURSE, UPDATE_SUB_SECTION_API, UPDATE_COURSE_PROGRESS} = courseApi
@@ -18,7 +18,7 @@ export const addCourseDetails = async(data, token) =>{
     let result = null
 
     try {
-      
+
         const response = await axios.post(CREATE_COURSE_API,  data, {
             headers:{
                 "Authorization" : `Bearer ${token}`
@@ -29,7 +29,7 @@ export const addCourseDetails = async(data, token) =>{
         }
         toast.success('Course Details Added Successfully')
             result = response?.data?.data
-        
+
     } catch (error) {
             toast.error(error.response.data.message)
     }
@@ -68,7 +68,7 @@ export const category = async(data) =>{
 
             if(response.data.success){
                 result = response.data.allCategory
-            }  
+            }
         } catch (error) {
             toast.error(error.message)
         }
@@ -88,14 +88,14 @@ export const createSection = async(data, token) =>{
         }
         result = response?.data?.updateCourseDetails
     } catch (error) {
-        toast.error("Failed to create section")        
+        toast.error("Failed to create section")
     }
     return result
 }
 
 export const updateSection = async(data, token) =>{
-    let result = null 
-    try {   
+    let result = null
+    try {
         const response = await axios.post(UPDATE_COURSE_SECTION_API,data, {
             headers : {
                 "Authorization" :`Bearer ${token}`
@@ -111,7 +111,7 @@ export const updateSection = async(data, token) =>{
 
 export const deleteSection = async(data, token) =>{
     let result ;
-   
+
     try {
         const {sectionId, courseId} = data
 
@@ -186,7 +186,7 @@ export const deleteSubSection = async(data, token) =>{
             toast.success("Deleted section successfully")
         }
         result = response?.data?.data
-        
+
     } catch (error) {
             toast.error(error.message)
     }
@@ -204,7 +204,7 @@ export const getInstructorCourse = async(token) =>{
         })
         result = response?.data?.data
     } catch (error) {
-        toast.error('Failed to fetch courses details')        
+        toast.error('Failed to fetch courses details')
     }
     return result
 }
@@ -234,7 +234,7 @@ export const getFullCourseDetail = async(courseId, token) =>{
         })
         result = response?.data?.data
     } catch (error) {
-        toast.error('Something went wrong')       
+        toast.error('Something went wrong')
     }
     return result
 }
@@ -257,6 +257,7 @@ export const updateCourseProgress = async(data, token) =>{
               "Authorization": `Bearer ${token}`
           }
       })
+      return res.data.success
   } catch (error) {
         toast.error('Failed to update course')
   }

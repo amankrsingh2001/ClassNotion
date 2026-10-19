@@ -1,14 +1,13 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FiLogOut, FiChevronsLeft, FiX } from "react-icons/fi";
 import { sidebarLinks } from "../../../data/dashboard-links";
 import { logOut } from "../../../services/authApi";
-import { useSelector } from "react-redux";
 import SidebarLink from "./SidebarLink";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../Common/ConfirmationModal";
-import { useState } from "react";
-import { FiLogOut } from "react-icons/fi";
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed = false, onToggleCollapsed, mobileOpen = false, onCloseMobile }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.profile);
@@ -24,71 +23,113 @@ const Sidebar = () => {
       btn2Handler: () => setConfirmationModal(null),
     });
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (event) => event.key === "Escape" && onCloseMobile?.();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen, onCloseMobile]);
+
   const visibleLinks = sidebarLinks.filter((link) => !(link.type && user?.accountType !== link.type));
   const settingsLink = { name: "Settings", path: "/dashboard/setting" };
 
-  return (
-    <>
-      {/* Mobile / tablet: scrollable segmented pills */}
-      <nav className="lg:hidden w-full -mx-1 px-1 overflow-x-auto no-scrollbar">
-        <div className="segmented">
-          {visibleLinks.map((link) => (
-            <SidebarLink link={link} iconName={link.icon} key={link.id} variant="pill" />
-          ))}
-          <SidebarLink link={settingsLink} iconName="VscSettingsGear" variant="pill" />
-          <button
-            type="button"
-            onClick={openLogoutModal}
-            className="segmented-item shrink-0 inline-flex items-center gap-2 whitespace-nowrap !text-rose/80 hover:!text-rose"
-          >
-            <FiLogOut className="text-base" />
-            Log out
-          </button>
-        </div>
-      </nav>
-
-      {/* Desktop: slim glass sidebar */}
-      <aside className="hidden lg:flex flex-col w-[260px] shrink-0 sticky top-24 z-10 glass p-4 max-h-[calc(100vh-7.5rem)]">
-        <div className="relative flex items-center gap-3 p-2 pb-5">
-          <div className="absolute -top-6 -left-6 w-28 h-28 rounded-full bg-magenta/25 blur-3xl pointer-events-none" />
-          <div className="relative shrink-0 p-[2px] bg-brand rounded-full">
-            <img
-              src={user?.image}
-              alt={`profile-${user?.firstName}`}
-              className="w-12 h-12 rounded-full object-cover bg-surface-2 border-2 border-night"
-            />
-          </div>
-          <div className="relative min-w-0">
-            <p className="text-[15px] font-semibold leading-tight truncate">
+  // `compact` only applies on desktop; the mobile drawer is always expanded.
+  const content = (compact) => (
+    <div className="flex flex-col h-full">
+      {/* User */}
+      <div className={`flex items-center gap-3 border-b border-foreground/[0.07] ${compact ? "justify-center px-2 py-4" : "px-4 py-4"}`}>
+        <img
+          src={user?.image}
+          alt={`profile-${user?.firstName}`}
+          title={compact ? `${user?.firstName ?? ""} ${user?.lastName ?? ""}` : undefined}
+          className="w-9 h-9 shrink-0 rounded-full object-cover bg-surface-2"
+        />
+        {!compact && (
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold leading-tight truncate">
               {user?.firstName} {user?.lastName}
             </p>
-            <span className="pill h-6 mt-1.5 text-[11px]">{user?.accountType}</span>
+            <p className="text-xs text-foreground/55 truncate mt-0.5">{user?.accountType}</p>
           </div>
-        </div>
+        )}
+        {!compact && onCloseMobile && mobileOpen && (
+          <button type="button" className="btn-icon lg:hidden" onClick={onCloseMobile} aria-label="Close menu">
+            <FiX />
+          </button>
+        )}
+      </div>
 
-        <div className="divider mx-2" />
-
-        <p className="eyebrow px-3 pt-5 pb-3 text-[10px]">Menu</p>
-        <nav className="flex flex-col gap-1 overflow-y-auto no-scrollbar">
+      {/* Main nav */}
+      <nav className={`flex-1 overflow-y-auto no-scrollbar py-4 ${compact ? "px-2" : "px-3"}`} aria-label="Dashboard">
+        {!compact && <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-foreground/45">Menu</p>}
+        <ul className="flex flex-col gap-0.5">
           {visibleLinks.map((link) => (
-            <SidebarLink link={link} iconName={link.icon} key={link.id} />
+            <li key={link.id}>
+              <SidebarLink link={link} iconName={link.icon} collapsed={compact} />
+            </li>
           ))}
-        </nav>
+        </ul>
+      </nav>
 
-        <div className="mt-auto pt-6 flex flex-col gap-1">
-          <div className="divider mx-2 mb-3" />
-          <SidebarLink link={settingsLink} iconName="VscSettingsGear" />
+      {/* Footer */}
+      <div className={`border-t border-foreground/[0.07] py-3 flex flex-col gap-0.5 ${compact ? "px-2" : "px-3"}`}>
+        <SidebarLink link={settingsLink} iconName="VscSettingsGear" collapsed={compact} />
+        <button
+          type="button"
+          onClick={openLogoutModal}
+          title={compact ? "Log out" : undefined}
+          className={`group flex items-center gap-3 h-10 rounded-lg text-sm font-medium text-foreground/60 hover:text-rose hover:bg-rose/10 transition ${
+            compact ? "justify-center px-0" : "px-3"
+          }`}
+        >
+          <FiLogOut className="text-[17px] shrink-0" />
+          {!compact && "Log out"}
+        </button>
+        {onToggleCollapsed && (
           <button
             type="button"
-            onClick={openLogoutModal}
-            className="group flex items-center gap-3 p-1.5 pr-4 rounded-full text-sm font-medium text-white/55 hover:text-rose hover:bg-rose/10 transition"
+            onClick={onToggleCollapsed}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className={`hidden lg:flex items-center gap-3 h-10 rounded-lg text-sm text-foreground/50 hover:text-foreground hover:bg-foreground/[0.05] transition ${
+              compact ? "justify-center px-0" : "px-3"
+            }`}
           >
-            <span className="grid place-items-center shrink-0 w-10 h-10 rounded-full bg-white/[0.06] border border-white/10 group-hover:border-rose/30 group-hover:bg-rose/15 transition">
-              <FiLogOut className="text-[16px]" />
-            </span>
-            Log out
+            <FiChevronsLeft className={`text-[17px] shrink-0 transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`} />
+            {!compact && "Collapse"}
           </button>
-        </div>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop: docked to the left edge, full height under the navbar */}
+      <aside
+        className={`hidden lg:block shrink-0 sticky top-[var(--nav-h,64px)] h-[calc(100vh-var(--nav-h,64px))] border-r border-foreground/[0.08] bg-[var(--panel)] transition-[width] duration-300 ease-out overflow-hidden ${
+          collapsed ? "w-[72px]" : "w-[248px]"
+        }`}
+      >
+        {content(collapsed)}
+      </aside>
+
+      {/* Tablet / mobile: off-canvas drawer */}
+      <div
+        className={`lg:hidden fixed inset-0 z-[1100] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 ${
+          mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onCloseMobile}
+        aria-hidden
+      />
+      <aside
+        className={`lg:hidden fixed inset-y-0 left-0 z-[1101] w-[280px] max-w-[85vw] bg-[var(--panel)] border-r border-foreground/[0.08] shadow-2xl transition-transform duration-300 ease-out ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        aria-hidden={!mobileOpen}
+        inert={mobileOpen ? undefined : ""}
+      >
+        {content(false)}
       </aside>
 
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}

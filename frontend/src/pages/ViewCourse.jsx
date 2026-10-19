@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { Outlet, useParams } from "react-router-dom"
 import { getFullCourseDetail } from "../services/courseDetail"
 import { setCompletedLectures, setCourseSection, setEntireCourseData, setTotalNoOfLectures } from "../slices/viewCourseSlice"
+import { Link } from 'react-router-dom'
+import LessonFolders from '../components/studio/LessonFolders'
 import VideoDetailsSidebar from "../components/core/viewCourse/VideoDetailsSidebar"
 import CourseReviewModal from '../components/core/viewCourse/CourseReviewModal';
 
@@ -25,7 +27,7 @@ const ViewCourse = () =>{
               dispatch(setEntireCourseData(courseData.courseDetails));
               dispatch(setCompletedLectures(courseData.completedVideos));
             let lectures = 0;
-            courseData?.courseContent?.forEach((sec)=>{
+            courseData?.courseDetails?.courseContent?.forEach((sec)=>{
                 lectures += sec.subSection.length
             })
             dispatch(setTotalNoOfLectures(lectures))
@@ -37,7 +39,7 @@ const ViewCourse = () =>{
         if(courseId && token){
             setCourseSpecificDetails()
         }
-    },[token])
+    },[token, courseId])
 
 
     return (
@@ -45,7 +47,9 @@ const ViewCourse = () =>{
 
             <div className="w-full min-w-0">
 
+                <Link to={`/dashboard/messages?course=${encodeURIComponent(courseId)}`} className="btn btn-glass mb-5">Message your instructor ↗</Link>
                 <Outlet/>
+                {courseId && <div className="mt-6"><LessonFolders courseId={courseId} /></div>}
 
             </div>
             <VideoDetailsSidebar setReviewModal={setReviewModal}/>

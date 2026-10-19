@@ -24,11 +24,11 @@ const About = () => {
           <span className="pill">
             <span className="w-1.5 h-1.5 rounded-full bg-citrus" /> About ClassNotion
           </span>
-          <h1 className="h-display text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-[5.5rem] text-white max-w-5xl">
+          <h1 className="h-display text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-[5.5rem] text-foreground max-w-5xl">
             Driving <span className="text-gradient">innovation</span> in online education for a{" "}
             <span className="text-gradient">brighter future</span>
           </h1>
-          <p className="text-white/55 text-base md:text-lg max-w-2xl">
+          <p className="text-foreground/55 text-base md:text-lg max-w-2xl">
             ClassNotion is at the forefront of driving innovation in online
             education. We're passionate about creating a brighter future by
             offering cutting-edge courses, leveraging emerging technologies, and
@@ -44,14 +44,14 @@ const About = () => {
             <motion.div
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: 0.05 }}
-              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-white/10 shadow-card"
+              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-foreground/10 shadow-card"
             >
               <img src="/assets/Images/aboutus1.webp" alt="Students learning" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-photo-fade" />
               <div className="absolute left-2 right-2 bottom-2 sm:left-4 sm:right-4 sm:bottom-4 glass rounded-2xl sm:rounded-3xl p-2 sm:p-3 flex items-center gap-2 text-left z-10">
                 <span className="hidden sm:grid icon-circle w-8 h-8"><FiZap className="text-sm" /></span>
                 <div className="min-w-0">
-                  <p className="text-[10px] sm:text-xs font-medium text-white truncate">AI for Creators</p>
+                  <p className="text-[10px] sm:text-xs font-medium text-foreground truncate">AI for Creators</p>
                   <p className="text-[10px] text-citrus">Active</p>
                 </div>
               </div>
@@ -61,15 +61,15 @@ const About = () => {
             <motion.div
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: 0.12 }}
-              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-white/15 shadow-glow md:mb-16"
+              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-foreground/15 shadow-glow md:mb-16"
             >
               <img src="/assets/Images/aboutus2.webp" alt="Learning together" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-photo-fade" />
               <span className="absolute top-2 right-2 sm:top-4 sm:right-4 pill pill-white z-10 hidden sm:inline-flex">Active</span>
               <div className="absolute left-2 right-2 bottom-2 sm:left-4 sm:right-4 sm:bottom-4 glass-strong rounded-2xl sm:rounded-3xl p-2 sm:p-3 flex items-center justify-between gap-2 text-left z-10">
                 <div className="min-w-0">
-                  <p className="text-[10px] sm:text-xs text-white/55">Progress</p>
-                  <p className="text-xs sm:text-sm font-medium text-white truncate">Creative Sprint</p>
+                  <p className="text-[10px] sm:text-xs text-foreground/55">Progress</p>
+                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">Creative Sprint</p>
                 </div>
                 <ProgressRing value={67} size={40} stroke={3} className="shrink-0 hidden sm:inline-grid">67%</ProgressRing>
                 <ProgressRing value={67} size={28} stroke={2.5} className="shrink-0 sm:hidden" />
@@ -80,13 +80,13 @@ const About = () => {
             <motion.div
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: 0.19 }}
-              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-white/10 shadow-card"
+              className="duotone relative rounded-3xl sm:rounded-4xl aspect-[9/16] sm:aspect-[3/5] border border-foreground/10 shadow-card"
             >
               <img src="/assets/Images/aboutus3.webp" alt="Online classroom" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-photo-fade" />
               <div className="absolute left-2 right-2 bottom-2 sm:left-4 sm:right-4 sm:bottom-4 glass rounded-2xl sm:rounded-3xl p-2 sm:p-3 flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 text-left z-10">
                 <AvatarStack count="+2K" size={22} />
-                <div className="hidden md:flex items-center gap-2 text-[11px] text-white/70">
+                <div className="hidden md:flex items-center gap-2 text-[11px] text-foreground/70">
                   <span className="inline-flex items-center gap-1"><FiStar className="text-citrus" /> 4.9</span>
                   <span className="inline-flex items-center gap-1"><FiClock /> 18h</span>
                 </div>
@@ -100,10 +100,10 @@ const About = () => {
       <section className="container-x">
         <motion.blockquote {...fadeUp} className="max-w-5xl mx-auto text-center">
           <span aria-hidden="true" className="block h-display text-7xl md:text-8xl text-gradient leading-none mb-2">“</span>
-          <p className="h-display text-2xl sm:text-3xl md:text-5xl text-white/40 !leading-[1.15]">
+          <p className="h-display text-2xl sm:text-3xl md:text-5xl text-foreground/40 !leading-[1.15]">
             We are passionate about revolutionizing the way we learn. Our
             innovative platform{" "}
-            <span className="text-white">combines technology, expertise,</span>{" "}
+            <span className="text-foreground">combines technology, expertise,</span>{" "}
             and community to create an{" "}
             <span className="text-gradient">unparalleled educational experience.</span>
           </p>
@@ -114,10 +114,10 @@ const About = () => {
       <section className="container-x grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <motion.div {...fadeUp} className="flex flex-col gap-6 order-2 lg:order-1">
           <p className="eyebrow">Since day one</p>
-          <h2 className="h-display text-4xl md:text-6xl text-white">
+          <h2 className="h-display text-4xl md:text-6xl text-foreground">
             Our founding <span className="text-gradient">story</span>
           </h2>
-          <div className="flex flex-col gap-4 text-white/60 text-base md:text-lg leading-relaxed">
+          <div className="flex flex-col gap-4 text-foreground/60 text-base md:text-lg leading-relaxed">
             <p>
               Our e-learning platform was born out of a shared vision and passion for transforming education. It all began with a group of educators, technologists, and lifelong learners who recognized the need for accessible, flexible, and high-quality learning opportunities in a rapidly evolving digital world.
             </p>
@@ -139,7 +139,7 @@ const About = () => {
           </div>
           <div className="absolute -bottom-5 left-6 sm:left-10 glass-strong rounded-full pl-2 pr-4 py-2 flex items-center gap-3">
             <AvatarStack count="+1K" size={26} />
-            <span className="text-xs font-medium text-white/80">learners joined this year</span>
+            <span className="text-xs font-medium text-foreground/80">learners joined this year</span>
           </div>
         </motion.div>
       </section>

@@ -1,14 +1,17 @@
 const express = require('express');
-const { createCourse, showAllCourses, getcourseDetail, getFullCourseDetails, editCourse, getInstructorCourses, deleteCourses, getCourseDetails } = require('../controllers/Course');
-const { auth, isInstructor, isAdmin, isStudent } = require('../middlewares/auth.middleware');
+const { enrollFreeCourse, createCourse, showAllCourses, getcourseDetail, getFullCourseDetails, editCourse, getInstructorCourses, deleteCourses, getCourseDetails } = require('../controllers/Course');
+const { auth, isInstructor, isAdmin, isStudent, isApprovedEducator } = require('../middlewares/auth.middleware');
 const { createSection, updateSection, deleteSection } = require('../controllers/Section');
 const { updateSubSection, deleteSubSection, createSubSection } = require('../controllers/SubSection');
 const { createCategory, showAllCategory, categoryPageDetails } = require('../controllers/Category');
 const { createRating, getAverageRating, getAllRatingAndReview, getCourseRatingandReview } = require('../controllers/RatingAndReview');
 const {updateCourseProgress} = require('../controllers/courseProgress')
 const router = express.Router();
+router.use('/:courseId/folders', require('./Project'))
 
-router.post('/createCourse', auth, isInstructor, createCourse)
+router.post('/enrollFree', auth, isStudent, enrollFreeCourse)
+
+router.post('/createCourse', auth, isInstructor, isApprovedEducator, createCourse)
 
 
 //section

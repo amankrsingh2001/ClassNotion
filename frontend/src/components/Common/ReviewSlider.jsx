@@ -9,7 +9,7 @@ import SectionHeader from "../ui/SectionHeader";
 const Stars = ({ value = 0 }) => (
   <div className="flex items-center gap-0.5" aria-label={`${value} out of 5`}>
     {[1, 2, 3, 4, 5].map((i) => (
-      <FaStar key={i} className={`text-[13px] ${i <= Math.round(value) ? "text-citrus" : "text-white/15"}`} />
+      <FaStar key={i} className={`text-[13px] ${i <= Math.round(value) ? "text-citrus" : "text-foreground/15"}`} />
     ))}
   </div>
 );
@@ -30,16 +30,16 @@ const ReviewCard = ({ review }) => (
         <p className="font-medium truncate">
           {review?.user?.firstName} {review?.user?.lastName}
         </p>
-        <p className="text-xs text-white/45 truncate">{review?.course?.courseName}</p>
+        <p className="text-xs text-foreground/45 truncate">{review?.course?.courseName}</p>
       </div>
     </figcaption>
 
     <div className="flex items-center gap-2">
       <Stars value={review?.rating} />
-      <span className="text-xs font-medium text-white/55">{review?.rating?.toFixed(1)}</span>
+      <span className="text-xs font-medium text-foreground/55">{review?.rating?.toFixed(1)}</span>
     </div>
 
-    <blockquote className="text-[15px] leading-relaxed text-white/75 line-clamp-4 break-words">
+    <blockquote className="text-[15px] leading-relaxed text-foreground/75 line-clamp-4 break-words">
       &ldquo;{review?.review}&rdquo;
     </blockquote>
   </figure>
@@ -85,11 +85,11 @@ const ReviewSlider = () => {
         <div className="container-x">
           <div className="mt-12 mx-auto max-w-md glass p-10 flex flex-col items-center text-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 -z-10 rounded-full bg-magenta/40 blur-2xl" />
+
               <span className="icon-circle-glass w-14 h-14"><FiMessageCircle className="text-xl" /></span>
             </div>
             <p className="text-lg font-medium tracking-tight">No reviews yet</p>
-            <p className="text-sm text-white/55">Finish a course and be the first to share the love.</p>
+            <p className="text-sm text-foreground/55">Finish a course and be the first to share the love.</p>
           </div>
         </div>
       ) : reviews.length === 0 ? (

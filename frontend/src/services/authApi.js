@@ -98,7 +98,7 @@ export function setLogin(data, navigate) {
       dispatch(setToken(response.data.token))
       dispatch(setUser(response.data.user))
       toast.success("Logged In Successfully")
-      navigate('/dashboard/my-profile')
+      navigate(response.data.user.accountType === 'Admin' ? '/dashboard/educator-reviews' : response.data.user.educatorApplication && response.data.user.educatorApplication.status !== 'Approved' ? '/dashboard/educator-profile' : '/courses')
     } catch (error) {
       toast.error(error.response.data.message)
       navigate('/login')
@@ -145,7 +145,7 @@ export function resetPassword(password, confirmPassword, token, navigate){
       }
       dispatch(setLoading(false))
       toast.dismiss(toastId)
-  } 
+  }
 }
 
 export function logOut(navigate){
@@ -173,7 +173,7 @@ export function UpdateDispayPicture(formData){
       const toastId = toast.loading("Loading...")
         dispatch(setLoading(true))
       try{
-        
+
         const File = formData
         const token = localStorage.getItem('token')
         const response = await axios.put(UPDATE_DISPLAY_API, File,{
@@ -194,8 +194,8 @@ export function UpdateDispayPicture(formData){
       dispatch(setLoading(false))
       toast.dismiss(toastId)
     }
-    
-} 
+
+}
 
 export function updateAbout(aboutData){
   return async(dispatch)=>{

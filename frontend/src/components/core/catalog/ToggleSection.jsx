@@ -23,9 +23,9 @@ const ToggleSection = ({section}) => {
                     </span>
                     <span className='flex-1 min-w-0'>
                       <span className='block text-sm font-medium break-words'>{it.title}</span>
-                      {duration && <span className='block text-xs text-white/45 mt-0.5'>{duration}</span>}
+                      {duration && <span className='block text-xs text-foreground/45 mt-0.5'>{duration}</span>}
                     </span>
-                    <FiChevronRight className='shrink-0 text-white/40' />
+                    <FiChevronRight className='shrink-0 text-foreground/40' />
                 </li>
                 )
             })

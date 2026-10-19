@@ -22,7 +22,7 @@ const ProfileDropDown = () => {
     dispatch(logOut(navigate));
   };
 
-  const itemClass = "flex w-full items-center gap-3 px-3 py-2.5 rounded-2xl text-sm text-white/80 hover:text-white hover:bg-white/[0.06] transition";
+  const itemClass = "flex w-full items-center gap-3 px-3 py-2.5 rounded-2xl text-sm text-foreground/80 hover:text-foreground hover:bg-foreground/[0.06] transition";
 
   return (
     <div className="relative" ref={ref}>
@@ -49,7 +49,7 @@ const ProfileDropDown = () => {
                 <p className="text-sm font-semibold truncate">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs text-white/45">{user?.accountType}</p>
+                <p className="text-xs text-foreground/45">{user?.accountType}</p>
               </div>
             </div>
             <div className="divider my-1" />

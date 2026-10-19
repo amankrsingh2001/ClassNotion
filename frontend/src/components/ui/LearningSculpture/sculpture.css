@@ -1,0 +1,27 @@
+.learning-sculpture { --orbit-light: #f6ffe9; --orbit-mid: #c5e798; --orbit-deep: #749656; position: relative; isolation: isolate; width: 100%; min-height: 300px; flex: 1; margin-block: 12px; }
+.sculpture-grid { position: absolute; inset: 5% -10%; z-index: -1; background-image: linear-gradient(#b4b6d01f 1px, transparent 1px), linear-gradient(90deg, #b4b6d01f 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(ellipse, #0008 10%, transparent 68%); }
+.sculpture-coordinate { position: absolute; left: 2%; top: 12%; font: 7px monospace; letter-spacing: .17em; color: var(--art-muted); writing-mode: vertical-rl; }
+.sculpture-orbit { position: absolute; left: 50%; top: 48%; width: 230px; height: 230px; border: 21px solid transparent; border-radius: 50%; background: linear-gradient(145deg, var(--orbit-light), var(--orbit-mid) 40%, var(--orbit-deep) 67%, var(--orbit-light)) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; filter: drop-shadow(0 12px 10px #29352d35); }
+.sculpture-orbit-back { transform: translate(-50%,-50%) rotate(-32deg) scaleX(.55); z-index: 1; animation: orbit-sway 12s ease-in-out infinite; }
+.sculpture-orbit-front { transform: translate(-50%,-50%) rotate(42deg) scaleX(.56); z-index: 3; opacity: .97; }
+.sculpture-orbit-cross { transform: translate(-50%,-50%) rotate(82deg) scaleX(.48); z-index: 4; border-width: 15px; --orbit-light: #f0eeff; --orbit-mid: #c3bfee; --orbit-deep: #8881b0; }
+.sculpture-core { position: absolute; z-index: 2; top: 48%; left: 50%; width: 100px; height: 100px; display: grid; place-items: center; border: 1px solid #ffffffa8; border-radius: 28px; transform: translate(-50%,-50%) rotate(-12deg); background: linear-gradient(145deg,#ffffffbf,#ffffff26); box-shadow: inset 0 0 24px #ffffff52, 0 20px 45px #444a6820; backdrop-filter: blur(12px); }
+.sculpture-core > span { font: 85px/1 Georgia,serif; color: #515570; text-shadow: 0 3px 0 #ffffff80; }
+.sculpture-chip { position: absolute; z-index: 5; display: flex; align-items: center; gap: 7px; border: 1px solid var(--art-chip-border); border-radius: 10px; padding: 10px 12px; font-size: 9px; font-weight: 500; color: var(--art-ink); background: var(--art-chip); box-shadow: 0 8px 25px #23243d09; backdrop-filter: blur(16px); }
+.sculpture-chip svg { font-size: 14px; }
+.sculpture-chip-code { left: 2%; top: 23%; transform: rotate(-7deg); }
+.sculpture-chip-idea { right: 0; top: 59%; transform: rotate(7deg); }
+.sculpture-chip-idea svg { color: #708552; }
+.sculpture-chip-create { left: 10%; bottom: 12%; transform: rotate(-4deg); }
+.sculpture-spark { position: absolute; color: var(--art-muted); font-size: 20px; font-weight: 300; }
+.sculpture-spark-one { right: 11%; top: 16%; }
+.sculpture-spark-two { left: 22%; top: 64%; font-size: 13px; }
+.sculpture-caption { position: absolute; bottom: 0; right: 0; font: 7px monospace; letter-spacing: .12em; color: var(--art-muted); }
+.sculpture-caption > span { margin-left: 18px; }
+@keyframes orbit-sway { 0%,100% { transform: translate(-50%,-50%) rotate(-32deg) scaleX(.55); } 50% { transform: translate(-50%,-53%) rotate(-20deg) scaleX(.55); } }
+.learning-sculpture-compact { min-height: 170px; height: 170px; flex: none; margin: 0; }
+.learning-sculpture-compact .sculpture-orbit { width: 140px; height: 140px; border-width: 13px; }
+.learning-sculpture-compact .sculpture-core { width: 62px; height: 62px; border-radius: 18px; }
+.learning-sculpture-compact .sculpture-core > span { font-size: 53px; }
+.learning-sculpture-compact .sculpture-chip, .learning-sculpture-compact .sculpture-coordinate, .learning-sculpture-compact .sculpture-caption { display: none; }
+@media (prefers-reduced-motion: reduce) { .sculpture-orbit-back { animation: none; } }

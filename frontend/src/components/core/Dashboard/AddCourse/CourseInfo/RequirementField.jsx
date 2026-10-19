@@ -1,78 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { FiPlus } from 'react-icons/fi'
-import { RxCross2 } from 'react-icons/rx'
-
-
-const RequirementField = ({name, label, register, errors, setValue, getValues}) => {
-    const [requirement, setRequirement] = useState('')
-    const [requirementList, setRequirementList] = useState([]);
-
-
-
-    const handleAddButton = (e) =>{
-        if(requirement){
-            e.preventDefault()
-            setRequirementList([...requirementList, requirement])
-            setRequirement("")
-        }
-    }
-
-    const handlerRemoveButton = (index) =>{
-        const updatedRequirementList = [...requirementList]
-        updatedRequirementList.splice(index, 1);
-        setRequirementList(updatedRequirementList)
-    }
-
-    useEffect(()=>{
-        register(name,{
-            required:true,
-            validate : (value) =>value.length > 0
-        })
-    },[])
-
-    useEffect(()=>{
-        setValue(name, requirementList);
-    },[requirementList])
-
-
-  return (
-    <div>
-        <label htmlFor={name} className='field-label'>{label} <span className="text-rose">*</span></label>
-        <div className='flex flex-col gap-3 sm:flex-row'>
-            <input type='text'
-                id={name}
-                value={requirement}
-                onChange={(e)=>setRequirement(e.target.value)}
-                placeholder='e.g. Basic JavaScript knowledge'
-                className='field'
-            />
-            <button type='button' className='btn btn-glass h-12 shrink-0' onClick={handleAddButton}>
-                <FiPlus /> Add
-            </button>
-        </div>
-        {
-            requirementList.length > 0 && (
-            <ul className='mt-4 flex flex-wrap gap-2'>
-                {
-                    requirementList.map((requirements, index)=>{
-                      return  <li key={index} className='pill pr-1.5'>
-                            <span>{requirements}</span>
-                            <button type='button' aria-label={`Remove ${requirements}`} className='grid h-4 w-4 place-items-center rounded-full text-white/60 transition hover:bg-white/20 hover:text-white' onClick={(index)=>handlerRemoveButton(index)}>
-                              <RxCross2 className='text-[10px]' />
-                            </button>
-                        </li>
-                    })
-                }
-            </ul>
-            )
-        }
-
-        {
-            errors[name] && (<p className="field-error">{label} is required</p>)
-        }
-
-    </div>
-  )
+import { useEffect, useState } from 'react';
+import { FiPlus, FiX } from 'react-icons/fi';
+export default function RequirementField({ name, label, register, errors, setValue, getValues }) {
+  const [value, setInput] = useState('');
+  const [items, setItems] = useState(() => getValues(name) || []);
+  useEffect(() => { register(name, { validate: values => values?.length > 0 }); }, [register, name]);
+  const update = next => { setItems(next); setValue(name, next, { shouldDirty: true, shouldValidate: true }); };
+  const add = () => { const item = value.trim(); if (item && !items.includes(item)) update([...items, item]); setInput(''); };
+  return <div><label className="field-label" htmlFor={name}><span>{label}<span className="cs-req">*</span></span></label><div className="studio-list-input"><input className="field" id={name} value={value} onChange={event => setInput(event.target.value)} placeholder="e.g. No prior experience needed" onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); add(); } }} /><button type="button" className="btn btn-glass" disabled={!value.trim()} onClick={add}><FiPlus /> Add</button></div><p className="cs-hint">What should learners know or have before starting? Press Enter to add.</p><ol className="studio-requirements">{items.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p><button type="button" aria-label={`Remove ${item}`} onClick={() => update(items.filter(value => value !== item))}><FiX /></button></li>)}</ol>{errors[name] && <p className="field-error">Add at least one requirement.</p>}</div>;
 }
-
-export default RequirementField

@@ -31,10 +31,10 @@ const ContactPage = () =>{
     return <div className='glass relative overflow-hidden w-full p-6 sm:p-8 md:p-10'>
       <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full bg-magenta/20 blur-3xl" />
       <div className="relative">
-        <h2 className='h-display text-2xl md:text-4xl text-white mb-3'>
+        <h2 className='h-display text-2xl md:text-4xl text-foreground mb-3'>
           Got an idea? We’ve got the skills. <span className='text-gradient'>Let’s team up</span>
         </h2>
-        <p className='text-white/55 mb-8'>
+        <p className='text-foreground/55 mb-8'>
           Tell us more about yourself and what you’ve got in mind.
         </p>
         <form onSubmit={handleSubmit(submitContact)}>
@@ -105,10 +105,10 @@ const ContactPage = () =>{
                       id='dropdown'{...register('countryCode',{required:true})}
                     >
                       {Countrycode.map((it, index) => {
-                        return <option key={index} value={it.code} className="bg-surface text-white">{it.code}-{it.country}</option>;
+                        return <option key={index} value={it.code} className="bg-surface text-foreground">{it.code}-{it.country}</option>;
                       })}
                     </select>
-                    <FiChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/45" />
+                    <FiChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground/45" />
                   </div>
 
                   <div className="flex-1 min-w-0">

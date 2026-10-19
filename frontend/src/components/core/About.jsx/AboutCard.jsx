@@ -21,8 +21,8 @@ const AboutCard = ({
         )}
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       </div>
-      <h2 className={`relative h-display text-3xl md:text-4xl text-white ${textColor}`}>{heading}</h2>
-      <div className="relative flex flex-col gap-3 text-white/60 leading-relaxed">
+      <h2 className={`relative h-display text-3xl md:text-4xl text-foreground ${textColor}`}>{heading}</h2>
+      <div className="relative flex flex-col gap-3 text-foreground/60 leading-relaxed">
         <p>{description1}</p>
         {description2 !== "" && description2 !== undefined && <p>{description2}</p>}
       </div>

@@ -19,7 +19,7 @@ const AvatarStack = ({ images = FALLBACK, count, size = 28, className = "" }) =>
     {count && (
       <span
         style={{ height: size, minWidth: size, marginLeft: -size / 3 }}
-        className="grid place-items-center px-1.5 rounded-full bg-white text-night text-[10px] font-bold ring-2 ring-night/80"
+        className="grid place-items-center px-1.5 rounded-full bg-foreground text-night text-[10px] font-bold ring-2 ring-night/80"
       >
         {count}
       </span>

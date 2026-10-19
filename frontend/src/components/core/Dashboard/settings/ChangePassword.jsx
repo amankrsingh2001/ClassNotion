@@ -39,7 +39,7 @@ const ChangePassword = () => {
       <div>
         <p className="eyebrow text-[10px]">03 · Security</p>
         <h2 className="mt-2 text-xl sm:text-2xl font-medium tracking-tight">Password</h2>
-        <p className="mt-2 text-sm text-white/55 leading-relaxed">
+        <p className="mt-2 text-sm text-foreground/55 leading-relaxed">
           Your new password must be different from the current one.
         </p>
       </div>
@@ -62,7 +62,7 @@ const ChangePassword = () => {
               type="button"
               onClick={currentPasswordHandler}
               aria-label="Toggle current password visibility"
-              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-white/45 hover:text-white hover:bg-white/[0.06] transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-foreground/45 hover:text-foreground hover:bg-foreground/[0.06] transition"
             >
               {currentPassword ? <FiEyeOff /> : <FiEye />}
             </button>
@@ -86,7 +86,7 @@ const ChangePassword = () => {
               type="button"
               onClick={changePasswordHandler}
               aria-label="Toggle new password visibility"
-              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-white/45 hover:text-white hover:bg-white/[0.06] transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-foreground/45 hover:text-foreground hover:bg-foreground/[0.06] transition"
             >
               {changePassword ? <FiEyeOff /> : <FiEye />}
             </button>

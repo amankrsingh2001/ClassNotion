@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FiCheck, FiArrowRight } from "react-icons/fi";
 import { motion } from "motion/react";
 import Ambient from "../../ui/Ambient";
+import ThemeToggle from "../../Common/ThemeToggle";
 import Logo from "../../Common/Logo";
 import ProgressRing from "../../ui/ProgressRing";
 
@@ -9,7 +10,7 @@ const ConfirmChange = ({ email }) => {
   return (
     <div className="relative min-h-screen w-full flex flex-col">
       <Ambient />
-      <header className="container-x pt-6">
+      <header className="container-x pt-6 flex items-center justify-between">
         <Logo />
       </header>
 
@@ -20,11 +21,11 @@ const ConfirmChange = ({ email }) => {
           transition={{ type: "spring", stiffness: 240, damping: 24 }}
           className="relative w-full max-w-md"
         >
-          <div aria-hidden className="absolute -top-16 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-citrus/15 blur-[110px] pointer-events-none" />
+
 
           <div className="relative glass p-8 sm:p-10 text-center">
             <div className="flex justify-center">
-              <ProgressRing value={100} size={120} stroke={4} color="#DDF247">
+              <ProgressRing value={100} size={120} stroke={4} color="var(--success)">
                 <motion.span
                   initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -37,13 +38,13 @@ const ConfirmChange = ({ email }) => {
             </div>
 
             <span className="mt-6 pill pill-citrus">Account secured</span>
-            <h1 className="mt-4 h-display text-4xl sm:text-5xl text-white">Reset completed</h1>
-            <p className="mt-3 text-white/55 leading-relaxed">
+            <h1 className="mt-4 h-display text-4xl sm:text-5xl text-foreground">Reset completed</h1>
+            <p className="mt-3 text-foreground/55 leading-relaxed">
               All done! We have sent an email
               {email ? (
                 <>
                   {" "}
-                  to <span className="font-medium text-white break-all">{email}</span>
+                  to <span className="font-medium text-foreground break-all">{email}</span>
                 </>
               ) : null}{" "}
               to confirm.

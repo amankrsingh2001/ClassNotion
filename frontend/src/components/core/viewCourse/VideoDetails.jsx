@@ -153,10 +153,10 @@ const VideoDetails = () => {
                         <span className='icon-circle-glass w-14 h-14'><FiFilm className='text-xl' /></span>
                     </div>
                     <p className='text-lg font-medium tracking-tight'>No data found</p>
-                    <p className='text-sm text-white/55'>Pick a lesson from the list to start watching.</p>
+                    <p className='text-sm text-foreground/55'>Pick a lesson from the list to start watching.</p>
                 </div>
             ) : (
-                <div className='overflow-hidden rounded-3xl md:rounded-4xl border border-white/10 bg-night shadow-card [&_.video-react]:!bg-night [&_.video-react]:!font-sans [&_.video-react-control-bar]:!bg-night/60 [&_.video-react-control-bar]:backdrop-blur-xl [&_.video-react-big-play-button]:!rounded-full [&_.video-react-big-play-button]:!w-20 [&_.video-react-big-play-button]:!h-20 [&_.video-react-big-play-button]:!leading-[5rem] [&_.video-react-big-play-button]:!border-white/25 [&_.video-react-big-play-button]:!bg-white/15 [&_.video-react-big-play-button]:backdrop-blur-xl [&_.video-react-big-play-button]:!left-1/2 [&_.video-react-big-play-button]:!top-1/2 [&_.video-react-big-play-button]:!-ml-10 [&_.video-react-big-play-button]:!-mt-10 [&_.video-react-play-progress]:!bg-citrus [&_.video-react-volume-level]:!bg-citrus'>
+                <div className='overflow-hidden rounded-3xl md:rounded-4xl border border-foreground/10 bg-night shadow-card [&_.video-react]:!bg-night [&_.video-react]:!font-sans [&_.video-react-control-bar]:!bg-night/60 [&_.video-react-control-bar]:backdrop-blur-xl [&_.video-react-big-play-button]:!rounded-full [&_.video-react-big-play-button]:!w-20 [&_.video-react-big-play-button]:!h-20 [&_.video-react-big-play-button]:!leading-[5rem] [&_.video-react-big-play-button]:!border-foreground/25 [&_.video-react-big-play-button]:!bg-foreground/15 [&_.video-react-big-play-button]:backdrop-blur-xl [&_.video-react-big-play-button]:!left-1/2 [&_.video-react-big-play-button]:!top-1/2 [&_.video-react-big-play-button]:!-ml-10 [&_.video-react-big-play-button]:!-mt-10 [&_.video-react-play-progress]:!bg-citrus [&_.video-react-volume-level]:!bg-citrus'>
                 <Player
                 ref = {playerRef}
                 aspectRatio = "16:9"
@@ -224,11 +224,11 @@ const VideoDetails = () => {
                 <span className='pill'><span className='w-1.5 h-1.5 rounded-full bg-magenta' /> Now playing</span>
                 {isDone && <span className='pill pill-citrus'><FiCheck strokeWidth={3} /> Completed</span>}
             </div>
-            <h1 className='h-display text-3xl sm:text-4xl md:text-5xl text-white break-words'>{videoData?.title}</h1>
-            {videoData?.description && <p className='text-white/55 text-base md:text-lg whitespace-pre-line max-w-3xl'>{videoData?.description}</p>}
+            <h1 className='h-display text-3xl sm:text-4xl md:text-5xl text-foreground break-words'>{videoData?.title}</h1>
+            {videoData?.description && <p className='text-foreground/55 text-base md:text-lg whitespace-pre-line max-w-3xl'>{videoData?.description}</p>}
 
             {instructor && (
-                <div className='flex items-center justify-between gap-4 p-3 pr-5 rounded-[26px] bg-white/[0.04] border border-white/[0.07]'>
+                <div className='flex items-center justify-between gap-4 p-3 pr-5 rounded-[26px] bg-foreground/[0.04] border border-foreground/[0.07]'>
                     <div className='flex items-center gap-3 min-w-0'>
                         <span className='shrink-0 p-[2px] bg-brand rounded-full'>
                             <img
@@ -238,11 +238,11 @@ const VideoDetails = () => {
                             />
                         </span>
                         <div className='min-w-0'>
-                            <p className='text-xs text-white/45'>By</p>
+                            <p className='text-xs text-foreground/45'>By</p>
                             <p className='font-medium truncate'>{instructor?.firstName} {instructor?.lastName}</p>
                         </div>
                     </div>
-                    <p className='text-sm text-white/55 truncate max-w-[45%] text-right'>{courseEntireData?.courseName}</p>
+                    <p className='text-sm text-foreground/55 truncate max-w-[45%] text-right'>{courseEntireData?.courseName}</p>
                 </div>
             )}
         </div>

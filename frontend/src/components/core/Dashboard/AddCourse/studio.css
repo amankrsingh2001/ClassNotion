@@ -1,0 +1,252 @@
+/* ───────────────────────── Course Studio ─────────────────────────
+   Structure inspired by Udemy / Teachable course builders (clickable stepper,
+   open curriculum with inline lessons) and Stripe's product editor (settings
+   cards + sticky live preview + sticky action bar). Uses theme.css variables
+   so it works in both light and dark mode. */
+
+.course-studio { --warn: #b7791f; --warn-soft: rgb(183 121 31 / .1); color: var(--text); padding-block: 8px 0; }
+[data-theme="dark"] .course-studio { --warn: #e8b45c; --warn-soft: rgb(232 180 92 / .12); }
+
+/* ── Header ── */
+.cs-header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.cs-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-bottom: 14px; transition: color .15s; }
+.cs-back:hover { color: var(--text); }
+.cs-header h1 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; }
+.cs-header h1 span { color: var(--muted); font-weight: 400; }
+.cs-header p { font-size: 14px; color: var(--muted); margin-top: 6px; }
+.cs-status { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel); font-size: 12px; font-weight: 500; color: var(--secondary); }
+.cs-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.cs-status.is-live i { background: var(--success); }
+
+/* ── Stepper ── */
+.cs-stepper { display: flex; align-items: center; gap: 4px; padding: 6px; margin-bottom: 24px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); overflow-x: auto; scrollbar-width: none; }
+.cs-stepper::-webkit-scrollbar { display: none; }
+.cs-step { flex: 1; min-width: max-content; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; text-align: left; color: var(--muted); transition: background .15s, color .15s; }
+.cs-step:disabled { cursor: default; }
+.cs-step:not(:disabled):hover { background: var(--panel-soft); color: var(--text); }
+.cs-step.is-current { background: var(--accent-soft); color: var(--text); }
+.cs-step-num { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--border); font-size: 12px; font-weight: 600; }
+.cs-step.is-current .cs-step-num { background: var(--strong); border-color: var(--strong); color: var(--strong-inverse); }
+.cs-step.is-complete .cs-step-num { background: var(--success); border-color: var(--success); color: #fff; }
+.cs-step b { display: block; font-size: 14px; font-weight: 600; color: inherit; }
+.cs-step small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+.cs-step-line { width: 24px; height: 1.5px; flex-shrink: 0; background: var(--border); }
+.cs-step-line.is-done { background: var(--success); }
+
+/* ── Two-column workspace ── */
+.cs-workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (min-width: 1280px) { .cs-workspace { grid-template-columns: minmax(0, 1fr) 300px; } }
+.cs-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.cs-aside { display: none; }
+@media (min-width: 1280px) { .cs-aside { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 96px; } }
+
+/* ── Settings-style cards ── */
+.cs-card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+.cs-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 24px 0; }
+.cs-card-head h2 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.cs-card-head p { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.cs-card-body { display: flex; flex-direction: column; gap: 20px; padding: 20px 24px 24px; }
+.cs-grid-2 { display: grid; gap: 20px; }
+@media (min-width: 640px) { .cs-grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* Fields (scoped so global .field stays untouched) */
+.course-studio .field, .cs-drawer .field { min-height: 44px; height: auto; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 14px; line-height: 1.5; box-shadow: none; transition: border-color .15s, box-shadow .15s; }
+.course-studio .field:hover, .cs-drawer .field:hover { border-color: var(--account-line); }
+.course-studio .field:focus, .cs-drawer .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.course-studio .field[readonly], .cs-drawer .field[readonly] { background: var(--panel-soft); }
+.course-studio textarea.field, .cs-drawer textarea.field { min-height: 112px; resize: vertical; }
+.course-studio select.field { padding-right: 38px; cursor: pointer; }
+.course-studio .field.has-icon { padding-left: 38px; }
+.course-studio .field-label, .cs-drawer .field-label { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.cs-label-meta { font-size: 12px; font-weight: 400; color: var(--muted); }
+.cs-label-meta.is-over { color: var(--danger); }
+.cs-req { color: var(--danger); margin-left: 2px; }
+.cs-hint { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+.course-studio .field-error, .cs-drawer .field-error { font-size: 12px; color: var(--danger); margin-top: 6px; }
+.cs-input-icon { position: relative; }
+.cs-input-icon > svg { position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--muted); }
+.cs-input-icon > svg:first-child { left: 13px; font-size: 16px; }
+.cs-input-icon > svg:last-child:not(:first-child) { right: 13px; }
+
+/* Tokens (tags) */
+.studio-token-input { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 6px 8px 6px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); transition: border-color .15s, box-shadow .15s; }
+.studio-token-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.studio-token-input > input { flex: 1; min-width: 140px; padding: 4px 2px; background: transparent; outline: none; font-size: 14px; color: var(--text); }
+.studio-token-input > input::placeholder { color: var(--faint); }
+.studio-token-input > button { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; color: var(--muted); }
+.studio-token-input > button:not(:disabled):hover { background: var(--panel-soft); color: var(--text); }
+.studio-token { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 6px 0 10px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; }
+.studio-token button { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; }
+.studio-token button:hover { background: rgb(var(--accent-rgb) / .15); }
+
+/* Requirements list */
+.studio-list-input { display: flex; gap: 8px; }
+.studio-list-input > input { min-width: 0; }
+.studio-list-input > .btn { flex-shrink: 0; height: 44px; }
+.studio-requirements { display: grid; gap: 6px; margin-top: 10px; }
+.studio-requirements:empty { display: none; }
+.studio-requirements li { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-soft); }
+.studio-requirements li > span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--panel); border: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--muted); flex-shrink: 0; }
+.studio-requirements p { flex: 1; font-size: 14px; overflow-wrap: anywhere; }
+.studio-requirements button { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; color: var(--muted); }
+.studio-requirements button:hover { background: var(--panel); color: var(--danger); }
+
+/* Upload */
+.studio-upload { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 20px; border: 1.5px dashed var(--account-line); border-radius: 14px; background: var(--panel-soft); transition: background .15s, border-color .15s; }
+.studio-upload.is-dragging { background: var(--accent-soft); border-color: var(--accent); }
+.studio-upload-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; background: var(--panel); border: 1px solid var(--border); color: var(--accent); font-size: 22px; box-shadow: var(--shadow); }
+.studio-upload h3 { font-size: 15px; font-weight: 600; margin-top: 14px; }
+.studio-upload p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.studio-upload .btn { margin-top: 14px; }
+.studio-upload small { font-size: 12px; color: var(--muted); margin-top: 12px; }
+.studio-media-preview { overflow: hidden; border: 1px solid var(--border); border-radius: 14px; background: var(--panel); }
+.studio-media-preview > div { aspect-ratio: 16 / 9; background: var(--panel-soft); }
+.studio-media-preview img, .studio-media-preview video { width: 100%; height: 100%; object-fit: cover; }
+.studio-media-preview video { object-fit: contain; background: #000; }
+.studio-media-preview footer { display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 16px; border-top: 1px solid var(--border); font-size: 13px; }
+.studio-media-preview footer > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+.studio-media-preview footer > button { height: 32px; padding: 0 10px; border-radius: 8px; font-weight: 500; color: var(--accent); }
+.studio-media-preview footer > button:hover { background: var(--panel-soft); }
+.studio-media-preview footer > button[aria-label] { width: 32px; padding: 0; display: grid; place-items: center; color: var(--muted); }
+
+/* ── Sticky action bar ── */
+.cs-actionbar { position: sticky; bottom: 16px; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 12px 12px 20px; border-radius: 14px; border: 1px solid var(--border); background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(14px); box-shadow: 0 10px 30px -12px rgb(0 0 0 / .25); }
+.cs-actionbar > p { font-size: 13px; color: var(--muted); min-width: 0; }
+.cs-actionbar > p b { color: var(--text); font-weight: 600; }
+.cs-actionbar > div { display: flex; gap: 8px; flex-shrink: 0; }
+.course-studio .btn, .cs-drawer .btn { height: 40px; padding: 0 16px; font-size: 14px; font-weight: 500; border-radius: 10px; gap: 8px; }
+.course-studio .btn:disabled, .cs-drawer .btn:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 767px) {
+  .cs-actionbar { bottom: 96px; flex-direction: column; align-items: stretch; padding: 12px; }
+  .cs-actionbar > p { text-align: center; }
+  .cs-actionbar > div > .btn { flex: 1; }
+}
+
+/* ── Aside: preview + checklist + tips ── */
+.cs-preview { overflow: hidden; }
+.cs-preview-cover { position: relative; aspect-ratio: 16 / 9; background: linear-gradient(135deg, var(--accent-soft), var(--panel-soft)); display: grid; place-items: center; color: var(--muted); }
+.cs-preview-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cs-preview-cover > span { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; }
+.cs-preview-cover > span svg { font-size: 22px; }
+.cs-preview-cover .pill { position: absolute; top: 10px; left: 10px; }
+.cs-preview-body { padding: 16px; }
+.cs-preview-cat { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.cs-preview-title { margin-top: 6px; font-size: 16px; font-weight: 600; line-height: 1.35; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.cs-preview-title.is-empty { color: var(--faint); font-weight: 500; }
+.cs-preview-desc { margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cs-preview-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+.cs-preview-meta strong { font-size: 16px; color: var(--text); font-weight: 600; }
+.cs-preview-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.cs-preview-tags span { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--panel-soft); color: var(--secondary); }
+
+.cs-check { padding: 18px; }
+.cs-check-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cs-check-head h3 { font-size: 14px; font-weight: 600; }
+.cs-check-head span { font-size: 12px; color: var(--muted); }
+.cs-progress { height: 6px; border-radius: 99px; background: var(--panel-soft); margin-top: 12px; overflow: hidden; }
+.cs-progress > div { height: 100%; border-radius: inherit; background: var(--success); transition: width .4s ease; }
+.cs-check ul { display: grid; gap: 10px; margin-top: 14px; }
+.cs-check li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--secondary); }
+.cs-check li i { display: grid; place-items: center; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--border); font-size: 10px; font-style: normal; }
+.cs-check li.is-done { color: var(--muted); }
+.cs-check li.is-done i { background: var(--success); border-color: var(--success); color: #fff; }
+
+.cs-tips { padding: 16px 18px; border-radius: 16px; background: var(--aside-card); border: 1px solid var(--frame-border); }
+.cs-tips summary { display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font-size: 13px; font-weight: 600; }
+.cs-tips summary::-webkit-details-marker { display: none; }
+.cs-tips summary svg:first-child { color: var(--accent); }
+.cs-tips summary svg:last-child { margin-left: auto; color: var(--muted); transition: transform .2s; }
+.cs-tips[open] summary svg:last-child { transform: rotate(180deg); }
+.cs-tips ul { display: grid; gap: 8px; margin-top: 12px; }
+.cs-tips li { position: relative; padding-left: 14px; font-size: 13px; line-height: 1.5; color: var(--secondary); }
+.cs-tips li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
+
+/* ── Curriculum ── */
+.cs-curriculum-stats { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs-stat { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; background: var(--panel-soft); font-size: 13px; color: var(--secondary); }
+.cs-stat b { color: var(--text); font-weight: 600; }
+
+.cs-section { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.cs-section.is-editing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cs-section.is-incomplete { border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); }
+.cs-section-head { display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 18px; background: var(--panel-soft); border-bottom: 1px solid var(--border); }
+.cs-section-head > button.cs-collapse { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; color: var(--muted); flex-shrink: 0; transition: transform .2s; }
+.cs-section-head > button.cs-collapse:hover { background: var(--panel); color: var(--text); }
+.cs-section-head > button.cs-collapse.is-collapsed { transform: rotate(-90deg); }
+.cs-section-title { flex: 1; min-width: 0; }
+.cs-section-title small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.cs-section-title p { margin-top: 2px; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-section-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.cs-icon-btn { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; color: var(--muted); transition: background .15s, color .15s; }
+.cs-icon-btn:hover { background: var(--panel); color: var(--text); }
+.cs-icon-btn.is-danger:hover { color: var(--danger); background: rgb(var(--danger-rgb) / .08); }
+.cs-section-body { display: flex; flex-direction: column; gap: 6px; padding: 12px; }
+.cs-warn { display: flex; align-items: center; gap: 8px; margin: 0 2px 4px; padding: 8px 12px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); font-size: 13px; }
+
+.cs-lesson { display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 10px; border: 1px solid transparent; border-radius: 10px; cursor: pointer; transition: background .15s, border-color .15s; }
+.cs-lesson:hover { background: var(--panel-soft); border-color: var(--border); }
+.cs-lesson-icon { display: grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; background: var(--accent-soft); color: var(--accent); font-size: 14px; }
+.cs-lesson-text { flex: 1; min-width: 0; }
+.cs-lesson-text small { display: block; font-size: 11px; color: var(--muted); }
+.cs-lesson-text p { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-lesson-actions { display: flex; gap: 2px; opacity: .7; transition: opacity .15s; }
+.cs-lesson:hover .cs-lesson-actions, .cs-lesson:focus-within .cs-lesson-actions { opacity: 1; }
+.cs-add-row { display: flex; align-items: center; justify-content: center; gap: 8px; height: 42px; border: 1.5px dashed var(--border); border-radius: 10px; font-size: 13px; font-weight: 500; color: var(--muted); transition: border-color .15s, color .15s, background .15s; }
+.cs-add-row:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+.cs-composer { display: flex; gap: 8px; align-items: flex-start; }
+.cs-composer > div { flex: 1; min-width: 0; }
+.cs-composer .btn { flex-shrink: 0; height: 44px; }
+.cs-composer-card { padding: 16px; border: 1.5px dashed var(--account-line); border-radius: 16px; background: var(--panel-soft); }
+.cs-composer-card > p { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+.cs-inline-edit { display: flex; gap: 6px; flex: 1; min-width: 0; }
+.cs-inline-edit .field { min-height: 38px !important; padding: 6px 12px !important; }
+.cs-inline-edit .btn { height: 38px !important; padding: 0 12px !important; }
+
+.cs-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
+.cs-empty > span { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-size: 22px; }
+.cs-empty h3 { margin-top: 14px; font-size: 16px; font-weight: 600; }
+.cs-empty p { margin-top: 4px; font-size: 14px; color: var(--muted); max-width: 360px; }
+
+/* ── Publish ── */
+.cs-visibility { display: grid; gap: 10px; }
+@media (min-width: 640px) { .cs-visibility { grid-template-columns: 1fr 1fr; } }
+.cs-visibility label { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; cursor: pointer; transition: border-color .15s, background .15s, box-shadow .15s; }
+.cs-visibility label:hover { border-color: var(--account-line); }
+.cs-visibility label.is-selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent); }
+.cs-visibility label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cs-visibility input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.cs-visibility-top { display: flex; align-items: center; justify-content: space-between; }
+.cs-visibility-top > svg { font-size: 20px; color: var(--accent); }
+.cs-radio { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); font-size: 11px; }
+.is-selected .cs-radio { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.cs-visibility b { font-size: 15px; font-weight: 600; }
+.cs-visibility small { font-size: 13px; line-height: 1.5; color: var(--muted); }
+.cs-review-list { display: grid; gap: 2px; }
+.cs-review-row { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.cs-review-row:last-child { border-bottom: 0; }
+.cs-review-row > i { display: grid; place-items: center; width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; font-style: normal; font-size: 11px; background: var(--success); color: #fff; }
+.cs-review-row > i.is-warn { background: var(--warn-soft); color: var(--warn); }
+.cs-review-row > span { flex: 1; color: var(--secondary); }
+.cs-review-row > b { font-weight: 500; color: var(--text); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+
+/* ── Lesson drawer ── */
+.cs-drawer-backdrop { animation: cs-fade .2s ease both; position: fixed; inset: 0; z-index: 1100; background: rgb(15 18 30 / .45); backdrop-filter: blur(3px); }
+.cs-drawer { animation: cs-slide .32s cubic-bezier(.22,1,.36,1) both; position: fixed; top: 0; right: 0; bottom: 0; z-index: 1101; width: min(560px, 100vw); display: flex; flex-direction: column; background: var(--panel); border-left: 1px solid var(--border); box-shadow: -20px 0 50px -20px rgb(0 0 0 / .35); color: var(--text); }
+@keyframes cs-fade { from { opacity: 0; } }
+@keyframes cs-slide { from { transform: translateX(100%); } }
+.cs-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 24px; border-bottom: 1px solid var(--border); }
+.cs-drawer-head small { display: block; font-size: 12px; color: var(--muted); }
+.cs-drawer-head h2 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+.cs-drawer-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 22px; padding: 24px; }
+.cs-drawer-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 24px; border-top: 1px solid var(--border); background: var(--panel-soft); }
+
+@media (max-width: 640px) {
+  .cs-card-head { padding: 18px 18px 0; }
+  .cs-card-body { padding: 18px; }
+  .cs-step small { display: none; }
+  .cs-step { padding: 8px 10px; gap: 8px; }
+  .cs-step-line { width: 12px; }
+  .cs-drawer-body { padding: 18px; }
+  .cs-drawer-head, .cs-drawer-foot { padding-inline: 18px; }
+}

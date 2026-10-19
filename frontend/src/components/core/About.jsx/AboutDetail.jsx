@@ -26,14 +26,14 @@ const AboutDetail = () => {
           <div
             key={index}
             className={`relative px-6 py-8 md:py-10 text-center lg:text-left
-              ${index % 2 === 1 ? "border-l border-white/[0.07]" : ""}
-              ${index >= 2 ? "border-t lg:border-t-0 border-white/[0.07]" : ""}
+              ${index % 2 === 1 ? "border-l border-foreground/[0.07]" : ""}
+              ${index >= 2 ? "border-t lg:border-t-0 border-foreground/[0.07]" : ""}
               ${index === 2 ? "lg:border-l" : ""}`}
           >
-            <p className="h-display text-4xl md:text-6xl text-white">
+            <p className="h-display text-4xl md:text-6xl text-foreground">
               {detail.count}
             </p>
-            <p className="mt-2 text-sm text-white/45">{detail.name}</p>
+            <p className="mt-2 text-sm text-foreground/45">{detail.name}</p>
           </div>
         );
       })}

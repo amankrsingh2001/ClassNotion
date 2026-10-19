@@ -85,18 +85,18 @@ const Catalog = () => {
                 <div className='relative p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10'>
                     <div className='max-w-2xl min-w-0'>
                         <nav className='eyebrow flex flex-wrap items-center gap-2'>
-                            <Link to='/' className='hover:text-white transition-colors'>Home</Link>
-                            <FiChevronRight className='text-white/30' />
+                            <Link to='/' className='hover:text-foreground transition-colors'>Home</Link>
+                            <FiChevronRight className='text-foreground/30' />
                             <span>Catalog</span>
-                            <FiChevronRight className='text-white/30' />
-                            <span className='text-white/80'>{selectedCategory?.name || '…'}</span>
+                            <FiChevronRight className='text-foreground/30' />
+                            <span className='text-foreground/80'>{selectedCategory?.name || '…'}</span>
                         </nav>
                         {selectedCategory ? (
                             <>
-                                <h1 className='mt-6 h-display text-5xl sm:text-6xl md:text-7xl text-white break-words'>
+                                <h1 className='mt-6 h-display text-5xl sm:text-6xl md:text-7xl text-foreground break-words'>
                                     {selectedCategory?.name}
                                 </h1>
-                                <p className='mt-5 text-base md:text-lg text-white/55 max-w-xl'>{selectedCategory?.description}</p>
+                                <p className='mt-5 text-base md:text-lg text-foreground/55 max-w-xl'>{selectedCategory?.description}</p>
                             </>
                         ) : (
                             <div className='mt-6 space-y-3'>
@@ -113,10 +113,10 @@ const Catalog = () => {
                             { icon: FiUsers, value: learnerCount, label: 'Learners' },
                             { icon: FiStar, value: reviewCount, label: 'Reviews' },
                         ].map(({ icon: Icon, value, label }) => (
-                            <div key={label} className='rounded-3xl bg-white/[0.05] border border-white/10 px-4 py-4 sm:px-5 sm:min-w-[120px]'>
-                                <Icon className='text-white/45' />
+                            <div key={label} className='rounded-3xl bg-foreground/[0.05] border border-foreground/10 px-4 py-4 sm:px-5 sm:min-w-[120px]'>
+                                <Icon className='text-foreground/45' />
                                 <p className='mt-3 text-3xl sm:text-4xl font-medium tracking-tight leading-none'>{value}</p>
-                                <p className='mt-1.5 text-xs text-white/45'>{label}</p>
+                                <p className='mt-1.5 text-xs text-foreground/45'>{label}</p>
                             </div>
                         ))}
                     </div>
@@ -194,7 +194,7 @@ const Catalog = () => {
                             <span className='icon-circle-glass w-14 h-14'><FiTrendingUp className='text-xl' /></span>
                         </div>
                         <p className='text-lg font-medium tracking-tight'>Nothing trending yet</p>
-                        <p className='text-sm text-white/55'>Be the first to grab a course from this category.</p>
+                        <p className='text-sm text-foreground/55'>Be the first to grab a course from this category.</p>
                     </div>
                 )}
             </motion.section>

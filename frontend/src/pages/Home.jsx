@@ -1,311 +1,63 @@
-import { useNavigate, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import toast from "react-hot-toast";
-import { motion } from "motion/react";
-import { FiArrowRight, FiPlay, FiArrowUpRight, FiCheck } from "react-icons/fi";
-import { FaStar } from "react-icons/fa6";
+import { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { FiArrowUpRight, FiArrowRight, FiCode, FiLayers, FiDatabase, FiBookOpen, FiCheck, FiPlay, FiPlus, FiCommand } from 'react-icons/fi';
+import './home.css';
 
-import CodeBlock from "../components/core/HomePage/CodeBlock";
-import LearningLanguage from "../components/core/HomePage/LearningLanguage";
-import CardImage from "../components/core/HomePage/CardImage";
-import { LogoCard } from "../components/core/HomePage/LogoCard";
-import ExploreMore from "../components/core/HomePage/ExploreMore";
-import HeroShowcase from "../components/core/HomePage/HeroShowcase";
-import ReviewSlider from "../components/Common/ReviewSlider";
-import SectionHeader from "../components/ui/SectionHeader";
-import AvatarStack from "../components/ui/AvatarStack";
-import ProgressRing from "../components/ui/ProgressRing";
-import Photo from "../components/ui/Photo";
-import CardData from "../data/CardData";
-
-const TECH = ["React", "Node.js", "Python", "TypeScript", "MongoDB", "Next.js", "Tailwind", "Docker", "Go", "SQL", "Figma", "AI/ML"];
-
-const STATS = [
-  { value: "10K+", label: "Active learners", ring: 82 },
-  { value: "250+", label: "Courses", ring: 64 },
-  { value: "4.9", label: "Average rating", ring: 98 },
-  { value: "10 yrs", label: "Teaching experience", ring: 100 },
+const PATHS = [
+  { name: 'Frontend', icon: FiCode, color: 'lilac', title: 'Make the web your canvas.', description: 'Go from your first element to interfaces people love to use.', skills: ['HTML & CSS', 'JavaScript', 'React'], file: 'your-next-idea.jsx', code: ['function YourNextChapter() {', '  const curiosity = true;', '', '  return (', '    <SomethingGreat', '      builtBy="you"', '      startsWith="one lesson"', '    />', '  );', '}'] },
+  { name: 'Backend', icon: FiDatabase, color: 'sage', title: 'Build what makes it work.', description: 'Explore the APIs, databases, and systems behind great products.', skills: ['Node.js', 'APIs', 'PostgreSQL'], file: 'possibilities.js', code: ['const nextIdea = {', '  creator: "you",', '  possibilities: Infinity,', '};', '', 'app.get("/your-future", () => {', '  return build(nextIdea);', '});', '', '// Start small. Build something real.'] },
+  { name: 'Foundations', icon: FiLayers, color: 'peach', title: 'Big ideas start here.', description: 'Build a solid foundation, one clear concept at a time.', skills: ['Python', 'Logic', 'Problem solving'], file: 'a_fresh_start.py', code: ['def your_next_chapter():', '    curiosity = "a little every day"', '    skills = []', '', '    for idea in possibilities:', '        skills.append(learn(idea))', '', '    return something_new(skills)', '', 'your_next_chapter()'] },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 18 },
-  show: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, type: "spring", stiffness: 200, damping: 26 } }),
-};
-
-const HTML_SNIPPET = `<!DOCTYPE html>
-<html>
-  <head>
-    <title>My first page</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <h1><a href="/">Hello, world!</a></h1>
-    <nav><a href="/learn">Learn</a></nav>
-  </body>
-</html>`;
-
-const JS_SNIPPET = `const learner = { name: "You" };
-
-function levelUp(skill) {
-  return \`\${learner.name} just learned \${skill} ✨\`;
+function HeroShowcase({ path }) {
+  return <div className="home-playground">
+    <div className="home-playground-top"><span><i /> THE POSSIBILITY STUDIO</span><FiCommand /></div>
+    <div className="home-orbit-art" aria-hidden="true"><div className="home-orbit home-orbit-one" /><div className="home-orbit home-orbit-two" /><div className="home-orbit home-orbit-three" /><span className="home-orbit-star">✳</span><span className="home-orbit-note">a little curiosity<br /><b>changes everything.</b></span><span className="home-orbit-plus">+</span></div>
+    <div className="home-editor"><div className="home-editor-bar"><span><i /><i /><i /></span><span>{path.file}</span><FiCode /></div><pre aria-label={`Sample ${path.name} code`}>{path.code.map((line, index) => <div key={index}><span className="home-line-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><code>{line || ' '}</code></div>)}</pre><div className="home-editor-footer"><span><i /> An idea in the making</span><span>Made of possibilities ↗</span></div></div>
+    <Link to="/courses" className="home-floating-link"><span className="home-play-icon"><FiPlay /></span><span>Your next chapter<small>Find your first lesson</small></span><FiArrowUpRight /></Link>
+    <span className="home-playground-caption">LEARN SOMETHING. MAKE SOMETHING.</span>
+  </div>;
 }
 
-levelUp("JavaScript");
-levelUp("React");
-levelUp("Node.js");`;
-
-const Home = () => {
-  const { token } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-
-  const onClickHandler = () => {
-    if (token) {
-      toast.error("You are already logged in please logout and signup as a instructor");
-    } else {
-      navigate("/signup");
-    }
-  };
-
-  return (
-    <div className="overflow-x-clip">
-      {/* ───────────── HERO ───────────── */}
-      <section className="container-x pt-10 md:pt-16 pb-10 grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-6 items-center">
-        <div>
-          <motion.button
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            onClick={onClickHandler}
-            className="group inline-flex items-center gap-2 pl-1 pr-4 py-1 rounded-full glass"
-          >
-            <span className="pill pill-white h-6">New</span>
-            <span className="text-sm text-white/80">Join as an instructor</span>
-            <FiArrowRight className="text-white/60 group-hover:translate-x-0.5 transition-transform" />
-          </motion.button>
-
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={1}
-            className="mt-7 h-display text-[44px] sm:text-6xl xl:text-7xl"
-          >
-            Empower your future with <span className="text-gradient">coding skills</span>
-          </motion.h1>
-
-          <motion.p variants={fadeUp} initial="hidden" animate="show" custom={2} className="mt-6 text-lg text-white/55 max-w-[520px]">
-            Learn at your own pace, from anywhere — with hands-on projects, quizzes and personal feedback from
-            instructors who build for a living.
-          </motion.p>
-
-          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={3} className="mt-9 flex flex-wrap gap-3">
-            <Link to="/signup" className="btn btn-lg btn-gradient">
-              Start learning free <FiArrowRight />
-            </Link>
-            <Link to="/about" className="btn btn-lg btn-glass">
-              <span className="grid place-items-center w-7 h-7 -ml-2 rounded-full bg-white text-night">
-                <FiPlay className="text-xs translate-x-[1px]" />
-              </span>
-              How it works
-            </Link>
-          </motion.div>
-
-          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={4} className="mt-10 flex items-center gap-4">
-            <AvatarStack size={36} count="+10K" />
-            <div className="text-sm">
-              <p className="flex items-center gap-1 text-white">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <FaStar key={i} className="text-citrus text-xs" />
-                ))}
-                <span className="ml-1 font-semibold">4.9</span>
-              </p>
-              <p className="text-white/45">from 2,400+ learner reviews</p>
-            </div>
-          </motion.div>
-        </div>
-
-        <HeroShowcase />
-      </section>
-
-      {/* ───────────── TECH MARQUEE ───────────── */}
-      <div className="container-x">
-        <div className="overflow-hidden mask-fade-x py-6">
-          <div className="flex w-max animate-marquee">
-            {[...TECH, ...TECH].map((t, i) => (
-              <span key={i} className="mx-8 text-lg font-medium text-white/30 whitespace-nowrap">
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
+export default function Home() {
+  const { token } = useSelector(state => state.auth);
+  const [selectedPath, setSelectedPath] = useState(0);
+  const path = PATHS[selectedPath];
+  if (token) return <Navigate to="/courses" replace />;
+  return <div className="home-redesign">
+    <section className="home-hero container-x">
+      <div className="home-hero-copy">
+        <Link to="/educators" className="home-eyebrow-link"><span className="home-dot" /> A place for curious minds <FiArrowUpRight /></Link>
+        <h1>Less scrolling.<br />More <em>becoming.</em><span className="home-heading-star" aria-hidden="true">✳</span></h1>
+        <p>Make room for the things you’ve always wanted to learn. Practical courses. Thoughtful educators. A future you get to build.</p>
+        <div className="home-actions"><Link to="/courses" className="home-button">Find your next skill <FiArrowUpRight /></Link><Link to="/signup" className="home-text-link">Create a free account <FiArrowRight /></Link></div>
+        <div className="home-hero-footnote"><span><FiCheck /> At your own pace</span><span><FiCheck /> From curiosity to practice</span></div>
       </div>
+      <HeroShowcase path={path} />
+    </section>
 
-      {/* ───────────── STATS ───────────── */}
-      <section className="container-x pt-14">
-        <div className="glass grid grid-cols-2 lg:grid-cols-4 divide-white/[0.07] lg:divide-x">
-          {STATS.map((s, i) => (
-            <motion.div
-              key={s.label}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              custom={i}
-              className="flex items-center gap-4 p-6 md:p-8"
-            >
-              <ProgressRing value={s.ring} size={52} stroke={3} color={i === 0 ? "#DDF247" : "rgba(255,255,255,.85)"}>
-                {i === 0 ? <FiCheck className="text-citrus text-sm" /> : `${s.ring}%`}
-              </ProgressRing>
-              <div>
-                <p className="text-3xl md:text-4xl font-medium tracking-tight">{s.value}</p>
-                <p className="text-sm text-white/45">{s.label}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+    <div className="container-x"><div className="home-skill-strip"><span>GOOD THINGS<br /><b>START WITH A SKILL.</b></span><div>{['React', 'JavaScript', 'Python', 'Node.js', 'PostgreSQL', 'Problem solving'].map(skill => <span key={skill}>{skill}<i aria-hidden="true">✳</i></span>)}</div></div></div>
 
-      {/* ───────────── CODE BLOCKS ───────────── */}
-      <section className="container-x">
-        <CodeBlock
-          position="lg:flex-row flex-col"
-          heading={
-            <h2 className="h-display text-4xl md:text-5xl">
-              Unlock your <span className="text-gradient">coding potential</span> with our online courses
-            </h2>
-          }
-          subHeading="Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
-          cpa1={{ btnText: "Try it yourself", linkto: "/signup", active: true }}
-          cpa2={{ btnText: "Learn more", linkto: "/about", active: false }}
-          codeBlock={HTML_SNIPPET}
-          codeColor="text-peach"
-          backgroundGradient="bg-magenta/25"
-          fileName="index.html"
-        />
-        <CodeBlock
-          position="lg:flex-row-reverse flex-col"
-          heading={
-            <h2 className="h-display text-4xl md:text-5xl">
-              Start <span className="text-gradient">coding in seconds</span>
-            </h2>
-          }
-          subHeading="Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson."
-          cpa1={{ btnText: "Continue lesson", linkto: "/signup", active: true }}
-          cpa2={{ btnText: "Learn more", linkto: "/about", active: false }}
-          codeBlock={JS_SNIPPET}
-          codeColor="text-orchid"
-          backgroundGradient="bg-violet/30"
-          fileName="level-up.js"
-        />
-      </section>
+    <section className="container-x home-section" aria-labelledby="home-paths-title">
+      <div className="home-section-heading"><div><p className="home-kicker">01 / FOLLOW YOUR CURIOSITY</p><h2 id="home-paths-title">Find your kind of <em>next.</em></h2></div><Link to="/courses" className="home-text-link">Explore all courses <FiArrowUpRight /></Link></div>
+      <div className="home-path-layout">
+        <div className="home-path-options" role="group" aria-label="Explore a learning direction">{PATHS.map((item, index) => <button key={item.name} onClick={() => setSelectedPath(index)} aria-pressed={selectedPath === index} className={`home-path-option ${selectedPath === index ? 'is-selected' : ''}`}><span className={`home-topic-icon ${item.color}`}><item.icon /></span><span>{item.name}<small>{item.skills.join(' · ')}</small></span><FiArrowUpRight /></button>)}</div>
+        <div className={`home-path-detail ${path.color}`} aria-live="polite"><div className="home-path-index">0{selectedPath + 1}<path.icon /></div><h3>{path.title}</h3><p>{path.description}</p><div className="home-skill-pills">{path.skills.map(skill => <span key={skill}>{skill}</span>)}</div><Link to="/courses">Explore the course library <FiArrowRight /></Link></div>
+      </div>
+    </section>
 
-      {/* ───────────── EXPLORE ───────────── */}
-      <ExploreMore />
+    <section className="container-x home-section" aria-labelledby="home-method-title">
+      <div className="home-section-heading"><div><p className="home-kicker">02 / THE CLASSNOTION WAY</p><h2 id="home-method-title">Built for your <em>momentum.</em></h2></div><p>A little structure.<br />A lot of room to grow.</p></div>
+      <div className="home-bento">
+        <article className="home-bento-main"><div className="home-bento-label"><FiLayers /><span>ONE STEP AT A TIME</span></div><div className="home-learning-map" aria-hidden="true"><span className="home-map-node">01 <FiBookOpen /><b>Understand</b></span><i /><span className="home-map-node">02 <FiCode /><b>Practice</b></span><i /><span className="home-map-node home-map-node-last">03 <FiArrowUpRight /><b>Build</b></span></div><h3>Big ambitions.<br />Manageable chapters.</h3><p>Clear sections and focused lessons help you turn “where do I start?” into “what’s next?”</p></article>
+        <article className="home-bento-small"><div className="home-pace-art" aria-hidden="true">{[30, 46, 40, 68, 58, 86, 100].map((height, i) => <i key={i} style={{ '--bar-height': `${height}%` }} />)}<span>YOUR PACE. YOUR PATH.</span></div><h3>Make progress your way.</h3><p>Learn when it works for you. Pick up where you left off.</p></article>
+        <article className="home-bento-small home-bento-educator"><div className="home-idea-art" aria-hidden="true"><span>{'{'}<i>✳</i>{'}'}</span><small>KNOWLEDGE, SHARED.</small></div><h3>People behind the lessons.</h3><p>Explore educators and discover every course they teach.</p><Link to="/educators" className="home-text-link">Meet your educators <FiArrowUpRight /></Link></article>
+      </div>
+    </section>
 
-      {/* ───────────── VALUES ───────────── */}
-      <section className="container-x py-20 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div>
-          <SectionHeader
-            eyebrow="Why ClassNotion"
-            title={
-              <>
-                Skills for jobs that are <span className="text-gradient">in demand</span>
-              </>
-            }
-            subtitle="Being a competitive specialist takes more than professional skills. Here's what we stand for."
-          />
-          <div className="mt-10 space-y-3">
-            {CardData.map((card) => (
-              <LogoCard key={card.id} index={card.id} name={card.name} description={card.description} logo={card.logo} />
-            ))}
-          </div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ type: "spring", stiffness: 140, damping: 24 }}
-          className="relative"
-        >
-          <div className="absolute -inset-8 rounded-full bg-magenta/25 blur-[90px]" />
-          <Photo src="/assets/Images/TimelineImage.png" alt="Learners" className="relative aspect-[4/5] sm:aspect-[5/5] rounded-5xl border border-white/10">
-            <div className="absolute top-5 left-5 right-5 flex justify-between">
-              <AvatarStack count="+2K" />
-              <span className="pill pill-white">Live cohort</span>
-            </div>
-            <div className="absolute bottom-5 inset-x-5 grid grid-cols-2 gap-3">
-              <div className="glass rounded-3xl p-4 bg-night/30">
-                <p className="text-3xl font-medium tracking-tight">10+</p>
-                <p className="text-xs text-white/60">Years of experience</p>
-              </div>
-              <div className="glass rounded-3xl p-4 bg-night/30">
-                <p className="text-3xl font-medium tracking-tight">250</p>
-                <p className="text-xs text-white/60">Types of courses</p>
-              </div>
-            </div>
-          </Photo>
-        </motion.div>
-      </section>
-
-      {/* ───────────── TOOLKIT ───────────── */}
-      <section className="container-x py-16">
-        <LearningLanguage />
-        <div className="mt-16">
-          <CardImage />
-        </div>
-      </section>
-
-      {/* ───────────── BECOME AN INSTRUCTOR ───────────── */}
-      <section className="container-x py-16">
-        <div className="relative grid lg:grid-cols-2 gap-10 items-center surface rounded-5xl p-4 sm:p-6 overflow-hidden">
-          <div className="absolute -top-40 right-0 w-[460px] h-[460px] rounded-full bg-violet/30 blur-[120px]" />
-          <Photo src="/assets/Images/Instructor.png" alt="Instructor" className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[320px] rounded-4xl">
-            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 glass rounded-full p-1.5 pr-4 bg-night/40">
-              <span className="icon-circle w-9 h-9">
-                <FiPlay className="text-xs translate-x-[1px]" />
-              </span>
-              <div className="flex-1">
-                <p className="text-sm font-medium">Teaching 101 with Daniel</p>
-                <div className="mt-1 h-1 rounded-full bg-white/20">
-                  <div className="h-full w-2/3 rounded-full bg-white" />
-                </div>
-              </div>
-              <span className="text-[11px] text-white/60">12:18 / 28:00</span>
-            </div>
-          </Photo>
-          <div className="relative p-4 sm:p-8">
-            <p className="eyebrow mb-4">For teachers</p>
-            <h2 className="h-display text-4xl md:text-5xl">
-              Become an <span className="text-gradient">instructor</span>
-            </h2>
-            <p className="mt-5 text-white/55 text-lg max-w-[460px]">
-              Instructors from around the world teach millions of students on ClassNotion. We provide the tools and
-              skills to teach what you love.
-            </p>
-            <ul className="mt-8 space-y-3">
-              {["Publish courses with a guided builder", "Track students and income in one place", "Get paid securely"].map((t) => (
-                <li key={t} className="flex items-center gap-3 text-sm text-white/80">
-                  <span className="grid place-items-center w-6 h-6 rounded-full bg-citrus/15 text-citrus">
-                    <FiCheck className="text-xs" />
-                  </span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-            <button onClick={onClickHandler} className="mt-10 btn btn-lg btn-primary">
-              Start teaching today <FiArrowUpRight />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ───────────── REVIEWS ───────────── */}
-      <section className="py-10">
-        <ReviewSlider />
-      </section>
-    </div>
-  );
-};
-
-export default Home;
+    <section className="container-x home-section home-teaching-section">
+      <div className="home-teaching-card"><div className="home-curriculum" aria-label="Example course outline"><div className="home-curriculum-header"><FiBookOpen /><span>YOUR KNOWLEDGE, REIMAGINED</span><FiArrowUpRight /></div><h3>A course only<br /><em>you</em> could teach.</h3>{['Start with an idea', 'Shape your lessons', 'Share your perspective'].map((label, index) => <div className="home-curriculum-row" key={label}><span>0{index + 1}</span>{label}<FiPlus /></div>)}<span className="home-curriculum-note">From a blank page to someone’s breakthrough.</span></div><div className="home-teaching-copy"><p className="home-kicker">03 / MAKE ROOM FOR YOUR IDEAS</p><h2>Someone needs<br />what <em>you know.</em></h2><p>Turn your experience into a course. Organize your lessons, share your perspective, and give curious people somewhere to start.</p><Link to="/signup" className="home-button">Start your teaching chapter <FiArrowUpRight /></Link></div></div>
+    </section>
+  </div>;
+}

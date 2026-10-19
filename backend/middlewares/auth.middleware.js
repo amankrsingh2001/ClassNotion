@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { prisma } = require('../config/database')
 require("dotenv").config()
 //auth  
 const auth = async( req , res , next )=>{
@@ -12,6 +13,9 @@ const auth = async( req , res , next )=>{
          const jwtToken = word[1];
          const token_decode = jwt.verify(jwtToken, process.env.JWT_SECRET)
  
+         const user = await prisma.user.findUnique({ where: { id: token_decode.id }, select: { id: true, accountType: true } })
+         if (!user) return res.status(401).json({ success: false, message: 'Account no longer exists' })
+         token_decode.accountType = user.accountType
          req.authorization = token_decode
          req.user = token_decode // temprory added to check the user 
          next()
@@ -71,3 +75,11 @@ module.exports = {
     isInstructor,
     isAdmin
 }
+const isApprovedEducator = async (req, res, next) => {
+    try {
+        const application = await prisma.educatorApplication.findUnique({ where: { userId: req.user.id }, select: { status: true } })
+        if (application?.status !== 'Approved') return res.status(403).json({ success: false, message: 'Complete your educator profile and wait for admin approval before creating or publishing courses', code: 'EDUCATOR_APPROVAL_REQUIRED' })
+        next()
+    } catch (error) { next(error) }
+}
+module.exports.isApprovedEducator = isApprovedEducator

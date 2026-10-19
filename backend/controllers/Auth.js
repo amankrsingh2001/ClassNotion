@@ -26,7 +26,8 @@ const signUp = handle(async (req, res) => {
         await tx.otp.delete({ where: { id: recentOtp.id } })
         const result = await tx.user.create({
             data: {
-                firstName, lastName, email, password: passwordHash, accountType, contactNumber,
+                firstName, lastName, email, password: passwordHash, accountType: 'Student', contactNumber,
+                ...(accountType === 'Instructor' ? { educatorApplication: { create: {} } } : {}),
                 image: `https://api.dicebear.com/5.x/initials/svg?seed=${encodeURIComponent(firstName + ' ' + lastName)}`,
                 additionalDetails: { create: { gender: '', dateOfBirth: '', about: '', contactNumber: '' } },
             }, include: userInclude,

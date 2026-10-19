@@ -11,7 +11,8 @@
     "db:migrate": "prisma migrate deploy",
     "db:seed": "node prisma/seed.js",
     "test": "node --test test/*.test.js",
-    "test:integration": "node --test test/integration.test.js"
+    "test:integration": "node --test test/integration.test.js",
+    "db:seed:demo": "node prisma/seed-demo.js"
   },
   "keywords": [],
   "author": "",

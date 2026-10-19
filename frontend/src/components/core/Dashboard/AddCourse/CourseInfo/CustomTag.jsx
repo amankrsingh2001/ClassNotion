@@ -1,74 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { RxCross2 } from "react-icons/rx";
-
-const CustomTag = ({ label, name, placeholder, register, errors, setValue, getValues }) => {
-  const [tagValue, setTagValue] = useState('');
-  const [tags, setTags] = useState([]);
-
-
-
-  const addTags = (e) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      if (tagValue.trim()) {
-        setTags([...tags, tagValue.trim()]);
-        setTagValue('');
-        setValue(name, [...tags, tagValue.trim()]);
-      }
-    }
-  };
-
-  const removeHandler = (index) =>{
-        const newValue = [...tags]
-        newValue.splice(index,1)
-        setTags(newValue)
-  }
-  
-
-  useEffect(() => {
-    register(name, {
-      required: true,
-      validate: (value) => value.length > 0
-    });
-
-    const existingTags = getValues(name);
-    if (existingTags && existingTags.length > 0) {
-      setTags(existingTags); // Set existing tags when editing
-    }
-  }, [register, name, getValues]);
-
-
-  
-  return (
-    <div>
-      <label htmlFor={name} className="field-label">
-        {label} <span className="text-rose">*</span>
-      </label>
-      <div className="field flex h-auto min-h-12 flex-wrap items-center gap-2 py-2 focus-within:border-orchid/60 focus-within:bg-white/[0.06] focus-within:ring-4 focus-within:ring-orchid/15">
-        {tags.map((tag, index) => (
-          <span key={index} className="pill pr-1.5">
-            {tag}
-            <button
-              onClick={(index)=>removeHandler(index)}
-              className="grid h-4 w-4 place-items-center rounded-full text-white/60 transition hover:bg-white/20 hover:text-white"
-              aria-label={`Remove ${tag}`}
-            >
-              <RxCross2 className="text-[10px]" />
-            </button>
-          </span>
-        ))}
-        <input
-          id={name}
-          className="h-8 min-w-[160px] flex-1 bg-transparent text-[15px] text-white outline-none placeholder:text-white/30"
-          onChange={(e) => setTagValue(e.target.value)}
-          value={tagValue}
-          placeholder={placeholder}
-          onKeyDown={addTags}
-        />
-      </div>
-      {errors[name] && <p className="field-error">This field is required</p>}
-    </div>
-  );
-};
-
-export default CustomTag;
+import { useEffect, useState } from 'react';
+import { FiX, FiPlus } from 'react-icons/fi';
+export default function CustomTag({ label, name, placeholder, register, errors, setValue, getValues }) {
+  const [value, setInput] = useState('');
+  const [tags, setTags] = useState(() => getValues(name) || []);
+  useEffect(() => { register(name, { validate: values => values?.length > 0 }); }, [name, register]);
+  const update = next => { setTags(next); setValue(name, next, { shouldDirty: true, shouldValidate: true }); };
+  const add = () => { const tag = value.trim(); if (tag && !tags.includes(tag)) update([...tags, tag]); setInput(''); };
+  return <div><label htmlFor={name} className="field-label"><span>{label}<span className="cs-req">*</span></span></label><div className="studio-token-input">{tags.map(tag => <span className="studio-token" key={tag}>{tag}<button type="button" aria-label={`Remove ${tag}`} onClick={() => update(tags.filter(item => item !== tag))}><FiX /></button></span>)}<input id={name} value={value} placeholder={placeholder} onChange={event => setInput(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' || event.key === ',') { event.preventDefault(); add(); } }} /><button type="button" aria-label="Add tag" disabled={!value.trim()} onClick={add}><FiPlus /></button></div><p className="cs-hint">Press Enter or comma to add. Add 3–6 tags.</p>{errors[name] && <p className="field-error">Add at least one tag.</p>}</div>;
+}

@@ -38,12 +38,12 @@ const DeleteAccount = () => {
 
   return (
     <section className="relative overflow-hidden glass border-rose/25 bg-rose/[0.04] p-6 sm:p-8 grid grid-cols-1 xl:grid-cols-[240px_1fr] gap-6 xl:gap-10">
-      <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-rose/20 blur-3xl pointer-events-none" />
+
 
       <div className="relative">
         <p className="eyebrow text-[10px] !text-rose/80">04 · Danger zone</p>
         <h2 className="mt-2 text-xl sm:text-2xl font-medium tracking-tight">Delete account</h2>
-        <p className="mt-2 text-sm text-white/55 leading-relaxed">This action is permanent and cannot be undone.</p>
+        <p className="mt-2 text-sm text-foreground/55 leading-relaxed">This action is permanent and cannot be undone.</p>
       </div>
 
       <div className="relative min-w-0 flex flex-col sm:flex-row gap-5">
@@ -52,7 +52,7 @@ const DeleteAccount = () => {
         </span>
         <div className="flex-1">
           <p className="text-lg font-medium tracking-tight">Would you like to delete account?</p>
-          <p className="mt-1.5 text-sm text-white/55 leading-relaxed">
+          <p className="mt-1.5 text-sm text-foreground/55 leading-relaxed">
             This account may contain Paid Courses. Deleting your account will permanently remove all the content
             associated with it.
           </p>

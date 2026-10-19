@@ -1,99 +1,127 @@
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import { resetCourseState, setStep } from '../../../../../slices/courseSlice'
-import { COURSE_STATUS } from '../../../../../utils/constants'
-import {  editCourseAPI } from '../../../../../services/courseDetail'
-import { useNavigate } from 'react-router-dom'
-import { FiArrowLeft, FiGlobe } from 'react-icons/fi'
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowLeft, FiGlobe, FiLock, FiCheck, FiArrowUpRight, FiEdit2 } from 'react-icons/fi';
+import { resetCourseState, setEditCourse, setStep } from '../../../../../slices/courseSlice';
+import { COURSE_STATUS } from '../../../../../utils/constants';
+import { editCourseAPI } from '../../../../../services/courseDetail';
+import { ActionBar, CoursePreviewCard, Tips } from '../StudioParts';
 
-const PublishCourse = () => {
-    const {register, handleSubmit, setValue, getValues} = useForm()
-    const dispatch = useDispatch()
-    const {course} = useSelector(state=>state.course)
-    const {token} = useSelector(state =>state.auth)
-    const navigate = useNavigate()
+const OPTIONS = [
+  { value: false, icon: FiLock, title: 'Keep as draft', description: 'Only you can see it. Come back and keep refining any time.' },
+  { value: true, icon: FiGlobe, title: 'Publish', description: 'Listed in the catalog so learners can find and enrol.' },
+];
 
-    useEffect(()=>{
-        if(course?.status === COURSE_STATUS.PUBLISHED){
-            setValue('public', true)
-        }
-    })
+export default function PublishCourse() {
+  const { course } = useSelector(state => state.course);
+  const { token } = useSelector(state => state.auth);
+  const [isPublic, setPublic] = useState(course?.status === COURSE_STATUS.PUBLISHED);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const sections = course?.courseContent || [];
+  const lessons = sections.reduce((sum, section) => sum + (section.subSection?.length || 0), 0);
 
-    const onSubmit = () =>{
-        handleCoursePublish()
-    }
-    const goToCourses = () =>{
-        dispatch(resetCourseState())
-        navigate('/dashboard/my-courses')
-    }
+  const save = async event => {
+    event.preventDefault(); setLoading(true);
+    try {
+      const status = isPublic ? COURSE_STATUS.PUBLISHED : COURSE_STATUS.DRAFT;
+      if (course.status !== status) { const data = new FormData(); data.append('courseId', course._id); data.append('status', status); if (!await editCourseAPI(data, token)) return; }
+      dispatch(resetCourseState()); navigate('/dashboard/my-courses');
+    } finally { setLoading(false); }
+  };
 
-    const handleCoursePublish= async ()=>{
-        if(course?.status===COURSE_STATUS.PUBLISHED && getValues("public")===true || (course.status===COURSE_STATUS.DRAFT && getValues("public")===false)){
-            //no need to make an api call
-            goToCourses()
-            return
-        }
-        const formData = new FormData();
-        formData.append("courseId", course._id)
-        const courseStatus = getValues("public") ? COURSE_STATUS.PUBLISHED : COURSE_STATUS.DRAFT
-        formData.append("status", courseStatus);
-         const result = await editCourseAPI(formData, token)
-         if(result){
-            goToCourses()
-         }
+  const editDetails = () => { dispatch(setEditCourse(true)); dispatch(setStep(1)); };
+  const price = Number(course?.price) === 0 ? 'Free' : `₹${Number(course?.price || 0).toLocaleString('en-IN')}`;
+  const tags = Array.isArray(course?.tag) ? course.tag : [];
 
-    }
-
-    const goBack = () =>{
-        dispatch(setStep(2))
-    }
+  const review = [
+    { label: 'Title', value: course?.courseName, step: 1 },
+    { label: 'Price', value: price, step: 1 },
+    { label: 'Cover image', value: course?.thumbnail ? 'Added' : null, step: 1 },
+    { label: 'Curriculum', value: sections.length ? `${sections.length} sections · ${lessons} lessons` : null, step: 2 },
+  ];
 
   return (
-    <div className='glass flex flex-col gap-6 p-5 sm:p-8'>
-        <div className='flex flex-wrap items-end justify-between gap-3'>
+    <form className="cs-workspace" onSubmit={save}>
+      <div className="cs-main">
+        <section className="cs-card">
+          <div className="cs-card-head">
             <div>
-                <p className='eyebrow'>Step 3 of 3</p>
-                <h2 className='mt-2 text-2xl font-medium tracking-tight sm:text-3xl'>Publish settings</h2>
+              <h2>Final review</h2>
+              <p>Here is what learners will get. Jump back to any step to make changes.</p>
             </div>
-            <span className='pill'>Almost there</span>
-        </div>
-        <div className='divider' />
-        <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
-            <label htmlFor='public' className='group block cursor-pointer'>
-                <input type='checkbox' id='public'
-                    {...register("public")}
-                    className='peer sr-only'
-                />
-                <div className='relative flex items-center gap-4 overflow-hidden rounded-4xl border border-white/10 bg-white/[0.04] p-5 transition hover:border-white/20 hover:bg-white/[0.06] peer-checked:border-citrus/30 peer-checked:bg-citrus/[0.06] peer-focus-visible:ring-4 peer-focus-visible:ring-orchid/30 sm:gap-6 sm:p-7
-                  [&_.sw-track]:bg-white/10 peer-checked:[&_.sw-track]:bg-citrus
-                  [&_.sw-knob]:translate-x-0 peer-checked:[&_.sw-knob]:translate-x-6 peer-checked:[&_.sw-knob]:bg-night
-                  [&_.sw-glow]:opacity-0 peer-checked:[&_.sw-glow]:opacity-100'>
-                    <div className='sw-glow pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-citrus/20 blur-3xl transition-opacity duration-500' />
-                    <span className='icon-circle-glass relative h-12 w-12'>
-                        <FiGlobe className='text-lg' />
-                    </span>
-                    <span className='relative flex min-w-0 flex-1 flex-col gap-1'>
-                        <span className='text-lg font-medium tracking-tight sm:text-xl'>Make this course public</span>
-                        <span className='text-sm text-white/55'>If you mark this course as public, it will be visible to all the students.</span>
-                    </span>
-                    <span className='sw-track relative h-8 w-14 shrink-0 rounded-full border border-white/10 transition-colors duration-300'>
-                        <span className='sw-knob absolute left-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-white shadow-card transition-all duration-300' />
-                    </span>
+          </div>
+          <div className="cs-card-body !pt-3">
+            <div className="cs-review-list">
+              {review.map(row => (
+                <div key={row.label} className="cs-review-row">
+                  <i className={row.value ? '' : 'is-warn'}>{row.value ? <FiCheck /> : '!'}</i>
+                  <span>{row.label}</span>
+                  <b title={row.value || ''}>{row.value || 'Missing'}</b>
+                  <button
+                    type="button"
+                    className="cs-icon-btn"
+                    aria-label={`Edit ${row.label.toLowerCase()}`}
+                    title="Edit"
+                    onClick={() => (row.step === 1 ? editDetails() : dispatch(setStep(2)))}
+                  ><FiEdit2 /></button>
                 </div>
-            </label>
-
-            <div className='divider mt-8' />
-            <div className='mt-6 flex flex-wrap justify-end gap-3' >
-                <button type='button' onClick={goBack} className='btn btn-glass'>
-                    <FiArrowLeft /> Back
-                </button>
-                <button className='btn btn-gradient'>Save Changes</button>
+              ))}
             </div>
-        </form>
+          </div>
+        </section>
 
-    </div>
-  )
+        <section className="cs-card">
+          <div className="cs-card-head">
+            <div>
+              <h2>Visibility</h2>
+              <p>You can change this later from My courses.</p>
+            </div>
+          </div>
+          <div className="cs-card-body">
+            <fieldset className="cs-visibility">
+              <legend className="sr-only">Course visibility</legend>
+              {OPTIONS.map(option => (
+                <label key={option.title} className={isPublic === option.value ? 'is-selected' : ''}>
+                  <input type="radio" name="visibility" checked={isPublic === option.value} onChange={() => setPublic(option.value)} />
+                  <span className="cs-visibility-top">
+                    <option.icon />
+                    <span className="cs-radio">{isPublic === option.value && <FiCheck />}</span>
+                  </span>
+                  <b>{option.title}</b>
+                  <small>{option.description}</small>
+                </label>
+              ))}
+            </fieldset>
+          </div>
+        </section>
+
+        <ActionBar hint={isPublic ? <><b>Ready to go live.</b> Learners will see it right away.</> : <>Saved privately as a <b>draft</b>.</>}>
+          <button type="button" className="btn btn-glass" disabled={loading} onClick={() => dispatch(setStep(2))}><FiArrowLeft /> Back</button>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Saving…' : isPublic ? 'Publish course' : 'Save draft'} <FiArrowUpRight />
+          </button>
+        </ActionBar>
+      </div>
+
+      <aside className="cs-aside">
+        <CoursePreviewCard
+          cover={course?.thumbnail}
+          category={course?.Category?.name}
+          title={course?.courseName}
+          description={course?.courseDescription}
+          price={course?.price}
+          tags={tags}
+          sections={sections.length}
+          lessons={lessons}
+        />
+        <Tips title="Before you publish" tips={[
+          'Watch your first lesson once more — first impressions matter.',
+          'Check that every lesson title says what learners will do.',
+          'Share the course link with a friend for quick feedback.',
+        ]} />
+      </aside>
+    </form>
+  );
 }
-
-export default PublishCourse

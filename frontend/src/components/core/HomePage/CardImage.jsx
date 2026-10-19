@@ -20,7 +20,7 @@ const CardImage = () => {
           className="relative glass p-3 overflow-hidden card-hover"
         >
           <div className={`absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl ${card.glow}`} />
-          <div className="relative rounded-3xl bg-white/[0.92] p-4 h-[220px] grid place-items-center overflow-hidden">
+          <div className="relative rounded-3xl bg-foreground/[0.92] p-4 h-[220px] grid place-items-center overflow-hidden">
             <img src={card.src} alt={card.title} className="max-h-full w-auto object-contain" />
           </div>
           <div className="relative flex items-start gap-3 p-4">
@@ -29,7 +29,7 @@ const CardImage = () => {
             </span>
             <div>
               <p className="font-medium">{card.title}</p>
-              <p className="mt-1 text-sm text-white/50">{card.text}</p>
+              <p className="mt-1 text-sm text-foreground/50">{card.text}</p>
             </div>
           </div>
         </motion.div>

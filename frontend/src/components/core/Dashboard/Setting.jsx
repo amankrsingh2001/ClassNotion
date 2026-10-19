@@ -72,7 +72,7 @@ const Setting = () => {
       <div>
         <p className="eyebrow">Account</p>
         <h1 className="h-display text-4xl sm:text-5xl mt-3">Settings</h1>
-        <p className="mt-3 text-white/55">Update your photo, personal details and password.</p>
+        <p className="mt-3 text-foreground/55">Update your photo, personal details and password.</p>
       </div>
 
       {/* Avatar upload */}
@@ -83,7 +83,7 @@ const Setting = () => {
       >
         <form onSubmit={submitHandler} className="flex flex-col sm:flex-row sm:items-center gap-6">
           <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 rounded-full bg-magenta/30 blur-2xl pointer-events-none" />
+
             <button
               type="button"
               onClick={() => inputRef.current.click()}
@@ -108,7 +108,7 @@ const Setting = () => {
 
           <div className="flex-1 min-w-0">
             <p className="text-lg font-medium tracking-tight">Change your profile picture</p>
-            <p className="mt-1 text-sm text-white/55 truncate">
+            <p className="mt-1 text-sm text-foreground/55 truncate">
               {file ? `Selected: ${file.name}` : "No new file selected yet."}
             </p>
             <div className="mt-5 flex flex-wrap gap-2.5">
@@ -166,7 +166,7 @@ const Setting = () => {
                 <option value="Test Engineer">Test Engineer</option>
                 <option value="Ios Developer">Ios Developer</option>
               </select>
-              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
+              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40 pointer-events-none" />
             </div>
           </div>
 
@@ -201,7 +201,7 @@ const Setting = () => {
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
-              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
+              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40 pointer-events-none" />
             </div>
           </div>
 
@@ -247,7 +247,7 @@ const SettingsSection = ({ eyebrow, title, helper, children }) => (
     <div>
       <p className="eyebrow text-[10px]">{eyebrow}</p>
       <h2 className="mt-2 text-xl sm:text-2xl font-medium tracking-tight">{title}</h2>
-      {helper && <p className="mt-2 text-sm text-white/55 leading-relaxed">{helper}</p>}
+      {helper && <p className="mt-2 text-sm text-foreground/55 leading-relaxed">{helper}</p>}
     </div>
     <div className="min-w-0">{children}</div>
   </section>

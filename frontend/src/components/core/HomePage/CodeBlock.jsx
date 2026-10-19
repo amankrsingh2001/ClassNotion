@@ -29,7 +29,7 @@ const CodeBlock = ({
         className="flex flex-col gap-6 lg:w-[46%]"
       >
         {heading}
-        <p className="text-lg text-white/55 max-w-[520px]">{subHeading}</p>
+        <p className="text-lg text-foreground/55 max-w-[520px]">{subHeading}</p>
         <div className="flex flex-wrap gap-3 pt-2">
           <Cpabutton background={buttonBackground} active={cpa1.active} linkto={cpa1.linkto}>
             {cpa1.btnText}
@@ -49,18 +49,18 @@ const CodeBlock = ({
       >
         <div className={`absolute -inset-6 rounded-full blur-[80px] ${backgroundGradient}`} />
         <div className="relative glass bg-surface/80 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/[0.07]">
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-white/15" />
-              <span className="w-3 h-3 rounded-full bg-white/15" />
-              <span className="w-3 h-3 rounded-full bg-white/15" />
+              <span className="w-3 h-3 rounded-full bg-foreground/15" />
+              <span className="w-3 h-3 rounded-full bg-foreground/15" />
+              <span className="w-3 h-3 rounded-full bg-foreground/15" />
             </div>
             <span className="pill h-6 text-[11px] font-mono">
               <FiTerminal /> {fileName}
             </span>
           </div>
           <div className="flex p-5 min-h-[280px] font-mono text-[13px] leading-6">
-            <div className="pr-5 text-right text-white/20 select-none">
+            <div className="pr-5 text-right text-foreground/20 select-none">
               {Array.from({ length: lineCount }, (_, i) => (
                 <p key={i}>{i + 1}</p>
               ))}

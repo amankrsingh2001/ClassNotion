@@ -1,8 +1,9 @@
 // Preserve the public JSON contract used by the React client.
 // Explicit selects prevent credentials from appearing in nested user responses.
 const publicUserSelect = {
-    id: true, firstName: true, lastName: true, email: true,
-    image: true, accountType: true, additionalDetails: true,
+    id: true, firstName: true, lastName: true,
+    image: true, accountType: true,
+    additionalDetails: { select: { about: true, profession: true } },
 }
 const contentInclude = {
     courseContent: {
@@ -31,6 +32,7 @@ const publicCourseInclude = {
 }
 const userInclude = {
     additionalDetails: true,
+    educatorApplication: true,
     teachingCourses: { include: courseInclude },
     enrollments: { include: { course: { include: courseInclude } } },
     courseProgress: { include: { completedVideo: true } },

@@ -74,7 +74,7 @@ const CourseReviewModal = ({setReviewModal}) => {
                     </span>
                     <div>
                         <p className='font-medium'>{user?.firstName} {user?.lastName}</p>
-                        <p className='text-xs text-white/45'>Posting publicly</p>
+                        <p className='text-xs text-foreground/45'>Posting publicly</p>
                     </div>
                 </div>
 
@@ -83,13 +83,13 @@ const CourseReviewModal = ({setReviewModal}) => {
                 onSubmit={handleSubmit(onSubmit)}
                 className='mt-6 flex flex-col items-center gap-5'>
 
-                    <div className='w-full flex justify-center rounded-3xl bg-white/[0.04] border border-white/[0.07] py-3'>
+                    <div className='w-full flex justify-center rounded-3xl bg-foreground/[0.04] border border-foreground/[0.07] py-3'>
                         <ReactStars
                             count={5}
                             // onChange={ratingChanged}
                             size={44}
-                            color='rgba(255,255,255,0.15)'
-                            activeColor="#DDF247"
+                            color='var(--border)'
+                            activeColor="var(--accent)"
                         />
                     </div>
 

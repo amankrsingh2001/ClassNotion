@@ -4,9 +4,9 @@ import AvatarStack from "../../ui/AvatarStack";
 
 // Abstract "artwork" per card (the reference's floral/gradient thumbnails), no image assets needed.
 const ART = [
-  "radial-gradient(circle at 30% 30%, #F5B9A1 0%, transparent 45%), radial-gradient(circle at 70% 70%, #E25FA8 0%, transparent 50%), linear-gradient(135deg,#5B3F5A,#2A1D2C)",
-  "radial-gradient(circle at 70% 25%, #8F6BF2 0%, transparent 45%), radial-gradient(circle at 25% 75%, #C86FD0 0%, transparent 50%), linear-gradient(135deg,#2A1D2C,#141218)",
-  "radial-gradient(circle at 50% 30%, #DDF247 0%, transparent 35%), radial-gradient(circle at 40% 80%, #E25FA8 0%, transparent 50%), linear-gradient(135deg,#5B3F5A,#1C1922)",
+  "linear-gradient(135deg, #627f9c, #294c6f)",
+  "linear-gradient(135deg, #738d83, #36594d)",
+  "linear-gradient(135deg, #9b8d76, #62543d)",
 ];
 
 const CourseCard = ({ data, index, setActive, active }) => {
@@ -18,8 +18,8 @@ const CourseCard = ({ data, index, setActive, active }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, type: "spring", stiffness: 220, damping: 26 }}
       onClick={() => setActive(index)}
-      className={`group relative text-left w-full overflow-hidden rounded-4xl border transition duration-300 ${
-        isActive ? "border-white/25 shadow-glow" : "border-white/10 hover:border-white/20 hover:-translate-y-1"
+      className={`media-contrast group relative text-left w-full overflow-hidden rounded-4xl border transition duration-300 ${
+        isActive ? "border-foreground/25 shadow-glow" : "border-foreground/10 hover:border-foreground/20 hover:-translate-y-1"
       }`}
     >
       <div className="relative aspect-[4/5]">
@@ -33,15 +33,15 @@ const CourseCard = ({ data, index, setActive, active }) => {
         </div>
 
         <div className="absolute bottom-0 inset-x-0 p-5">
-          <p className="text-3xl font-medium tracking-tight text-white">{data.heading}</p>
-          <p className="mt-2 text-sm text-white/55 line-clamp-2">{data.description}</p>
-          <div className="mt-4 flex items-center gap-4 text-xs text-white/80">
+          <p className="text-3xl font-medium tracking-tight text-foreground">{data.heading}</p>
+          <p className="mt-2 text-sm text-foreground/55 line-clamp-2">{data.description}</p>
+          <div className="mt-4 flex items-center gap-4 text-xs text-foreground/80">
             <span className="flex items-center gap-1.5"><FiBarChart2 /> {data.level}</span>
             <span className="flex items-center gap-1.5"><FiVideo /> {data.lessonNumber} lessons</span>
           </div>
-          <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-xs">
-            <span className="text-white/50">{index + 1} of 3</span>
-            <span className="flex items-center gap-1 text-white">Start <FiChevronRight /></span>
+          <div className="mt-4 pt-4 border-t border-foreground/10 flex justify-between text-xs">
+            <span className="text-foreground/50">{index + 1} of 3</span>
+            <span className="flex items-center gap-1 text-foreground">Start <FiChevronRight /></span>
           </div>
         </div>
       </div>

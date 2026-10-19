@@ -23,13 +23,13 @@ const MyCourses = () =>{
         fetchCourses()
     },[])
 
-    return <div className="w-full py-8 text-white sm:py-10">
+    return <div className="w-full py-8 text-foreground sm:py-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
                 <p className="eyebrow">Instructor</p>
                 <h1 className="h-display mt-3 text-4xl sm:text-5xl">
                     My courses
-                    {courses?.length > 0 && <sup className="ml-1 align-super text-base font-medium text-white/45 sm:text-lg">{courses.length}</sup>}
+                    {courses?.length > 0 && <sup className="ml-1 align-super text-base font-medium text-foreground/45 sm:text-lg">{courses.length}</sup>}
                 </h1>
             </div>
             <button className="btn btn-gradient" onClick={()=>(navigate('/dashboard/add-course'))}>Add Course <IoAdd className="text-lg"/></button>

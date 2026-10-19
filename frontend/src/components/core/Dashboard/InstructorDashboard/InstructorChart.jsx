@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {Chart, registerables} from 'chart.js'
+import { useTheme } from '../../../../theme/useTheme'
 import {Doughnut} from "react-chartjs-2"
 
 Chart.register(...registerables)
 
 const InstructorChart = ({ courses }) => {
     const [currChart, setCurrChart] = useState('students')
-    
+    const { theme } = useTheme()
+    const dark = theme === 'dark'
+    const panel = dark ? '#181f2a' : '#ffffff'
+    const label = dark ? '#a3afbf' : '#5d6b7d'
 
-    // Aurora palette (tokens): magenta / violet / peach / citrus / mint / orchid
-    const PALETTE = ['#E25FA8', '#8F6BF2', '#F5B9A1', '#DDF247', '#7FE3C3', '#C86FD0']
+
+    // Restrained categorical colors remain distinct in both themes.
+    const PALETTE = ['#4474a5', '#66958a', '#b09b6c', '#7b88a4', '#a07d86', '#789bac']
 
     const getRandomColors = (numColors) =>{
         const colors = [];
@@ -25,7 +30,7 @@ const InstructorChart = ({ courses }) => {
         datasets:[{
             data:courses.map((course)=>course.totalStudentsEnrolled),
             backgroundColor: getRandomColors(courses.length),
-            borderColor: '#141218',
+            borderColor: panel,
             borderWidth: 3,
             hoverOffset: 8,
         }]
@@ -34,13 +39,13 @@ const InstructorChart = ({ courses }) => {
 
 
     //create data for income info
-    
+
     const chartDataForIncome = {
         labels:courses.map((course)=>course.courseName),
         datasets:[{
             data:courses.map((course)=>course.totalAmountGenerated),
             backgroundColor: getRandomColors(courses.length),
-            borderColor: '#141218',
+            borderColor: panel,
             borderWidth: 3,
             hoverOffset: 8,
         }]
@@ -55,26 +60,26 @@ const InstructorChart = ({ courses }) => {
             legend: {
                 position: 'bottom',
                 labels: {
-                    color: 'rgba(255,255,255,.6)',
+                    color: label,
                     usePointStyle: true,
                     pointStyle: 'circle',
                     boxWidth: 8,
                     boxHeight: 8,
                     padding: 16,
-                    font: { family: 'Plus Jakarta Sans', weight: '500', size: 12 },
+                    font: { family: 'Inter', weight: '500', size: 12 },
                 },
             },
             tooltip: {
-                backgroundColor: 'rgba(20,18,24,.95)',
-                titleColor: '#FFFFFF',
-                bodyColor: 'rgba(255,255,255,.75)',
-                borderColor: 'rgba(255,255,255,.1)',
+                backgroundColor: panel,
+                titleColor: dark ? '#e6ebf2' : '#17202e',
+                bodyColor: label,
+                borderColor: dark ? '#303b4b' : '#dde3eb',
                 borderWidth: 1,
                 cornerRadius: 14,
                 padding: 12,
                 usePointStyle: true,
-                titleFont: { family: 'Plus Jakarta Sans', weight: '600' },
-                bodyFont: { family: 'Plus Jakarta Sans' },
+                titleFont: { family: 'Inter', weight: '600' },
+                bodyFont: { family: 'Inter' },
             },
         },
     }
@@ -114,7 +119,7 @@ const InstructorChart = ({ courses }) => {
                     options={options}
                 />
             ) : (
-                <div className='grid h-full place-items-center text-center text-sm text-white/45'>No data to chart yet</div>
+                <div className='grid h-full place-items-center text-center text-sm text-foreground/45'>No data to chart yet</div>
             )}
         </div>
 

@@ -44,7 +44,7 @@ const ResetPasswordTemp = () => {
             ) : (
               <>
                 We have sent the reset email to{" "}
-                <span className="font-medium text-white break-all">{email}</span>
+                <span className="font-medium text-foreground break-all">{email}</span>
               </>
             )
           }

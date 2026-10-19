@@ -1,43 +1,45 @@
 /** @type {import('tailwindcss').Config} */
-// "Aurora Glass" — inspired by Nixtio's AI Learning Platform shot:
-// near-black UI on a plum ambience, magenta→violet→peach glows, frosted glass, pills, progress rings.
+// Shared semantic colors support light and dark modes.
 export default {
+  darkMode: ["selector", '[data-theme="dark"]'],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
-        display: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        sans: ['"Inter"', "system-ui", "sans-serif"],
+        display: ['"Inter"', "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "monospace"],
       },
       colors: {
-        night: "#0B0A0F", // page base
-        surface: { DEFAULT: "#141218", 2: "#1C1922", 3: "#25212C" },
-        plum: { DEFAULT: "#5B3F5A", deep: "#2A1D2C", soft: "#8A6787" },
-        orchid: "#C86FD0",
-        magenta: "#E25FA8",
-        violet: "#8F6BF2",
-        peach: "#F5B9A1",
-        citrus: "#DDF247", // progress / highlight accent (the yellow-lime ring)
-        mint: "#7FE3C3",
-        rose: "#FF6B81",
+        background: "rgb(var(--canvas) / <alpha-value>)",
+        foreground: "rgb(var(--ink) / <alpha-value>)",
+        night: "rgb(var(--canvas) / <alpha-value>)",
+        surface: { DEFAULT: "rgb(var(--surface) / <alpha-value>)", 2: "rgb(var(--surface-2) / <alpha-value>)", 3: "rgb(var(--surface-3) / <alpha-value>)" },
+        accent: "rgb(var(--accent-rgb) / <alpha-value>)",
+        plum: { DEFAULT: "rgb(var(--accent-rgb) / <alpha-value>)", deep: "rgb(var(--surface-2) / <alpha-value>)", soft: "rgb(var(--accent-rgb) / <alpha-value>)" },
+        orchid: "rgb(var(--accent-rgb) / <alpha-value>)",
+        magenta: "rgb(var(--accent-rgb) / <alpha-value>)",
+        violet: "rgb(var(--accent-rgb) / <alpha-value>)",
+        peach: "rgb(var(--accent-rgb) / <alpha-value>)",
+        citrus: "rgb(var(--success-rgb) / <alpha-value>)",
+        mint: "rgb(var(--success-rgb) / <alpha-value>)",
+        rose: "rgb(var(--danger-rgb) / <alpha-value>)",
       },
       backgroundImage: {
-        brand: "linear-gradient(135deg, #F5B9A1 0%, #E25FA8 45%, #8F6BF2 100%)",
-        "brand-soft":
-          "linear-gradient(135deg, rgba(245,185,161,.25) 0%, rgba(226,95,168,.25) 45%, rgba(143,107,242,.25) 100%)",
+        brand: "linear-gradient(var(--accent), var(--accent))",
+        "brand-soft": "linear-gradient(135deg, var(--accent-soft), transparent)",
         "photo-fade": "linear-gradient(180deg, rgba(11,10,15,0) 35%, rgba(11,10,15,.55) 70%, rgba(11,10,15,.92) 100%)",
-        "pink-wash": "linear-gradient(180deg, rgba(226,95,168,0) 30%, rgba(226,95,168,.55) 100%)",
+        "pink-wash": "linear-gradient(180deg, rgba(15,23,42,0) 30%, rgba(15,23,42,.18) 100%)",
       },
       borderRadius: {
-        "4xl": "2rem",
-        "5xl": "2.5rem",
+        "4xl": "1rem",
+        "5xl": "1.25rem",
       },
       boxShadow: {
-        glow: "0 10px 40px -10px rgba(226,95,168,.55)",
-        "glow-violet": "0 10px 40px -10px rgba(143,107,242,.6)",
-        card: "0 30px 60px -30px rgba(0,0,0,.8)",
-        inset: "inset 0 1px 0 0 rgba(255,255,255,.08)",
+        glow: "none",
+        "glow-violet": "none",
+        card: "var(--shadow)",
+        inset: "none",
       },
       maxWidth: {
         maxContent: "1280px",

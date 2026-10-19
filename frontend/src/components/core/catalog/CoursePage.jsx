@@ -4,8 +4,9 @@ import GetAvgRating from "../../../utils/avgRating";
 import { FiArrowLeft, FiCalendar, FiCheck, FiGlobe, FiPlay, FiShare2, FiShoppingCart, FiUsers, FiArrowUpRight, FiShield } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
+import { enrollFree } from "../../../services/discovery";
 import { buyCourse } from "../../../services/studentFeaturesAPI";
 import toast from "react-hot-toast";
 import ConfirmationModal from '../../Common/ConfirmationModal';
@@ -24,7 +25,15 @@ const CoursePage = ({courseDetail, children}) =>{
     const navigate = useNavigate()
     const {courseId} = useParams()
     const [confirmationModal, setConfirmationModal] = useState(null)
-    const [isStudentEnrolled, setIsStudentEnrolled] = useState(false)
+    const [enrolling, setEnrolling] = useState(false)
+    const isStudentEnrolled = courseDetail?.studentsEnrolled?.includes(user?._id) || false
+    const ownsCourse = courseDetail?.instructor?._id === user?._id
+    const openCourse = () => {
+        const section = courseDetail?.courseContent?.[0]
+        const lesson = section?.subSection?.[0]
+        if (!lesson) return toast.error('This course has no published lessons yet')
+        navigate(`/view-course/${courseId}/section/${section._id}/sub-section/${lesson._id}`)
+    }
 
     useEffect(() => {
         if (courseDetail?.ratingAndReviews) {
@@ -45,18 +54,6 @@ const CoursePage = ({courseDetail, children}) =>{
             </div>
         )
     }
-
-    const checkIsStudentEnrolled=()=>{
-        if(courseDetail?.studentsEnrolled.includes(user._id)){
-            setIsStudentEnrolled(true)
-        }
-    }
-
-    useEffect(()=>{
-        if(courseDetail && user){
-            checkIsStudentEnrolled()
-        }
-    },[courseDetail,user])
 
     const handleAddToCart = () =>{
         if(user && (user.accountType === ACCOUNT_TYPE.INSTRUCTOR || user.accountType ===ACCOUNT_TYPE.ADMIN) ){
@@ -82,21 +79,25 @@ const CoursePage = ({courseDetail, children}) =>{
         toast.success("Copied to clipboad")
     }
 
-    const handleBuyCourse = () =>{
-        if(!token){
-            setConfirmationModal({
-                text1:'You are not logged In',
-                text2:'Please login to purchase the course',
-                btn1Text:'Login',
-                btn2Text:'Cancel',
-                btn1Handler:()=>navigate('/login'),
-                btn2Handler:()=>setConfirmationModal(null),
-            })
+    const handleBuyCourse = async () => {
+        if (!token) {
+            setConfirmationModal({ text1: 'Log in to start learning', text2: 'Your courses and progress will be saved to your account.', btn1Text: 'Log in', btn2Text: 'Cancel', btn1Handler: () => navigate('/login'), btn2Handler: () => setConfirmationModal(null) })
+            return
         }
-        if(token){
-            buyCourse([courseId],token, user, navigate, dispatch)
+        if (ownsCourse) return openCourse()
+        if (user?.accountType !== ACCOUNT_TYPE.STUDENT) return toast.error('Please use a student account to enroll in a course')
+        if (courseDetail.price === 0) {
+            setEnrolling(true)
+            try {
+                await enrollFree(courseId, token)
+                toast.success('Added to your learning')
+                openCourse()
+            } catch (error) {
+                toast.error(error.response?.data?.message || 'Could not enroll. Please try again.')
+            } finally { setEnrolling(false) }
+            return
         }
-
+        buyCourse([courseId], token, user, navigate, dispatch)
     }
 
     const reviewCount = courseDetail?.ratingAndReviews?.length || 0
@@ -105,7 +106,7 @@ const CoursePage = ({courseDetail, children}) =>{
 
     const handlePlay = () => {
         if (isStudentEnrolled) {
-            navigate('/dashboard/enrolled-courses')
+            openCourse()
             return
         }
         document.getElementById('lessons')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -119,7 +120,7 @@ const CoursePage = ({courseDetail, children}) =>{
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: 'spring', stiffness: 220, damping: 24 }}
-                className="relative overflow-hidden rounded-4xl md:rounded-5xl aspect-[4/3] sm:aspect-[16/8] lg:aspect-[16/6] bg-surface border border-white/10 shadow-card"
+                className="media-contrast relative overflow-hidden rounded-4xl md:rounded-5xl aspect-[4/3] sm:aspect-[16/8] lg:aspect-[16/6] bg-surface border border-foreground/10 shadow-card"
             >
                 <img
                     className="absolute inset-0 w-full h-full object-cover"
@@ -142,9 +143,9 @@ const CoursePage = ({courseDetail, children}) =>{
                     type="button"
                     onClick={handlePlay}
                     aria-label={isStudentEnrolled ? 'Go to course' : 'View lessons'}
-                    className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/15 border border-white/25 backdrop-blur-xl transition hover:scale-105"
+                    className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-foreground/15 border border-foreground/25 backdrop-blur-xl transition hover:scale-105"
                 >
-                    <span className="grid place-items-center w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white text-night shadow-glow">
+                    <span className="grid place-items-center w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-foreground text-night shadow-glow">
                         <FiPlay className="text-lg sm:text-xl translate-x-[1px] fill-current" />
                     </span>
                 </button>
@@ -162,17 +163,17 @@ const CoursePage = ({courseDetail, children}) =>{
                     <section className="flex flex-col gap-6">
                         <div>
                             <p className="eyebrow">Course</p>
-                            <h1 className="mt-3 h-display text-4xl sm:text-5xl md:text-6xl text-white break-words">
+                            <h1 className="mt-3 h-display text-4xl sm:text-5xl md:text-6xl text-foreground break-words">
                                 {courseDetail?.courseName}
                             </h1>
                             {courseDetail?.courseDescription && (
-                                <p className="mt-5 text-base md:text-lg text-white/55 max-w-2xl">{courseDetail?.courseDescription}</p>
+                                <p className="mt-5 text-base md:text-lg text-foreground/55 max-w-2xl">{courseDetail?.courseDescription}</p>
                             )}
                         </div>
 
                         {/* Instructor row */}
-                        <div className="flex items-center justify-between gap-4 p-3 pr-5 rounded-[26px] bg-white/[0.04] border border-white/[0.07]">
-                            <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center justify-between gap-4 p-3 pr-5 rounded-[26px] bg-foreground/[0.04] border border-foreground/[0.07]">
+                            <Link to={`/educators/${instructor?._id}`} className="flex items-center gap-3 min-w-0">
                                 <span className="shrink-0 p-[2px] bg-brand rounded-full">
                                     <img
                                         className="w-12 h-12 rounded-full object-cover border-2 border-night bg-surface-2"
@@ -181,12 +182,12 @@ const CoursePage = ({courseDetail, children}) =>{
                                     />
                                 </span>
                                 <div className="min-w-0">
-                                    <p className="text-xs text-white/45">By</p>
+                                    <p className="text-xs text-foreground/45">By</p>
                                     <p className="font-medium truncate">
                                         {courseDetail?.instructor.firstName || "Teacher"} {courseDetail?.instructor.lastName || "Teacher"}
                                     </p>
                                 </div>
-                            </div>
+                            </Link>
                             <div className="flex items-center gap-2 shrink-0">
                                 <span className="hidden sm:block [&>div]:!text-citrus">
                                     <RatingStars Review_Count={avgReviewCount} Star_Size={16}/>
@@ -210,35 +211,35 @@ const CoursePage = ({courseDetail, children}) =>{
                 {/* Right column: sticky purchase card */}
                 <aside className="lg:sticky lg:top-28 w-full max-w-md mx-auto lg:max-w-none">
                     <div className="relative glass-strong p-6 flex flex-col gap-6 overflow-hidden">
-                        <div aria-hidden className="pointer-events-none absolute -top-20 -right-16 w-56 h-56 rounded-full bg-magenta/25 blur-3xl" />
+
 
                         <div className="relative flex items-end justify-between gap-2">
                             <div>
                                 <p className="eyebrow">Price</p>
-                                <p className="mt-2 text-5xl font-medium tracking-tight leading-none">Rs. {courseDetail?.price}</p>
+                                <p className="mt-2 text-5xl font-medium tracking-tight leading-none">{courseDetail.price === 0 ? "Free" : `₹${courseDetail.price}`}</p>
                             </div>
                             <span className="pill pill-citrus">Lifetime access</span>
                         </div>
 
                         {
-                            isStudentEnrolled ? (
-                                <button onClick={()=>navigate('/dashboard/enrolled-courses')} className="btn btn-gradient btn-lg w-full">
+                            isStudentEnrolled || ownsCourse ? (
+                                <button onClick={()=>openCourse()} className="btn btn-gradient btn-lg w-full">
                                     <FiPlay className="fill-current" /> Go to course
                                 </button>
                             ) : (
                                 <div className="flex flex-col gap-3">
-                                    <button onClick={()=>handleBuyCourse()} className="btn btn-gradient btn-lg w-full">
-                                        Buy now <FiArrowUpRight />
+                                    <button onClick={handleBuyCourse} disabled={enrolling} className="btn btn-gradient btn-lg w-full">
+                                        {enrolling ? "Adding to your learning…" : courseDetail.price === 0 ? "Enroll for free" : "Buy now"} <FiArrowUpRight />
                                     </button>
-                                    <button onClick={()=>handleAddToCart()} className="btn btn-glass btn-lg w-full">
+                                    {courseDetail.price > 0 && <button onClick={()=>handleAddToCart()} className="btn btn-glass btn-lg w-full">
                                         <FiShoppingCart /> Add to cart
-                                    </button>
+                                    </button>}
                                 </div>
                             )
                         }
 
-                        <p className="flex items-center justify-center gap-2 text-xs text-white/45">
-                            <FiShield /> 30-day money-back guarantee
+                        <p className="flex items-center justify-center gap-2 text-xs text-foreground/45">
+                            <FiShield /> {courseDetail.price === 0 ? "No payment required" : "Secure checkout"}
                         </p>
 
                         <div className="divider" />
@@ -249,7 +250,7 @@ const CoursePage = ({courseDetail, children}) =>{
                             {
                                 courseDetail?.instructions.map((instruction, index)=>{
                                     return (
-                                        <li className="flex items-start gap-3 text-sm text-white/70" key={index}>
+                                        <li className="flex items-start gap-3 text-sm text-foreground/70" key={index}>
                                             <span className="mt-0.5 shrink-0 grid place-items-center w-5 h-5 rounded-full bg-citrus/15 text-citrus">
                                                 <FiCheck className="text-[11px]" strokeWidth={3} />
                                             </span>

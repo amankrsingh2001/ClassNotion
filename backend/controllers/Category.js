@@ -9,7 +9,7 @@ const createCategory = handle(async (req, res) => {
     res.json({ success: true, message: 'Category created Successfully' })
 })
 const showAllCategory = handle(async (req, res) => {
-    const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } })
+    const categories = await prisma.category.findMany({ orderBy: { name: 'asc' }, include: { course: { where: { status: 'Published' }, select: { id: true } } } })
     res.json({ success: true, message: 'All categories returned successfully', allCategory: apiData(categories) })
 })
 const categoryPageDetails = handle(async (req, res) => {

@@ -30,7 +30,7 @@ const ExploreMore = () => {
       />
 
       {/* Text tabs with superscript counts, like the reference */}
-      <div className="mt-10 flex gap-6 overflow-x-auto no-scrollbar border-b border-white/[0.07]">
+      <div className="mt-10 flex gap-6 overflow-x-auto no-scrollbar border-b border-foreground/[0.07]">
         {tabName.map((el) => {
           const count = HomePageExplore.find((c) => c.tag === el)?.courses.length ?? 0;
           const isActive = currentTab === el;
@@ -38,7 +38,7 @@ const ExploreMore = () => {
             <button
               key={el}
               onClick={() => setMyCards(el)}
-              className={`relative pb-4 text-sm whitespace-nowrap transition ${isActive ? "text-white" : "text-white/45 hover:text-white/80"}`}
+              className={`relative pb-4 text-sm whitespace-nowrap transition ${isActive ? "text-foreground" : "text-foreground/45 hover:text-foreground/80"}`}
             >
               {el}
               <sup className="ml-0.5 text-[10px]">{count}</sup>

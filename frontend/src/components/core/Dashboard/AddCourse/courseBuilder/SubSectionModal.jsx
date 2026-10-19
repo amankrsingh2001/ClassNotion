@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSubSection, updateSubSection } from '../../../../../services/courseDetail'
@@ -6,9 +6,9 @@ import { setCourse } from '../../../../../slices/courseSlice'
 import { RxCross2 } from "react-icons/rx";
 import ThumbnailUpload from '../CourseInfo/ThumbnailUpload'
 import toast from 'react-hot-toast'
-import { motion } from 'motion/react'
 
-const SubSectionModal = ({modalData, setModalData, add=false ,
+const SubSectionModal = ({modalData, setModalData,
+  add = false,
   view = false,
   edit = false
 
@@ -27,12 +27,12 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
         setValue("lectureDesc", modalData.description)
         setValue("lectureVideo", modalData.videoUrl)
     }
-  },[])
+  },[view, edit, modalData.title, modalData.description, modalData.videoUrl, setValue])
 
   const isFormUpdated = () =>{
     const currentValues = getValues();
       if((currentValues.lectureTitle !== modalData.title) || ( currentValues.lectureDesc !== modalData.description ) || (currentValues.lectureVideo !== modalData.videoUrl)){
-        return true 
+        return true
       } else{
         return false
       }
@@ -61,17 +61,17 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
       if(result){
         const updateCourse = course?.courseContent.map((section)=>{
             if(section._id === result._id){
-               return {...section = result}
+               return result
             }else{
                 return {...section}
             }
         })
-        
+
 
        const courseNew =  {...course,courseContent:updateCourse}
         dispatch(setCourse(courseNew))
-    }
       setModalData(null)
+    }
 
   }
 
@@ -83,7 +83,7 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
         if(!isFormUpdated()){
           toast.error("No changes made to the form")
         }else{
-          handleEditSubSection();
+          await handleEditSubSection();
         }
         return
       }
@@ -102,7 +102,7 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
       if(result){
           const updateCourse = course?.courseContent.map((section)=>{
               if(section._id === result._id){
-                 return {...section = result}
+                 return result
               }else{
                   return {...section}
               }
@@ -110,41 +110,36 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
 
          const courseNew =  {...course,courseContent:updateCourse}
           dispatch(setCourse(courseNew))
+        setModalData(null)
       }
-      setModalData(null)
   }
 
-  const modeLabel = view ? "Viewing" : edit ? "Editing" : "Adding"
-  const modeClass = view ? "pill" : edit ? "pill pill-magenta" : "pill pill-citrus"
+  useEffect(() => {
+    const onKey = event => { if (event.key === 'Escape' && !loading) setModalData(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [loading, setModalData])
+
+  const heading = view ? modalData.title : edit ? 'Edit lesson' : 'New lesson'
+  const sectionName = course?.courseContent?.find(section => section._id === (add ? modalData : modalData.sectionId))?.sectionName
+  const eyebrow = view ? 'Lesson preview' : sectionName ? `In “${sectionName}”` : 'Lesson'
+  const formId = 'cs-lesson-form'
 
   return (
-    <div className="fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-night/70 p-4 backdrop-blur-md">
-
-      <motion.div
-        initial={{ opacity: 0, y: 16, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: "spring", stiffness: 240, damping: 24 }}
-        className="glass-strong relative my-8 w-full max-w-[700px] overflow-hidden bg-surface-2/80"
-      >
-        <div className='pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-violet/25 blur-3xl' />
-
-        <div className='relative flex items-center justify-between gap-4 border-b border-white/[0.07] px-5 py-4 sm:px-7 sm:py-5'>
-            <div className='flex items-center gap-3'>
-              <span className={modeClass}>{modeLabel}</span>
-              <p className='text-xl font-medium tracking-tight sm:text-2xl'>Lecture</p>
-            </div>
-            <button
-              type='button'
-              aria-label='Close'
-              className="btn-icon"
-              onClick={() => {!loading ? setModalData(null):{}}}
-            ><RxCross2 /></button>
+    <>
+      <div className="cs-drawer-backdrop" onClick={() => !loading && setModalData(null)} />
+      <aside role="dialog" aria-modal="true" aria-label={heading} className="cs-drawer">
+        <div className='cs-drawer-head'>
+          <div className='min-w-0'>
+            <small className='truncate'>{eyebrow}</small>
+            <h2 className='truncate'>{heading}</h2>
+          </div>
+          <button type='button' aria-label='Close' className="btn-icon" disabled={loading} onClick={() => setModalData(null)}><RxCross2 /></button>
         </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='relative space-y-6 p-5 sm:p-7' encType="multipart/form-data">
-
+        <form id={formId} onSubmit={handleSubmit(async data => { setLoading(true); try { await onSubmit(data); } finally { setLoading(false); } })} className='cs-drawer-body' encType="multipart/form-data">
           <div>
-            <p className='field-label'>Lecture video</p>
+            <p className='field-label'><span>Video{!view && <span className='cs-req'>*</span>}</span></p>
             <ThumbnailUpload name="lectureVideo"
               label="lectureVideo"
               register={register}
@@ -156,44 +151,38 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
             />
           </div>
           <div>
-            <label className='field-label' htmlFor='lectureTitle'>Lecture title</label>
+            <label className='field-label' htmlFor='lectureTitle'><span>Title{!view && <span className='cs-req'>*</span>}</span></label>
             <input id='lectureTitle'
-              placeholder='Enter Lecture Title'
+              placeholder='e.g. Setting up your environment'
               {...register("lectureTitle", {required:true})}
-              className='field'
+              readOnly={view} className='field'
             />
-            {
-              errors.lectureTitle && (<p className='field-error'>Lecture Title is required</p>)
-            }
+            {errors.lectureTitle && <p className='field-error'>Add a lesson title.</p>}
           </div>
           <div>
-            <label className='field-label' htmlFor="lectureDescription">Lecture description</label>
+            <label className='field-label' htmlFor="lectureDescription"><span>Description{!view && <span className='cs-req'>*</span>}</span></label>
             <textarea
               id='lectureDescription'
-              placeholder='Enter Lecture Description'
+              placeholder='What will learners do or understand after this lesson?'
               {...register('lectureDesc', {required:true})}
-              className='field min-h-[130px] resize-y'
+              readOnly={view} className='field'
             />
-            {
-              errors.lectureDesc && (<p className='field-error'>
-                Lecture Description is required
-              </p>)
-            }
+            {errors.lectureDesc && <p className='field-error'>Add a short description.</p>}
           </div>
+        </form>
 
-          {
-            !view && (
-              <div className='flex flex-wrap justify-end gap-3'>
-                <button className='btn btn-glass' onClick={()=>setModalData(null)} type='button'>Cancel</button>
-                <button className='btn btn-gradient'>{edit ? "Save Changes" : "Save"}</button>
-              </div>
-            )
-          }
-
-      </form>
-      </motion.div>
-
-    </div>
+        <div className='cs-drawer-foot'>
+          {view ? (
+            <button type='button' className='btn btn-glass' onClick={() => setModalData(null)}>Close</button>
+          ) : (
+            <>
+              <button disabled={loading} className='btn btn-glass' onClick={()=>setModalData(null)} type='button'>Cancel</button>
+              <button disabled={loading} form={formId} type='submit' className='btn btn-primary'>{loading ? 'Uploading…' : edit ? 'Save changes' : 'Add lesson'}</button>
+            </>
+          )}
+        </div>
+      </aside>
+    </>
   )
 }
 

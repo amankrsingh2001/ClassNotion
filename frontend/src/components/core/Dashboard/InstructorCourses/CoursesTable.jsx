@@ -25,7 +25,7 @@ const CoursesTable = ({courses, setCourses}) => {
         setConfirmationModal(null)
 
     }
-   
+
 
   if (courses.length === 0) {
     return (
@@ -38,7 +38,7 @@ const CoursesTable = ({courses, setCourses}) => {
             </span>
           </div>
           <h2 className='mt-2 text-2xl font-medium tracking-tight'>No courses found</h2>
-          <p className='max-w-md text-white/55'>You haven't created a course yet. Your first one is just a few steps away!</p>
+          <p className='max-w-md text-foreground/55'>You haven't created a course yet. Your first one is just a few steps away!</p>
           <Link to='/dashboard/add-course' className='btn btn-primary mt-2'>Create a course</Link>
         </div>
       </div>
@@ -63,15 +63,15 @@ const CoursesTable = ({courses, setCourses}) => {
                                           course.status === COURSE_STATUS.DRAFT ?( <span className='pill pill-magenta'><FiClock /> Drafted</span>) :(
                                                <span className='pill pill-citrus'><FiCheckCircle /> Published</span>)
                                       }
-                                      <span className='text-xs text-white/40'>Created {`${formatDate(course.createdAt)}`}</span>
+                                      <span className='text-xs text-foreground/40'>Created {`${formatDate(course.createdAt)}`}</span>
                                     </div>
                                     <h2 className='text-lg font-medium capitalize leading-snug tracking-tight sm:text-xl'>{course.courseName}</h2>
-                                    <p className='line-clamp-2 text-sm capitalize text-white/55'>{course.courseDescription}</p>
-                                    <div className='flex items-center gap-4 text-xs text-white/55'>
+                                    <p className='line-clamp-2 text-sm capitalize text-foreground/55'>{course.courseDescription}</p>
+                                    <div className='flex items-center gap-4 text-xs text-foreground/55'>
                                       <span className='inline-flex items-center gap-1.5'><FiClock /> 2hr 30min</span>
                                     </div>
                                 </div>
-                                <div className='flex items-center justify-between gap-4 border-t border-white/[0.07] px-1 pt-3 sm:flex-col sm:items-end sm:justify-center sm:border-0 sm:p-0'>
+                                <div className='flex items-center justify-between gap-4 border-t border-foreground/[0.07] px-1 pt-3 sm:flex-col sm:items-end sm:justify-center sm:border-0 sm:p-0'>
                                   <p className='text-2xl font-medium tracking-tight'>₹{course.price}</p>
                                   <div className='flex gap-2'>
                                     <button

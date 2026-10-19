@@ -30,10 +30,10 @@ const ContactInfo = () =>{
             <span className="pill w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-citrus" /> Contact
             </span>
-            <h1 className="h-display text-5xl sm:text-6xl lg:text-7xl text-white">
+            <h1 className="h-display text-5xl sm:text-6xl lg:text-7xl text-foreground">
                 Let’s <span className="text-gradient">talk</span>
             </h1>
-            <p className="text-white/55 text-base md:text-lg max-w-md">
+            <p className="text-foreground/55 text-base md:text-lg max-w-md">
                 Questions, ideas or partnerships — reach out through any channel below and we’ll get back within a day.
             </p>
         </div>
@@ -44,11 +44,11 @@ const ContactInfo = () =>{
                 return <Tag key={title} href={href} className="row-item group">
                     <span className="icon-circle"><Icon className="text-lg" /></span>
                     <div className="flex-1 min-w-0">
-                        <p className="text-[15px] font-medium text-white">{title}</p>
-                        <p className="text-xs text-white/45 truncate">{detail}</p>
-                        <p className="mt-0.5 text-sm text-white/80 truncate">{linkText}</p>
+                        <p className="text-[15px] font-medium text-foreground">{title}</p>
+                        <p className="text-xs text-foreground/45 truncate">{detail}</p>
+                        <p className="mt-0.5 text-sm text-foreground/80 truncate">{linkText}</p>
                     </div>
-                    <FiChevronRight className="shrink-0 text-white/40 transition group-hover:translate-x-0.5 group-hover:text-white" />
+                    <FiChevronRight className="shrink-0 text-foreground/40 transition group-hover:translate-x-0.5 group-hover:text-foreground" />
                 </Tag>
             })}
         </div>

@@ -49,9 +49,9 @@ const Myprofile = () => {
 
       {/* Hero profile card */}
       <section className="relative glass overflow-hidden p-6 sm:p-8 lg:p-10">
-        <div className="absolute -top-24 -right-16 w-80 h-80 rounded-full bg-magenta/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-28 left-10 w-72 h-72 rounded-full bg-violet/25 blur-3xl pointer-events-none" />
-        <div className="absolute top-10 left-1/2 w-40 h-40 rounded-full bg-peach/15 blur-3xl pointer-events-none" />
+
+
+
 
         <div className="relative flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8">
           <div className="shrink-0 self-start sm:self-center p-[3px] bg-brand rounded-full shadow-glow">
@@ -67,7 +67,7 @@ const Myprofile = () => {
             <p className="h-display mt-4 text-3xl sm:text-4xl lg:text-5xl break-words">
               {user?.firstName + " " + user?.lastName}
             </p>
-            <p className="mt-2 text-white/55 break-all">{user?.email}</p>
+            <p className="mt-2 text-foreground/55 break-all">{user?.email}</p>
           </div>
 
           <IconBtn text="Edit" outline onclick={goToSettings} customClasses="self-start sm:self-center">
@@ -92,7 +92,7 @@ const Myprofile = () => {
               Edit
             </IconBtn>
           </div>
-          <p className="text-white/70 leading-relaxed">
+          <p className="text-foreground/70 leading-relaxed">
             {user?.additionalDetails?.about || "Write something about Yourself"}
           </p>
         </section>
@@ -110,7 +110,7 @@ const Myprofile = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {details.map(({ label, value, icon: Icon }) => (
               <div key={label} className="glass rounded-3xl p-4 flex items-center gap-3 card-hover">
-                <span className="icon-circle-glass w-10 h-10 text-white/80">
+                <span className="icon-circle-glass w-10 h-10 text-foreground/80">
                   <Icon />
                 </span>
                 <div className="min-w-0">

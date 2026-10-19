@@ -39,13 +39,13 @@ const RenderCartCourses = ({ cart }) => {
                   count={5}
                   size={16}
                   edit={false}
-                  color1="rgba(255,255,255,.18)"
-                  color2="#DDF247"
+                  color1="var(--border)"
+                  color2="var(--accent)"
                   activeColor="ffd700"
                   emptyIcon={<FaRegStar />}
                   fullIcon={<IoIosStar />}
                 />
-                <span className="text-xs text-white/45">{course?.ratingAndReviews?.length} Reviews</span>
+                <span className="text-xs text-foreground/45">{course?.ratingAndReviews?.length} Reviews</span>
               </div>
             </div>
 

@@ -2,6 +2,7 @@ const { prisma } = require('../config/database')
 const { uploadOnCloudinary } = require('../utils/imageUploader')
 const { apiData, courseInclude } = require('../utils/apiData')
 const { handle, fail, userId } = require('../utils/http')
+const { projectType } = require('../utils/educatorPolicy')
 const { convertSecondsToDuration } = require('../utils/secToDuration')
 
 function stringArray(value, fallback = []) {
@@ -14,13 +15,14 @@ function stringArray(value, fallback = []) {
 const createCourse = handle(async (req, res) => {
     const { courseName, courseDescription, whatYouWillLearn, category, price, courseTags, instructions, status = 'Draft' } = req.body
     if (!courseName || !courseDescription || !category || price === undefined || !Number.isFinite(Number(price)) || Number(price) < 0 || !['Draft', 'Published'].includes(status)) return fail(res, 400, 'Please provide valid course details')
+    if (!projectType.safeParse(req.body.projectType).success) return fail(res, 400, 'Choose a valid project type before creating a course')
     if (!req.files?.image) return fail(res, 400, 'Course image is required')
     if (!await prisma.category.findUnique({ where: { id: category } })) return fail(res, 404, 'Category details not found')
     const tags = stringArray(courseTags)
     const instructionsArray = stringArray(instructions)
     const image = await uploadOnCloudinary(req.files.image, process.env.FOLDER_NAME)
     const course = await prisma.course.create({
-        data: { courseName, courseDescription, whatYouWillLearn, categoryId: category, instructorId: userId(req), price: Number(price), tag: tags, instructions: instructionsArray, status, thumbnail: image.secure_url },
+        data: { courseName, courseDescription, whatYouWillLearn, categoryId: category, instructorId: userId(req), projectType: req.body.projectType, price: Number(price), tag: tags, instructions: instructionsArray, status, thumbnail: image.secure_url },
         include: courseInclude,
     })
     res.json({ success: true, message: 'Course created', data: apiData(course) })
@@ -32,6 +34,15 @@ const editCourse = handle(async (req, res) => {
     if (!course) return fail(res, 404, 'Course not found')
     if (course.instructorId !== userId(req)) return fail(res, 403, 'You do not own this course')
     const data = {}
+    if (req.body.projectType !== undefined) {
+        if (!projectType.safeParse(req.body.projectType).success) return fail(res, 400, 'Invalid project type')
+        data.projectType = req.body.projectType
+    }
+    if (req.body.status === 'Published') {
+        const application = await prisma.educatorApplication.findUnique({ where: { userId: userId(req) } })
+        if (application?.status !== 'Approved') return fail(res, 403, 'Educator approval is required to publish')
+        if (!course.projectType && !data.projectType) return fail(res, 400, 'Choose a project type before publishing')
+    }
     for (const key of ['courseName', 'courseDescription', 'whatYouWillLearn', 'status']) {
         if (req.body[key] !== undefined) data[key] = req.body[key]
     }
@@ -91,4 +102,23 @@ const deleteCourses = handle(async (req, res) => {
     await prisma.course.delete({ where: { id: courseId } })
     res.json({ success: true, message: 'Course deleted Successfully' })
 })
-module.exports = { createCourse, editCourse, getCourseDetails, getFullCourseDetails, showAllCourses, getInstructorCourses, deleteCourses }
+const enrollFreeCourse = handle(async (req, res) => {
+    const { courseId } = req.body
+    if (!courseId) return fail(res, 400, 'Course ID is required')
+    // Read and enroll in one serializable transaction so a concurrent price or
+    // publication change cannot accidentally grant access to a paid course.
+    await prisma.$transaction(async tx => {
+        const course = await tx.course.findUnique({ where: { id: courseId } })
+        if (!course || course.status !== 'Published') {
+            const error = new Error('Course not found'); error.status = 404; throw error
+        }
+        if (course.price !== 0) {
+            const error = new Error('This course requires payment'); error.status = 400; throw error
+        }
+        const key = { userId: userId(req), courseId }
+        await tx.enrollment.upsert({ where: { userId_courseId: key }, create: key, update: {} })
+        await tx.courseProgress.upsert({ where: { userId_courseId: key }, create: key, update: {} })
+    }, { isolationLevel: 'Serializable' })
+    res.json({ success: true, message: 'You are enrolled in this free course' })
+})
+module.exports = { enrollFreeCourse, createCourse, editCourse, getCourseDetails, getFullCourseDetails, showAllCourses, getInstructorCourses, deleteCourses }

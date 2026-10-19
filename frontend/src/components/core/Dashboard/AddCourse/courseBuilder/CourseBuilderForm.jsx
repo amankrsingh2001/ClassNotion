@@ -1,32 +1,32 @@
+import LessonFolders from '../../../../studio/LessonFolders';
 import { useForm } from 'react-hook-form';
-import IconBtn from '../../../../Common/IconBtn';
-import { FiPlusCircle, FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiPlus, FiArrowLeft, FiArrowRight, FiLayers, FiPlayCircle, FiCheck, FiX } from "react-icons/fi";
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCourse, setEditCourse, setStep } from '../../../../../slices/courseSlice';
 import toast from 'react-hot-toast';
 import { createSection, updateSection } from '../../../../../services/courseDetail';
-import { setLoading } from '../../../../../slices/authSlice';
 import NestedView from './NestedView';
+import { ActionBar, Checklist, CoursePreviewCard, Tips } from '../StudioParts';
 
-
-
+const TIPS = [
+  'Aim for sections of 3–7 lessons, each with one clear goal.',
+  'Keep lessons short — 5 to 15 minutes holds attention best.',
+  'Click a lesson to preview it, or the pencil to edit it.',
+  'Every section needs at least one lesson before publishing.',
+]
 
 const CourseBuilderForm = () =>{
 
-    const {register, handleSubmit, setValue, formState:{errors}} = useForm()
+    const {register, handleSubmit, setValue, setFocus, formState:{errors}} = useForm()
     const [editSectionName, setEditSectionName] = useState(null)
-    const [loading , setLaoding]  = useState(false)
+    const [loading , setLoading]  = useState(false)
     const {course} = useSelector(state => state.course)
     const {token} = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    
-
-
-    
 
         const onSubmit = async(data) =>{
-            setLaoding(true)
+            setLoading(true)
             let result;
 
             if(editSectionName){
@@ -34,7 +34,7 @@ const CourseBuilderForm = () =>{
                 if(result){
                     const updateCourse = course?.courseContent.map((section)=>{
                         if(section._id === result._id){
-                           return {...section = result}
+                           return result
                         }else{
                             return {...section}
                         }
@@ -44,6 +44,7 @@ const CourseBuilderForm = () =>{
                     dispatch(setCourse(courseNew))
                     setEditSectionName(null)
                     setValue('sectionName','')
+                    setLoading(false)
                     return;
                 }
             }else{
@@ -59,7 +60,6 @@ const CourseBuilderForm = () =>{
             }
             setLoading(false)
         }
-
 
         const cancelEdit = () =>{
             setEditSectionName(null)
@@ -77,7 +77,7 @@ const CourseBuilderForm = () =>{
                 return;
             }
             if(course.courseContent.some((section)=>section.subSection.length===0)){
-                toast.error("please add addleast lecture in each section")
+                toast.error("Add at least one lesson to every section")
                 return
             }
             dispatch(setStep(3));
@@ -91,61 +91,101 @@ const CourseBuilderForm = () =>{
             }
             setEditSectionName(sectionId)
             setValue("sectionName", sectionName)
+            setTimeout(() => setFocus('sectionName'), 0)
         }
 
-    return <div className="glass flex flex-col gap-6 p-5 sm:p-8">
-            <div className='flex flex-wrap items-end justify-between gap-3'>
-                <div>
-                    <p className='eyebrow'>Step 2 of 3</p>
-                    <h2 className='mt-2 text-2xl font-medium tracking-tight sm:text-3xl'>Course builder</h2>
-                </div>
-                <span className='pill'>
-                    Sections <sup className='text-white/60'>{course?.courseContent?.length || 0}</sup>
-                </span>
-            </div>
-            <div className='divider' />
-            <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label className='field-label' htmlFor='sectionName'>Section name</label>
-                    <input id='sectionName'
-                        placeholder='Add section name'
-                        {...register("sectionName",{ required:true })}
-                         className='field'
-                    />{
-                        errors.sectionName && (
-                            <p className="field-error">Section name is required</p>
-                        )
-                    }
-                </div>
+    const sections = course?.courseContent || []
+    const lessonCount = sections.reduce((sum, section) => sum + (section.subSection?.length || 0), 0)
+    const emptySections = sections.filter(section => !section.subSection?.length).length
+    const sectionError = errors.sectionName && <p className="field-error">Give the section a name.</p>
 
-                <div className='flex flex-wrap items-center gap-3'>
-                    <button type='submit' className='btn btn-primary' >
-                        <FiPlusCircle className='text-base'/>
-                        {editSectionName ?"Edit Section Name":"Create Section"}
-                    </button>
+    // Inline rename form rendered inside the section header being edited
+    const sectionEditor = (
+        <form className='cs-inline-edit' onSubmit={handleSubmit(onSubmit)}>
+            <input aria-label='Section name' {...register("sectionName",{ required:true })} className='field' placeholder='Section name' />
+            <button type='submit' className='btn btn-primary' disabled={loading} aria-label='Save section name'><FiCheck /></button>
+            <button type='button' className='btn btn-glass' onClick={cancelEdit} aria-label='Cancel rename'><FiX /></button>
+        </form>
+    )
 
-                        {
-                            editSectionName && (
-                                <button type='button'
-                                    onClick={cancelEdit}
-                                    className='btn btn-ghost btn-sm'
-                                >Cancel Edit</button>
-                            )
-                        }
+    return <div className='cs-workspace'>
+        <div className='cs-main'>
+            <LessonFolders courseId={course._id} editable refreshKey={JSON.stringify(course.courseContent)} />
+            <section className='cs-card'>
+                <div className='cs-card-head'>
+                    <div>
+                        <h2>Curriculum</h2>
+                        <p>Organise your course into sections, then add lessons to each one.</p>
+                    </div>
                 </div>
-            </form>
+                <div className='cs-card-body !pt-4'>
+                    <div className='cs-curriculum-stats'>
+                        <span className='cs-stat'><FiLayers /><b>{sections.length}</b> {sections.length === 1 ? 'section' : 'sections'}</span>
+                        <span className='cs-stat'><FiPlayCircle /><b>{lessonCount}</b> {lessonCount === 1 ? 'lesson' : 'lessons'}</span>
+                        {emptySections > 0 && <span className='cs-stat !text-[var(--warn)] !bg-[var(--warn-soft)]'>{emptySections} {emptySections === 1 ? 'section needs' : 'sections need'} a lesson</span>}
+                    </div>
+                </div>
+            </section>
 
-            { course?.courseContent?.length > 0 && (
-                <NestedView handleChangeEditSectionName={handleChangeEditSectionName}/>
+            {sections.length === 0 && (
+                <div className='cs-card cs-empty'>
+                    <span><FiLayers /></span>
+                    <h3>Start with your first section</h3>
+                    <p>Sections group related lessons — like chapters in a book. Name it below to get going.</p>
+                </div>
             )}
-            <div className='divider' />
-            <div className='flex flex-wrap justify-end gap-3'>
-                <button className='btn btn-glass' onClick={goBack}><FiArrowLeft /> Back</button>
-                <button onClick={goToNext} className='btn btn-gradient'>Next
-                <FiArrowRight />
-                </button>
-            </div>
 
+            {sections.length > 0 && (
+                <NestedView
+                    handleChangeEditSectionName={handleChangeEditSectionName}
+                    editingSectionId={editSectionName}
+                    sectionEditor={sectionEditor}
+                    sectionError={sectionError}
+                />
+            )}
+
+            {!editSectionName && (
+                <form className='cs-composer-card' onSubmit={handleSubmit(onSubmit)}>
+                    <p>{sections.length ? 'Add another section' : 'New section'}</p>
+                    <div className='cs-composer'>
+                        <div>
+                            <input id='sectionName'
+                                aria-label='Section name'
+                                placeholder={`e.g. ${sections.length ? 'Working with APIs' : 'Getting started'}`}
+                                {...register("sectionName",{ required:true })}
+                                className='field'
+                            />
+                            {sectionError}
+                        </div>
+                        <button type='submit' className='btn btn-primary' disabled={loading}>
+                            <FiPlus /> {loading ? 'Adding…' : 'Add section'}
+                        </button>
+                    </div>
+                </form>
+            )}
+
+            <ActionBar hint={sections.length === 0 ? 'Add a section to begin.' : emptySections > 0 ? <><b>{emptySections}</b> {emptySections === 1 ? 'section has' : 'sections have'} no lessons yet.</> : <><b>Looks good.</b> Next: review & publish.</>}>
+                <button type='button' className='btn btn-glass' onClick={goBack}><FiArrowLeft /> Back</button>
+                <button type='button' onClick={goToNext} className='btn btn-primary' disabled={loading}>Review & publish <FiArrowRight /></button>
+            </ActionBar>
+        </div>
+
+        <aside className='cs-aside'>
+            <CoursePreviewCard
+                cover={course?.thumbnail}
+                category={course?.Category?.name}
+                title={course?.courseName}
+                price={course?.price}
+                sections={sections.length}
+                lessons={lessonCount}
+            />
+            <Checklist title='Curriculum' items={[
+                { label: 'At least one section', done: sections.length > 0 },
+                { label: 'At least one lesson', done: lessonCount > 0 },
+                { label: 'Every section has a lesson', done: sections.length > 0 && emptySections === 0 },
+            ]} />
+            <Tips tips={TIPS} />
+        </aside>
     </div>
 }
 

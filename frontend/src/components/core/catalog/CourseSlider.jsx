@@ -65,7 +65,7 @@ const CourseSlider = ({ Courses = [] }) => {
             <span className='icon-circle-glass w-14 h-14'><FiInbox className='text-xl' /></span>
           </div>
           <p className='text-lg font-medium tracking-tight'>No courses here yet</p>
-          <p className='text-sm text-white/55'>Check back soon — new courses drop all the time.</p>
+          <p className='text-sm text-foreground/55'>Check back soon — new courses drop all the time.</p>
         </div>
       )}
     </div>

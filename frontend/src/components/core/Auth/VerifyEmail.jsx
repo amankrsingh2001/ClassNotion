@@ -35,25 +35,25 @@ const VerifyEmail = () => {
         className="relative w-full max-w-lg"
       >
         {/* soft glow behind the card */}
-        <div aria-hidden className="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-magenta/25 blur-[100px] pointer-events-none" />
+
 
         <div className="relative glass p-6 sm:p-10">
           <div className="flex items-start justify-between gap-4">
-            <ProgressRing value={(otp.length / 6) * 100} size={72} stroke={3} color="#C86FD0">
-              <span className="grid place-items-center w-12 h-12 rounded-full bg-white text-night">
+            <ProgressRing value={(otp.length / 6) * 100} size={72} stroke={3} color="var(--accent)">
+              <span className="grid place-items-center w-12 h-12 rounded-full bg-foreground text-night">
                 <FiMail className="text-xl" />
               </span>
             </ProgressRing>
             <span className="pill pill-citrus">Almost there</span>
           </div>
 
-          <h1 className="mt-7 h-display text-4xl sm:text-5xl text-white">Verify your email</h1>
-          <p className="mt-3 text-white/55 leading-relaxed">
+          <h1 className="mt-7 h-display text-4xl sm:text-5xl text-foreground">Verify your email</h1>
+          <p className="mt-3 text-foreground/55 leading-relaxed">
             A verification code has been sent to
             {signupData?.email ? (
               <>
                 {" "}
-                <span className="text-white font-medium break-all">{signupData.email}</span>
+                <span className="text-foreground font-medium break-all">{signupData.email}</span>
               </>
             ) : (
               " you"
@@ -71,7 +71,7 @@ const VerifyEmail = () => {
                 <input
                   {...props}
                   placeholder="·"
-                  className="flex-1 min-w-0 max-w-[64px] h-14 sm:h-16 rounded-2xl bg-white/[0.05] border border-white/10 backdrop-blur-xl text-center text-2xl font-medium text-white placeholder:text-white/25 outline-none transition focus:border-orchid/70 focus:bg-white/[0.08] focus:ring-4 focus:ring-orchid/25"
+                  className="flex-1 min-w-0 max-w-[64px] h-14 sm:h-16 rounded-2xl bg-foreground/[0.05] border border-foreground/10 backdrop-blur-xl text-center text-2xl font-medium text-foreground placeholder:text-foreground/25 outline-none transition focus:border-orchid/70 focus:bg-foreground/[0.08] focus:ring-4 focus:ring-orchid/25"
                 />
               )}
               containerStyle={{
@@ -80,7 +80,7 @@ const VerifyEmail = () => {
                 gap: "8px",
               }}
             />
-            <div className="mt-3 flex items-center justify-between text-xs text-white/35">
+            <div className="mt-3 flex items-center justify-between text-xs text-foreground/35">
               <span>{otp.length} of 6</span>
               <span>Check your spam folder too</span>
             </div>
@@ -90,11 +90,11 @@ const VerifyEmail = () => {
           </form>
 
           <div className="mt-6 pt-5 divider flex items-center justify-between gap-3 text-sm">
-            <Link to="/signup" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition">
+            <Link to="/signup" className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground transition">
               <BiArrowBack />
               Back to signup
             </Link>
-            <p className="text-white/35">Resend it</p>
+            <p className="text-foreground/35">Resend it</p>
           </div>
         </div>
       </motion.div>

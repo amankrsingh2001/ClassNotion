@@ -47,7 +47,7 @@ const ShowCourseCard = ({course, height}) => {
     <div className='w-full h-full'>
         <Link
             to={`/courses/${course?._id}`}
-            className='group relative block overflow-hidden rounded-4xl aspect-[4/5] bg-surface border border-white/10 shadow-card transition duration-500 hover:-translate-y-1.5 hover:border-white/20'
+            className='media-contrast group relative block overflow-hidden rounded-4xl aspect-[4/5] bg-surface border border-foreground/10 shadow-card transition duration-500 hover:-translate-y-1.5 hover:border-foreground/20'
         >
             <img
                 src={course?.thumbnail}
@@ -68,10 +68,10 @@ const ShowCourseCard = ({course, height}) => {
 
             {/* Bottom content */}
             <div className='absolute inset-x-0 bottom-0 p-5 sm:p-6 flex flex-col gap-3'>
-                <p className='text-2xl font-medium tracking-tight leading-[1.1] text-white line-clamp-2 break-words'>
+                <p className='text-2xl font-medium tracking-tight leading-[1.1] text-foreground line-clamp-2 break-words'>
                     {course?.courseName}
                 </p>
-                <div className='flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-white/75'>
+                <div className='flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-foreground/75'>
                     <span className='inline-flex items-center gap-1.5'>
                         <FiClock />
                         {duration || `${lectures} ${lectures === 1 ? 'lesson' : 'lessons'}`}
@@ -87,8 +87,8 @@ const ShowCourseCard = ({course, height}) => {
                 </div>
                 <div className='divider' />
                 <div className='flex items-center justify-between gap-3 text-[13px]'>
-                    <span className='text-white/55 truncate'>By <span className='text-white/85'>{instructorName}</span></span>
-                    <span className='inline-flex items-center gap-0.5 font-medium text-white shrink-0'>
+                    <span className='text-foreground/55 truncate'>By <span className='text-foreground/85'>{instructorName}</span></span>
+                    <span className='inline-flex items-center gap-0.5 font-medium text-foreground shrink-0'>
                         View <FiChevronRight className='transition-transform group-hover:translate-x-0.5' />
                     </span>
                 </div>

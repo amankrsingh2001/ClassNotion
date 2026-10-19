@@ -91,7 +91,7 @@ const EnrolledCourses = () => {
                 type="button"
                 onClick={() => setActive(index)}
                 className={`relative shrink-0 pb-2 text-lg sm:text-xl font-medium tracking-tight transition ${
-                  active === index ? "text-white" : "text-white/40 hover:text-white/70"
+                  active === index ? "text-foreground" : "text-foreground/40 hover:text-foreground/70"
                 }`}
                 key={index}
               >
@@ -99,7 +99,7 @@ const EnrolledCourses = () => {
                 <sup className={`ml-0.5 text-[11px] font-semibold ${active === index ? "text-citrus" : ""}`}>
                   {enrolledCourses ? counts[index] : "–"}
                 </sup>
-                {active === index && <span className="absolute left-0 right-3 -bottom-px h-0.5 rounded-full bg-white" />}
+                {active === index && <span className="absolute left-0 right-3 -bottom-px h-0.5 rounded-full bg-foreground" />}
               </button>
             );
           })}
@@ -113,14 +113,14 @@ const EnrolledCourses = () => {
             <div
               key={day.label}
               className={`flex flex-col items-center gap-2.5 py-3 rounded-3xl transition ${
-                day.isToday ? "bg-white/[0.06] border border-white/10" : ""
+                day.isToday ? "bg-foreground/[0.06] border border-foreground/10" : ""
               }`}
             >
-              <span className={`text-[11px] sm:text-xs font-medium ${day.isToday ? "text-white" : "text-white/40"}`}>
+              <span className={`text-[11px] sm:text-xs font-medium ${day.isToday ? "text-foreground" : "text-foreground/40"}`}>
                 {day.label}
               </span>
               {day.isToday ? (
-                <ProgressRing value={avgProgress} size={46} stroke={3.5} color="#DDF247">
+                <ProgressRing value={avgProgress} size={46} stroke={3.5} color="var(--success)">
                   <span className="text-[10px]">
                     {completedCount}/{list.length}
                   </span>
@@ -130,9 +130,9 @@ const EnrolledCourses = () => {
                   value={day.isPast ? avgProgress : 0}
                   size={40}
                   stroke={2.5}
-                  color="rgba(255,255,255,.45)"
+                  color="var(--muted)"
                 >
-                  <span className="text-[11px] text-white/60">{day.date}</span>
+                  <span className="text-[11px] text-foreground/60">{day.date}</span>
                 </ProgressRing>
               )}
             </div>
@@ -151,13 +151,13 @@ const EnrolledCourses = () => {
         /* Empty state */
         <div className="glass p-10 sm:p-14 flex flex-col items-center text-center">
           <div className="relative">
-            <div className="absolute inset-0 -m-6 rounded-full bg-magenta/30 blur-2xl" />
+
             <span className="relative icon-circle-glass w-16 h-16 text-2xl">
               <FiBookOpen />
             </span>
           </div>
           <p className="mt-6 text-2xl font-medium tracking-tight">Nothing to learn yet</p>
-          <p className="mt-2 max-w-md text-white/55">You have not enrolled in any Course yet. Find something you love and start today.</p>
+          <p className="mt-2 max-w-md text-foreground/55">You have not enrolled in any Course yet. Find something you love and start today.</p>
           <Link to="/" className="btn btn-primary mt-6">
             Browse courses
           </Link>
@@ -167,7 +167,7 @@ const EnrolledCourses = () => {
           <section className="flex flex-col gap-3">
             <div className="flex items-baseline justify-between px-1 mb-1">
               <p className="text-lg font-medium tracking-tight">
-                Schedule <span className="text-white/40">Today, {todayLabel}</span>
+                Schedule <span className="text-foreground/40">Today, {todayLabel}</span>
               </p>
             </div>
 
@@ -204,17 +204,17 @@ const EnrolledCourses = () => {
                     <p className="text-[15px] sm:text-base font-medium leading-tight truncate">
                       {course?.courseName || "Course Name"}
                     </p>
-                    <div className="mt-1 flex items-center gap-2 text-sm text-white/50 min-w-0">
+                    <div className="mt-1 flex items-center gap-2 text-sm text-foreground/50 min-w-0">
                       {course?.totalDuration && (
                         <span className="shrink-0 inline-flex items-center gap-1">
                           <FiClock className="text-xs" /> {course?.totalDuration}
                         </span>
                       )}
-                      {course?.totalDuration && <span className="shrink-0 text-white/20">•</span>}
+                      {course?.totalDuration && <span className="shrink-0 text-foreground/20">•</span>}
                       <span className="truncate">{course?.courseDescription || "Course Description"}</span>
                     </div>
                     {/* thin bar on mobile */}
-                    <div className="sm:hidden mt-2 h-1 rounded-full bg-white/10 overflow-hidden">
+                    <div className="sm:hidden mt-2 h-1 rounded-full bg-foreground/10 overflow-hidden">
                       <div
                         className={`h-full rounded-full ${done ? "bg-citrus" : "bg-brand"}`}
                         style={{ width: `${Math.min(progress, 100)}%` }}
@@ -231,16 +231,17 @@ const EnrolledCourses = () => {
                         </span>
                       </span>
                     ) : (
-                      <ProgressRing value={progress} size={42} stroke={3} color="#E25FA8">
+                      <ProgressRing value={progress} size={42} stroke={3} color="var(--accent)">
                         <span className="text-[10px]">{progress}%</span>
                       </ProgressRing>
                     )}
-                    <span className="inline-flex items-center gap-0.5 text-sm text-white/55 group-hover:text-white transition min-w-[84px] justify-end">
+                    <span className="inline-flex items-center gap-0.5 text-sm text-foreground/55 group-hover:text-foreground transition min-w-[84px] justify-end">
                       {lessons} {lessons === 1 ? "lesson" : "lessons"}
                       <FiChevronRight />
                     </span>
                   </div>
-                  <FiChevronRight className="sm:hidden shrink-0 text-white/40" />
+                  <Link onClick={event => event.stopPropagation()} to={`/dashboard/messages?course=${encodeURIComponent(course._id)}`} className="btn btn-glass btn-sm">Message educator</Link>
+                  <FiChevronRight className="sm:hidden shrink-0 text-foreground/40" />
                 </div>
               );
             })}
@@ -248,27 +249,27 @@ const EnrolledCourses = () => {
 
           {/* Overview */}
           <aside className="glass relative overflow-hidden p-6 xl:sticky xl:top-24">
-            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-violet/25 blur-3xl pointer-events-none" />
+
             <p className="relative eyebrow text-[10px]">Overview</p>
             <div className="relative mt-5 flex items-center gap-5">
-              <ProgressRing value={avgProgress} size={96} stroke={6} color="#DDF247">
+              <ProgressRing value={avgProgress} size={96} stroke={6} color="var(--success)">
                 <span className="text-xl font-medium">{avgProgress}%</span>
               </ProgressRing>
               <div>
-                <p className="text-sm text-white/55">Average progress</p>
+                <p className="text-sm text-foreground/55">Average progress</p>
                 <p className="mt-1 text-lg font-medium tracking-tight">
                   {completedCount} of {list.length} done
                 </p>
               </div>
             </div>
             <div className="relative mt-6 grid grid-cols-2 gap-3">
-              <div className="rounded-3xl bg-white/[0.04] border border-white/[0.07] p-4">
+              <div className="rounded-3xl bg-foreground/[0.04] border border-foreground/[0.07] p-4">
                 <p className="text-3xl font-medium tracking-tight">{counts[1]}</p>
-                <p className="mt-1 text-xs text-white/45">In progress</p>
+                <p className="mt-1 text-xs text-foreground/45">In progress</p>
               </div>
-              <div className="rounded-3xl bg-white/[0.04] border border-white/[0.07] p-4">
+              <div className="rounded-3xl bg-foreground/[0.04] border border-foreground/[0.07] p-4">
                 <p className="text-3xl font-medium tracking-tight">{completedCount}</p>
-                <p className="mt-1 text-xs text-white/45">Completed</p>
+                <p className="mt-1 text-xs text-foreground/45">Completed</p>
               </div>
             </div>
           </aside>

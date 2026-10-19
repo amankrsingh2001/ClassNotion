@@ -73,7 +73,7 @@ const Instructor = () => {
   ];
 
   return (
-    <div className="w-full py-8 text-white sm:py-10">
+    <div className="w-full py-8 text-foreground sm:py-10">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ const Instructor = () => {
           <h1 className="h-display mt-3 text-4xl sm:text-5xl">
             Good to see you, <span className="text-gradient">{user.firstName}</span>
           </h1>
-          <p className="mt-3 text-white/55">Let's start something new</p>
+          <p className="mt-3 text-foreground/55">Let's start something new</p>
         </div>
         <Link to="/dashboard/add-course" className="btn btn-gradient">
           <FiPlus /> New course
@@ -128,7 +128,7 @@ const Instructor = () => {
                     </div>
                   </div>
                   <p className="mt-6 break-all text-4xl font-medium tracking-tight">{stat.value}</p>
-                  <p className="mt-1 text-sm text-white/45">{stat.label}</p>
+                  <p className="mt-1 text-sm text-foreground/45">{stat.label}</p>
                 </motion.div>
               );
             })}
@@ -143,7 +143,7 @@ const Instructor = () => {
           <div className="mt-12">
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-2xl font-medium tracking-tight">
-                Your courses <sup className="text-sm text-white/45">{courses.length}</sup>
+                Your courses <sup className="text-sm text-foreground/45">{courses.length}</sup>
               </h2>
               <Link to={"/dashboard/my-courses"} className="btn btn-ghost btn-sm">
                 View all <FiChevronRight />
@@ -154,7 +154,7 @@ const Instructor = () => {
                 return (
                   <div
                     key={course._id}
-                    className="card-hover relative aspect-[4/5] w-[78%] shrink-0 snap-start overflow-hidden rounded-4xl border border-white/10 sm:w-auto"
+                    className="card-hover relative aspect-[4/5] w-[78%] shrink-0 snap-start overflow-hidden rounded-4xl border border-foreground/10 sm:w-auto"
                   >
                     <img src={course?.thumbnail} alt={course.courseName} className="absolute inset-0 h-full w-full object-cover" />
                     <div className="absolute inset-0 bg-pink-wash mix-blend-screen" />
@@ -166,12 +166,12 @@ const Instructor = () => {
 
                     <div className="absolute inset-x-0 bottom-0 p-5">
                       <p className="line-clamp-2 text-2xl font-medium capitalize leading-tight tracking-tight">{course.courseName}</p>
-                      <p className="mt-2 line-clamp-2 text-sm capitalize text-white/60">{course.courseDescription.length>200?course.courseDescription.slice(0,200):course.courseDescription}</p>
-                      <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4 text-sm">
-                        <span className="inline-flex items-center gap-1.5 text-white/75">
+                      <p className="mt-2 line-clamp-2 text-sm capitalize text-foreground/60">{course.courseDescription.length>200?course.courseDescription.slice(0,200):course.courseDescription}</p>
+                      <div className="mt-4 flex items-center justify-between gap-3 border-t border-foreground/10 pt-4 text-sm">
+                        <span className="inline-flex items-center gap-1.5 text-foreground/75">
                           <FiUsers /> {course?.studentsEnrolled.length} Students
                         </span>
-                        <span className="inline-flex items-center gap-1 text-white/75">
+                        <span className="inline-flex items-center gap-1 text-foreground/75">
                           Rs: {course?.price}
                         </span>
                       </div>
@@ -185,13 +185,13 @@ const Instructor = () => {
       ) : (
         <div className="glass relative mt-8 flex flex-col items-center gap-4 overflow-hidden px-6 py-16 text-center">
           <div className="relative">
-            <div className="absolute inset-0 scale-[2.2] rounded-full bg-violet/30 blur-2xl" />
+
             <span className="icon-circle-glass relative h-16 w-16">
               <FiPlus className="text-2xl" />
             </span>
           </div>
           <h2 className="mt-2 text-2xl font-medium tracking-tight">You haven't created any course yet</h2>
-          <p className="max-w-md text-white/55">Build your first course and your stats will show up right here.</p>
+          <p className="max-w-md text-foreground/55">Build your first course and your stats will show up right here.</p>
           <Link to={"/dashboard/add-course"} className="btn btn-primary mt-2">
             Create a course
           </Link>

@@ -37,13 +37,13 @@ const Cart = () => {
       ) : (
         <div className="glass p-10 sm:p-14 flex flex-col items-center text-center">
           <div className="relative">
-            <div className="absolute inset-0 -m-6 rounded-full bg-magenta/30 blur-2xl" />
+
             <span className="relative icon-circle-glass w-16 h-16 text-2xl">
               <FiShoppingBag />
             </span>
           </div>
           <p className="mt-6 text-2xl font-medium tracking-tight">Your Cart is Empty</p>
-          <p className="mt-2 max-w-md text-white/55">Nothing here yet. Add a course or two and they'll show up right here.</p>
+          <p className="mt-2 max-w-md text-foreground/55">Nothing here yet. Add a course or two and they'll show up right here.</p>
           <Link to="/" className="btn btn-primary mt-6">
             Find a course
           </Link>

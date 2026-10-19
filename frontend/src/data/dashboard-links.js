@@ -1,5 +1,8 @@
 import { ACCOUNT_TYPE } from "../utils/constants";
 export const sidebarLinks = [
+  { id: 20, name: 'Educator profile', path: '/dashboard/educator-profile', icon: 'VscVerified' },
+  { id: 21, name: 'Messages', path: '/dashboard/messages', icon: 'VscCommentDiscussion' },
+  { id: 22, name: 'Educator reviews', path: '/dashboard/educator-reviews', type: ACCOUNT_TYPE.ADMIN, icon: 'VscChecklist' },
   {
     id: 1,
     name: "My Profile",

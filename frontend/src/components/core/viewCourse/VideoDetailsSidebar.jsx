@@ -45,7 +45,7 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
         <aside className='w-full lg:sticky lg:top-28'>
           <div className='glass flex flex-col overflow-hidden lg:max-h-[calc(100vh-8.5rem)]'>
             {/* buttons, heading and progress */}
-            <div className='p-5 flex flex-col gap-5 border-b border-white/[0.07]'>
+            <div className='p-5 flex flex-col gap-5 border-b border-foreground/[0.07]'>
               <div className='flex items-center justify-between gap-2'>
                 <button aria-label='Back to enrolled courses' className='btn-icon' onClick={()=>{navigate('/dashboard/enrolled-courses')}}>
                   <FiArrowLeft />
@@ -56,17 +56,17 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
               </div>
 
               <div className='flex items-center gap-4'>
-                <ProgressRing value={progress} size={60} stroke={4} color='#DDF247'>
+                <ProgressRing value={progress} size={60} stroke={4} color='var(--success)'>
                   <span className='text-xs'>{progress}%</span>
                 </ProgressRing>
                 <div className='min-w-0'>
                   <p className='text-2xl font-medium tracking-tight leading-none'>Lessons</p>
-                  <p className='mt-1.5 text-sm text-white/55'>
+                  <p className='mt-1.5 text-sm text-foreground/55'>
                     <span className='text-citrus font-medium'>{doneLectures}</span>/{totalLectures} completed
                   </p>
                 </div>
               </div>
-              <p className='text-sm text-white/45 line-clamp-2 break-words'>{courseEntireData?.courseName}</p>
+              <p className='text-sm text-foreground/45 line-clamp-2 break-words'>{courseEntireData?.courseName}</p>
             </div>
 
             {/* sections and subsections */}
@@ -79,18 +79,18 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
                      <div
                       onClick={()=>setActiveStatus(course?._id)}
                       key={index}
-                      className={`cursor-pointer rounded-[24px] border transition-colors ${isOpen ? 'bg-white/[0.05] border-white/[0.12]' : 'border-transparent hover:bg-white/[0.04]'}`}
+                      className={`cursor-pointer rounded-[24px] border transition-colors ${isOpen ? 'bg-foreground/[0.05] border-foreground/[0.12]' : 'border-transparent hover:bg-foreground/[0.04]'}`}
                     >
                       {/* section */}
                       <div className='flex items-center gap-3 px-3 py-3'>
-                        <span className='grid place-items-center shrink-0 w-9 h-9 rounded-full bg-white/[0.08] border border-white/10 text-xs font-semibold'>
+                        <span className='grid place-items-center shrink-0 w-9 h-9 rounded-full bg-foreground/[0.08] border border-foreground/10 text-xs font-semibold'>
                           {String(index + 1).padStart(2, '0')}
                         </span>
                         <span className='flex-1 min-w-0'>
                           <span className='block text-sm font-medium break-words'>{course?.sectionName}</span>
-                          <span className='block text-xs text-white/45 mt-0.5'>{doneInSection}/{course?.subSection?.length || 0} done</span>
+                          <span className='block text-xs text-foreground/45 mt-0.5'>{doneInSection}/{course?.subSection?.length || 0} done</span>
                         </span>
-                        <FiChevronDown className={`shrink-0 text-white/55 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                        <FiChevronDown className={`shrink-0 text-foreground/55 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                       </div>
 
                       {/* subSections */}
@@ -105,7 +105,7 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
                                     <div
                                     key={index}
                                     onClick={()=>{navigate(`/view-course/${courseEntireData?._id}/section/${course?._id}/sub-section/${topic?._id}`)}}
-                                      className={`flex items-center gap-3 cursor-pointer p-2 pr-3 rounded-[18px] text-sm transition-colors ${isActive ? 'bg-white/[0.1] border border-white/15' : 'border border-transparent hover:bg-white/[0.05]'}`}
+                                      className={`flex items-center gap-3 cursor-pointer p-2 pr-3 rounded-[18px] text-sm transition-colors ${isActive ? 'bg-foreground/[0.1] border border-foreground/15' : 'border border-transparent hover:bg-foreground/[0.05]'}`}
                                     >
                                       <span className='relative shrink-0 grid place-items-center w-8 h-8'>
                                         <input type='checkbox'
@@ -113,12 +113,12 @@ const VideoDetailsSidebar = ({ setReviewModal }) => {
                                           checked = {isDone}
                                           onChange={()=>{}}
                                         />
-                                        <span className={`absolute inset-0 rounded-full ${isDone ? 'bg-citrus' : isActive ? 'bg-white' : 'bg-white/[0.06] border border-white/15'}`} />
+                                        <span className={`absolute inset-0 rounded-full ${isDone ? 'bg-citrus' : isActive ? 'bg-foreground' : 'bg-foreground/[0.06] border border-foreground/15'}`} />
                                         {isDone
                                           ? <FiCheck className='relative text-sm text-night' strokeWidth={3} />
                                           : isActive && <FiPlay className='relative text-[11px] text-night fill-current translate-x-[1px]' />}
                                       </span>
-                                      <span className={`break-words min-w-0 ${isActive ? 'text-white font-medium' : isDone ? 'text-white/55' : 'text-white/75'}`}>{topic.title}</span>
+                                      <span className={`break-words min-w-0 ${isActive ? 'text-foreground font-medium' : isDone ? 'text-foreground/55' : 'text-foreground/75'}`}>{topic.title}</span>
                                     </div>
                                 )
                               })

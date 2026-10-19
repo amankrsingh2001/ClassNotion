@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FiCheck } from 'react-icons/fi';
 import { getNewCourseDetail } from '../services/courseDetail';
 import { useSelector } from 'react-redux';
@@ -51,22 +51,22 @@ const CourseDetail = () =>{
 
                 {/* What you'll learn */}
                 <section className="relative overflow-hidden glass p-6 sm:p-8">
-                    <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-16 w-64 h-64 rounded-full bg-violet/20 blur-3xl" />
+
                     <p className="relative eyebrow">Outcomes</p>
                     <h2 className="relative mt-2 text-2xl md:text-3xl font-medium tracking-tight">What you'll learn</h2>
                     {courseDetail?.whatYouWillLearn && (
-                        <p className="relative mt-4 text-white/70 whitespace-pre-line">{courseDetail?.whatYouWillLearn}</p>
+                        <p className="relative mt-4 text-foreground/70 whitespace-pre-line">{courseDetail?.whatYouWillLearn}</p>
                     )}
                     {courseDetail?.tag?.length > 0 && (
                         <ul className="relative mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                             {
                                 courseDetail?.tag?.map((it, index)=>{
                                     return (
-                                        <li key={index} className="flex items-center gap-3 rounded-2xl bg-white/[0.04] border border-white/[0.07] px-3 py-2.5 text-sm">
+                                        <li key={index} className="flex items-center gap-3 rounded-2xl bg-foreground/[0.04] border border-foreground/[0.07] px-3 py-2.5 text-sm">
                                             <span className="shrink-0 grid place-items-center w-6 h-6 rounded-full bg-citrus text-night">
                                                 <FiCheck className="text-xs" strokeWidth={3} />
                                             </span>
-                                            <span className="break-words min-w-0 text-white/85">{it}</span>
+                                            <span className="break-words min-w-0 text-foreground/85">{it}</span>
                                         </li>
                                     )
                                 })
@@ -91,7 +91,8 @@ const CourseDetail = () =>{
                         <div className="min-w-0">
                             <p className="text-xl font-medium tracking-tight">{instructor?.firstName} {instructor?.lastName}</p>
                             <span className="pill pill-magenta mt-2">Instructor</span>
-                            <p className="mt-4 text-white/55 leading-relaxed">{instructor?.additionalDetails?.about || "I will be your lead trainer in this course. Within no time, I will help you to understand the subject in an easy manner. I have a huge experience in online training and recording videos. Let's get started!"}</p>
+                            <Link to={`/educators/${instructor?._id}`} className="btn btn-glass btn-sm ml-3">View educator & all courses</Link>
+                            <p className="mt-4 text-foreground/55 leading-relaxed">{instructor?.additionalDetails?.about || "I will be your lead trainer in this course. Within no time, I will help you to understand the subject in an easy manner. I have a huge experience in online training and recording videos. Let's get started!"}</p>
                         </div>
                     </div>
                 </section>

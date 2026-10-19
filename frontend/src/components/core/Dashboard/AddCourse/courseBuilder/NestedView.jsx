@@ -1,14 +1,14 @@
 import toast from 'react-hot-toast'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FiEdit2, FiTrash2, FiChevronDown, FiPlay, FiPlus } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiChevronDown, FiPlay, FiPlus, FiAlertTriangle } from "react-icons/fi";
 import SubSectionModal from './SubSectionModal';
 import ConfirmationModal from '../../../../Common/ConfirmationModal';
 import { deleteSection, deleteSubSection } from '../../../../../services/courseDetail';
 import { setCourse } from '../../../../../slices/courseSlice';
 
 
-const NestedView = ({ handleChangeEditSectionName }) => {
+const NestedView = ({ handleChangeEditSectionName, editingSectionId, sectionEditor, sectionError }) => {
 
   const {course} = useSelector(state => state.course)
   const {token} = useSelector(state => state.auth)
@@ -19,7 +19,13 @@ const NestedView = ({ handleChangeEditSectionName }) => {
   const[editSubSection, setEditSubSection] = useState(null)
 
   const [confirmationModal, setConfirmationModal] = useState(null)
-  
+  const [collapsed, setCollapsed] = useState(() => new Set())
+
+  const toggle = id => setCollapsed(prev => {
+    const next = new Set(prev)
+    next.has(id) ? next.delete(id) : next.add(id)
+    return next
+  })
 
   const handleDeleteSection = async(sectionId,courseId, token) =>{
 
@@ -27,7 +33,7 @@ const NestedView = ({ handleChangeEditSectionName }) => {
         const result = await deleteSection(data, token)
           if(result){
             const deletedSection = course.courseContent.filter((section)=>{
-            return (section._id !== result._id)  
+            return (section._id !== result._id)
             })
             const updatedCourseContent = {...course, courseContent:deletedSection}
             dispatch(setCourse(updatedCourseContent))
@@ -49,111 +55,113 @@ const NestedView = ({ handleChangeEditSectionName }) => {
     }
     setConfirmationModal(null)
   }
- 
+
 
   return (
-    <div>
-
+    <>
       <div className='flex flex-col gap-3'>
-
         {course?.courseContent?.map((section, sIndex)=>{
+          const isEditing = editingSectionId === section._id
+          const isCollapsed = collapsed.has(section._id)
+          const lessons = section.subSection || []
 
           return (
-          <details key={section._id} className='glass group overflow-hidden rounded-3xl open:bg-white/[0.06]'>
-            <summary className='flex cursor-pointer list-none items-center justify-between gap-3 p-3 pl-4 sm:p-4 sm:pl-5 [&::-webkit-details-marker]:hidden'>
-                <div className='flex min-w-0 items-center gap-3'>
-                <span className='grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/[0.06] text-xs font-semibold text-white/60'>
-                  {String(sIndex + 1).padStart(2, '0')}
-                </span>
-                <div className='min-w-0'>
-                  <p className='truncate font-medium tracking-tight'>{section.sectionName}</p>
-                  <p className='text-xs text-white/45'>{section.subSection?.length || 0} lessons</p>
+          <section key={section._id} className={`cs-section ${isEditing ? 'is-editing' : ''} ${lessons.length === 0 ? 'is-incomplete' : ''}`}>
+            <header className='cs-section-head'>
+              <button type='button' className={`cs-collapse ${isCollapsed ? 'is-collapsed' : ''}`} onClick={() => toggle(section._id)} aria-label={isCollapsed ? 'Expand section' : 'Collapse section'} aria-expanded={!isCollapsed}>
+                <FiChevronDown />
+              </button>
+
+              {isEditing ? (
+                <div className='flex-1 min-w-0'>
+                  {sectionEditor}
+                  {sectionError}
                 </div>
-                </div>
+              ) : (
+                <>
+                  <div className='cs-section-title'>
+                    <small>Section {sIndex + 1} · {lessons.length} {lessons.length === 1 ? 'lesson' : 'lessons'}</small>
+                    <p title={section.sectionName}>{section.sectionName}</p>
+                  </div>
+                  <div className='cs-section-actions'>
+                    <button
+                      type='button'
+                      aria-label='Rename section'
+                      title='Rename section'
+                      className='cs-icon-btn'
+                      onClick={()=>handleChangeEditSectionName(section._id, section.sectionName)}
+                    ><FiEdit2 /></button>
+                    <button
+                      type='button'
+                      aria-label='Delete section'
+                      title='Delete section'
+                      className='cs-icon-btn is-danger'
+                      onClick={()=>{
+                        setConfirmationModal({
+                          text1:"Delete this section?",
+                          text2:"All lessons in this section will be deleted too.",
+                          btn1Text:"Delete",
+                          btn2Text:"Cancel",
+                          btn1Handler:() => handleDeleteSection(section._id,course._id, token),
+                          btn2Handler:() => setConfirmationModal(null)
+                        })
+                    }}><FiTrash2 /></button>
+                  </div>
+                </>
+              )}
+            </header>
 
-                <div className='flex shrink-0 items-center gap-1.5'>
-                  <button
-                   type='button'
-                   aria-label='Edit section'
-                   className='btn-icon h-9 w-9'
-                   onClick={()=>handleChangeEditSectionName(section._id, section.sectionName)}
-                  ><FiEdit2 className='text-sm'/></button>
+            {!isCollapsed && (
+              <div className='cs-section-body'>
+                {lessons.length === 0 && (
+                  <p className='cs-warn'><FiAlertTriangle /> Add at least one lesson to this section before publishing.</p>
+                )}
 
-                  <button
-                    type='button'
-                    aria-label='Delete section'
-                    className='btn-icon h-9 w-9 hover:border-rose/30 hover:bg-rose/15 hover:text-rose'
-                    onClick={()=>{
-                      setConfirmationModal({
-                        text1:"Delete this section",
-                        text2:"All your lectures in this section will be deleted",
-                        btn1Text:"Delete",
-                        btn2Text:"Cancel",
-                        btn1Handler:() => handleDeleteSection(section._id,course._id, token),
-                        btn2Hander:() => setConfirmationModal(null)
-                      })
-                  }}>
-                  <FiTrash2 className='text-sm' />
-                  </button>
-                  <span className='mx-1 h-5 w-px bg-white/10' />
-                  <FiChevronDown className='text-white/55 transition-transform duration-300 group-open:rotate-180'/>
-
-                </div>
-            </summary>
-
-            <div className='flex flex-col gap-2 border-t border-white/[0.07] p-3 sm:p-4'>
-              {
-                section.subSection.map((data)=>{
-                  return( <div key={data._id} onClick={()=>setViewSubSection(data)}
-                      className='row-item cursor-pointer'
+                {lessons.map((data, lIndex)=>(
+                  <div key={data._id} onClick={()=>setViewSubSection(data)} className='cs-lesson' role='button' tabIndex={0}
+                    onKeyDown={event => { if (event.key === 'Enter') setViewSubSection(data) }}
                   >
-                <div className='flex min-w-0 flex-1 items-center gap-3'>
-                <span className='icon-circle h-10 w-10'>
-                  <FiPlay className='ml-0.5 fill-night text-sm' />
-                </span>
-                   <p className='truncate text-[15px] font-medium'>{data.title}</p>
-
-                   </div>
-                    <div
-                      onClick={(e)=>e.stopPropagation()}
-                    className='flex shrink-0 items-center gap-1.5'>
-
+                    <span className='cs-lesson-icon'><FiPlay /></span>
+                    <div className='cs-lesson-text'>
+                      <small>Lesson {sIndex + 1}.{lIndex + 1}</small>
+                      <p>{data.title}</p>
+                    </div>
+                    <div onClick={(e)=>e.stopPropagation()} className='cs-lesson-actions'>
                       <button
-                        aria-label='Edit lecture'
-                        className='btn-icon h-9 w-9'
+                        type='button'
+                        aria-label='Edit lesson'
+                        title='Edit lesson'
+                        className='cs-icon-btn'
                         onClick={()=>setEditSubSection({...data, sectionId:section._id})}>
-                      <FiEdit2 className='text-sm'/>
+                        <FiEdit2 />
                       </button>
                       <button
-                        aria-label='Delete lecture'
-                        className='btn-icon h-9 w-9 hover:border-rose/30 hover:bg-rose/15 hover:text-rose'
+                        type='button'
+                        aria-label='Delete lesson'
+                        title='Delete lesson'
+                        className='cs-icon-btn is-danger'
                         onClick={()=>
                          setConfirmationModal({
-                          text1:"Delete this sub section",
-                          text2:"Selected lecture will be deleted",
+                          text1:"Delete this lesson?",
+                          text2:"The lesson and its video will be removed.",
                           btn1Text:"Delete",
                           btn2Text:"Cancel",
                           btn1Handler:() => handleDeleteSubSection(data._id, section._id,token),
-                          btn2Hander:() => setConfirmationModal(null)
+                          btn2Handler:() => setConfirmationModal(null)
                         })
                       }>
-                            <FiTrash2 className='text-sm' />
+                        <FiTrash2 />
                       </button>
-
                     </div>
+                  </div>
+                ))}
 
-                  </div>)
-                })
-              }
-              <button onClick={()=>setAddSubSection(section._id)}
-                className='btn btn-glass btn-sm mt-1 self-start'
-              >
-              <FiPlus />
-              <span>Add Lecture</span>
-              </button>
-
-            </div>
-          </details>
+                <button type='button' onClick={()=>setAddSubSection(section._id)} className='cs-add-row'>
+                  <FiPlus /> Add lesson
+                </button>
+              </div>
+            )}
+          </section>
           )
         })}
       </div>
@@ -173,13 +181,10 @@ const NestedView = ({ handleChangeEditSectionName }) => {
           modalData = {editSubSection}
           setModalData = {setEditSubSection}
           edit = {true}
-         />):
-       ( <div></div>)
-
+         />): null
       }
-       {confirmationModal? (<ConfirmationModal modalData={confirmationModal}/>):(<div></div>)}
-
-    </div>
+       {confirmationModal ? <ConfirmationModal modalData={confirmationModal}/> : null}
+    </>
   )
 }
 

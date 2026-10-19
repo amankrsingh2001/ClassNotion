@@ -1,9 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { ThemeProvider } from "./theme/ThemeProvider";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
+import Courses from "./pages/Courses.jsx";
+import Educators from "./pages/Educators.jsx";
+import EducatorProfile from "./pages/EducatorProfile.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import { Provider } from "react-redux";
@@ -28,6 +32,9 @@ import Catalog from "./pages/Catalog.jsx";
 import CourseDetail from './pages/CourseDetails';
 import ViewCourse from "./pages/ViewCourse.jsx";
 import VideoDetails from "./components/core/viewCourse/VideoDetails.jsx";
+import EducatorApplication from './pages/EducatorApplication';
+import EducatorReviews from './pages/EducatorReviews';
+import Messages from './pages/Messages';
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor.jsx";
 
 
@@ -40,7 +47,10 @@ const Router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      { 
+      { path: "/courses", element: <Courses /> },
+      { path: "/educators", element: <Educators /> },
+      { path: "/educators/:educatorId", element: <EducatorProfile /> },
+      {
         path:'/about',
         element:<About/>
 
@@ -51,6 +61,9 @@ const Router = createBrowserRouter([
             <Dashboard/>
         </PrivateRoute>,
         children:[
+          { path: 'educator-profile', element: <EducatorApplication /> },
+          { path: 'educator-reviews', element: <EducatorReviews /> },
+          { path: 'messages', element: <Messages /> },
           {
             path:'my-profile',
             element:<Myprofile/>
@@ -128,26 +141,28 @@ const Router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
 
+    <ThemeProvider>
     <Provider store={store}>
       <RouterProvider router={Router} />
       <Toaster
         position="top-center"
         toastOptions={{
           style: {
-            background: "rgba(28,25,34,.92)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,.1)",
-            borderRadius: "999px",
+            background: "var(--panel)",
+            color: "var(--text)",
+            border: "1px solid var(--border)",
+            borderRadius: "10px",
             padding: "10px 18px",
             backdropFilter: "blur(20px)",
-            boxShadow: "0 20px 40px -20px rgba(0,0,0,.8)",
-            fontFamily: '"Plus Jakarta Sans", sans-serif',
+            boxShadow: "var(--shadow)",
+            fontFamily: '"Inter", sans-serif',
             fontSize: "14px",
           },
-          success: { iconTheme: { primary: "#DDF247", secondary: "#0B0A0F" } },
-          error: { iconTheme: { primary: "#FF6B81", secondary: "#0B0A0F" } },
+          success: { iconTheme: { primary: "var(--success)", secondary: "var(--panel)" } },
+          error: { iconTheme: { primary: "var(--danger)", secondary: "var(--panel)" } },
         }}
       />
     </Provider>
+    </ThemeProvider>
 
 );
