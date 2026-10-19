@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import IconBtn from '../../Common/IconBtn';
 import { createRating } from '../../../services/courseDetail';
 import  ReactStars  from 'react-rating-stars-component';
-import { IoCloseCircle } from "react-icons/io5";
+import { FiX } from "react-icons/fi";
+import { motion } from "motion/react";
 
 
 const CourseReviewModal = ({setReviewModal}) => {
@@ -35,73 +36,91 @@ const CourseReviewModal = ({setReviewModal}) => {
 
 
   return (
-    <div className='fixed w-full inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm'>
-        <div className='rounded-lg border border-richblack-400 bg-richblack-800 p-6 w-[30%]'>
+    <div className='fixed w-full inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-night/60 backdrop-blur-md p-4'>
+        <motion.div
+            initial={{ y: 16, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+            className='relative glass-strong w-full max-w-[520px] overflow-hidden shadow-card'
+        >
+            <div aria-hidden className='pointer-events-none absolute -top-24 -right-16 w-60 h-60 rounded-full bg-magenta/30 blur-3xl' />
+
             {/* Modal header */}
-            <div className='text-white flex justify-between '>
-                <p className='text-[#F1F2FF] font-bold'>Add Review</p>
-                <button 
+            <div className='relative flex items-center justify-between gap-3 px-6 pt-6'>
+                <div>
+                    <p className='eyebrow'>{courseEntireData?.courseName || 'Your course'}</p>
+                    <p className='mt-1 text-2xl font-medium tracking-tight'>Add a review</p>
+                </div>
+                <button
+                type='button'
+                aria-label='Close'
+                className='btn-icon'
                 onClick={() => setReviewModal(false)}
                 >
-                   <IoCloseCircle className='text-pink-500 text-xl'/>
+                   <FiX className='text-lg' />
                 </button>
             </div>
 
             {/* Modal Body */}
-            <div className='mt-4 '>
+            <div className='relative p-6'>
 
-                <div className='flex gap-3 text-[#F1F2FF]'>
-                    <img 
-                        src={user?.image}
-                        alt='user Image'
-                        className='aspect-square  w-[50px] rounded-full object-cover'
-                    />
+                <div className='flex items-center gap-3'>
+                    <span className='shrink-0 p-[2px] bg-brand rounded-full'>
+                        <img
+                            src={user?.image}
+                            alt='user Image'
+                            className='aspect-square w-12 rounded-full border-2 border-night object-cover bg-surface-2'
+                        />
+                    </span>
                     <div>
-                        <p className='text-semibold'>{user?.firstName} {user?.lastName}</p>
-                        <p className='text-caribbeangreen-100 text-sm'>Posting Publicly</p>
+                        <p className='font-medium'>{user?.firstName} {user?.lastName}</p>
+                        <p className='text-xs text-white/45'>Posting publicly</p>
                     </div>
                 </div>
 
 
                 <form
                 onSubmit={handleSubmit(onSubmit)}
-                className='mt-6 flex flex-col items-center'>
+                className='mt-6 flex flex-col items-center gap-5'>
 
-                    <ReactStars
-                        count={5}
-                        // onChange={ratingChanged}
-                        size={24}
-                        activeColor="#ffd700"
-                    />
+                    <div className='w-full flex justify-center rounded-3xl bg-white/[0.04] border border-white/[0.07] py-3'>
+                        <ReactStars
+                            count={5}
+                            // onChange={ratingChanged}
+                            size={44}
+                            color='rgba(255,255,255,0.15)'
+                            activeColor="#DDF247"
+                        />
+                    </div>
 
                     <div className='w-full flex flex-col'>
-                        <label htmlFor='courseExperience ' className='text-[#d6d6da] mb-2 '>
-                            *Add Your Experience
+                        <label htmlFor='courseExperience' className='field-label'>
+                            Add your experience *
                         </label>
-                        <textarea 
+                        <textarea
                             id='courseExperience'
-                            placeholder='Add Your Experience here'
+                            placeholder='What did you love? What could be better?'
                             {...register("courseExperience", {required:true})}
-                            className='form-style min-h-[130px] w-full p-4 outline-none'
+                            className='field min-h-[130px] resize-y'
                         />
                         {
                             errors.courseExperience && (
-                                <span className='text-[#d12828] mt-1 text-sm font-inter'>
+                                <span className='field-error'>
                                     Please add your experience
                                 </span>
                             )
                         }
                     </div>
                     {/* Cancel and Save button */}
-                    <div className='mt-8 flex gap-3'>
+                    <div className='w-full flex justify-end gap-3'>
                         <button
-                        className='bg-richblack-700 rounded-md px-3 py-[10px] text-white'
+                        className='btn btn-glass'
                         onClick={() => setReviewModal(false)}
                         >
                             Cancel
                         </button>
                         <IconBtn
-                            text="save"
+                            text="Save"
                         />
                     </div>
 
@@ -109,7 +128,7 @@ const CourseReviewModal = ({setReviewModal}) => {
                 </form>
 
             </div>
-        </div>
+        </motion.div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {Chart, registerables} from 'chart.js'
-import {Pie} from "react-chartjs-2"
+import {Doughnut} from "react-chartjs-2"
 
 Chart.register(...registerables)
 
@@ -8,23 +8,26 @@ const InstructorChart = ({ courses }) => {
     const [currChart, setCurrChart] = useState('students')
     
 
+    // Aurora palette (tokens): magenta / violet / peach / citrus / mint / orchid
+    const PALETTE = ['#E25FA8', '#8F6BF2', '#F5B9A1', '#DDF247', '#7FE3C3', '#C86FD0']
+
     const getRandomColors = (numColors) =>{
         const colors = [];
         for(let i = 0;i<numColors; i++){
-            const color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
-            colors.push(color)
+            colors.push(PALETTE[i % PALETTE.length])
         }
         return colors
     }
-
-    
 
     //create data for chart displaying student info
     const chartDataForStudents = {
         labels:courses.map((course)=>course.courseName),
         datasets:[{
             data:courses.map((course)=>course.totalStudentsEnrolled),
-            backgroundColor: getRandomColors(courses.length)
+            backgroundColor: getRandomColors(courses.length),
+            borderColor: '#141218',
+            borderWidth: 3,
+            hoverOffset: 8,
         }]
     }
 
@@ -36,29 +39,83 @@ const InstructorChart = ({ courses }) => {
         labels:courses.map((course)=>course.courseName),
         datasets:[{
             data:courses.map((course)=>course.totalAmountGenerated),
-            backgroundColor: getRandomColors(courses.length)
+            backgroundColor: getRandomColors(courses.length),
+            borderColor: '#141218',
+            borderWidth: 3,
+            hoverOffset: 8,
         }]
     }
 
     // create option
 
     const options = {
-
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: 'rgba(255,255,255,.6)',
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    boxWidth: 8,
+                    boxHeight: 8,
+                    padding: 16,
+                    font: { family: 'Plus Jakarta Sans', weight: '500', size: 12 },
+                },
+            },
+            tooltip: {
+                backgroundColor: 'rgba(20,18,24,.95)',
+                titleColor: '#FFFFFF',
+                bodyColor: 'rgba(255,255,255,.75)',
+                borderColor: 'rgba(255,255,255,.1)',
+                borderWidth: 1,
+                cornerRadius: 14,
+                padding: 12,
+                usePointStyle: true,
+                titleFont: { family: 'Plus Jakarta Sans', weight: '600' },
+                bodyFont: { family: 'Plus Jakarta Sans' },
+            },
+        },
     }
 
+  const tabs = [
+    { key: 'students', label: 'Students' },
+    { key: 'income', label: 'Income' },
+  ]
+
   return (
-    <div className='w-[40%] '>
-       
-        <div className='flex gap-4 w-fit'>
-        <p className='text-2xl text-[#F1F2FF] '>Visualise:-</p>
-            <button className={`${currChart === "students"? "bg-yellow-25 text-black rounded-md py-2 px-3": " py-2 px-3 bg-richblack-700 text-white rounded-md"}`} onClick={()=>setCurrChart('students')}>Student</button>
-            <button className={`${currChart === "income"? "bg-yellow-25 text-black rounded-md py-2 px-3": " py-2 px-3 bg-richblack-700 text-white rounded-md"}`} onClick={()=>setCurrChart('income')}>Income</button>
+    <div className='glass flex h-full w-full flex-col p-5 sm:p-7'>
+
+        <div className='flex flex-wrap items-center justify-between gap-4'>
+            <div>
+                <p className='eyebrow'>Insights</p>
+                <p className='mt-1.5 text-xl font-medium tracking-tight'>
+                    {currChart === 'students' ? 'Students per course' : 'Income per course'}
+                </p>
+            </div>
+            <div className='segmented'>
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.key}
+                        type='button'
+                        onClick={()=>setCurrChart(tab.key)}
+                        className={`segmented-item ${currChart === tab.key ? 'segmented-item-active' : ''}`}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
         </div>
 
-        <div className=' w-[100%] mt-6 aspect-square p-4 bg-gray-900 rounded-lg shadow-lg'>
-            <Pie  data={currChart === "students" ? chartDataForStudents : chartDataForIncome}
-                options={options}
-            />
+        <div className='relative mt-6 h-[320px] w-full sm:h-[360px]'>
+            {courses.length > 0 ? (
+                <Doughnut data={currChart === "students" ? chartDataForStudents : chartDataForIncome}
+                    options={options}
+                />
+            ) : (
+                <div className='grid h-full place-items-center text-center text-sm text-white/45'>No data to chart yet</div>
+            )}
         </div>
 
     </div>

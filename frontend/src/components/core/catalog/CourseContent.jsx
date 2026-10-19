@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { LuDot } from "react-icons/lu";
-import { FaChevronUp } from "react-icons/fa";
+import { FiChevronDown } from "react-icons/fi";
 import ToggleSection from './ToggleSection';
 
+// Presentational helpers: sum subsection `timeDuration` (seconds) when available
+const sectionSeconds = (section) =>
+  (section?.subSection || []).reduce((acc, sub) => acc + (parseInt(sub?.timeDuration) || 0), 0)
+
+const formatSeconds = (total) => {
+  if (!total) return null
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  const s = Math.floor(total % 60)
+  if (h) return `${h}h ${m}m`
+  if (m) return `${m}m${s ? ` ${s}s` : ''}`
+  return `${s}s`
+}
 
 const CourseContent = ({ courseDetail }) => {
 
@@ -32,7 +44,7 @@ const CourseContent = ({ courseDetail }) => {
     }
   }, [courseDetail]);
 
-  
+
 
   const subSectionHandler = (id) =>{
      if(subSectionActive===id){
@@ -42,62 +54,76 @@ const CourseContent = ({ courseDetail }) => {
      }
   }
 
+  const totalLength = formatSeconds(
+    (courseDetail?.courseContent || []).reduce((acc, sec) => acc + sectionSeconds(sec), 0)
+  )
 
   return (
-    <div className='w-10/12'>
-      <div className='p-4 flex flex-col gap-4'>
-         <h1 className='text-2xl '>Course Content</h1>
-         <div className='flex justify-between w-[82%]'>
-         <div className='flex gap-2'>
-            <p className='text-white'>{courseDetail?.courseContent?.length} Sections</p>
-            <p className='text-white'><LuDot className='mt-1' /></p>
-            <p className='text-white'>{subSectionCount} Lecture</p>
-            <p className='text-white'><LuDot className='mt-1' /></p>
-            <p className='text-white'>{`7h 57m total length`} </p>
-          </div>
-          <p className='text-yellow-5 text-sm cursor-pointer' onClick={()=>setSubSectionActive(0)}>Collapse All</p>
+    <section id='lessons' className='w-full scroll-mt-28'>
+      <div className='flex flex-wrap items-end justify-between gap-4 mb-5'>
+         <div>
+           <h2 className='text-3xl md:text-4xl font-medium tracking-tight'>
+             Lessons <span className='text-white/35'>{subSectionCount}</span>
+           </h2>
+           <p className='mt-2 text-sm text-white/55'>
+             {courseDetail?.courseContent?.length || 0} sections
+             {totalLength && <> · {totalLength} total</>}
+           </p>
          </div>
-          
-         
+         <button type='button' className='btn btn-ghost btn-sm' onClick={()=>setSubSectionActive(0)}>Collapse all</button>
       </div>
 
-      <div className='p-4 w-10/12 flex flex-col gap-4'>
+      <div className='flex flex-col gap-3'>
           {
-            courseDetail ? (<div>
-              {
-                courseDetail?.courseContent?.map((section)=>{
-                    return<div  key={section._id}>
-                       <div className='bg-richblack-800 p-4 border-[1px] border-richblack-500' >
-                      <div onClick={()=>subSectionHandler(section._id)} className='flex justify-between cursor-pointer '>
-                         <p  className='text-[#F1F2FF] text-sm'><FaChevronUp className='inline mr-2' /> {section?.sectionName}</p>
-                          <div className='flex gap-4'>
-                                <p className='text-yellow-25 text-sm'>5 Lecture</p>
-                                <p className='text-sm'>51min</p>
-                            </div>
-                          
-                            
-                        </div>
-                      
-                      </div>
+            courseDetail ? (
+              courseDetail?.courseContent?.map((section, i)=>{
+                  const isOpen = section._id === subSectionActive
+                  const duration = formatSeconds(sectionSeconds(section))
+                  const n = section?.subSection?.length || 0
+                  return (
+                    <div
+                      key={section._id}
+                      className={`rounded-[28px] border transition-colors ${isOpen ? 'bg-white/[0.06] border-white/15' : 'bg-white/[0.03] border-white/[0.07] hover:bg-white/[0.05]'}`}
+                    >
+                      <button
+                        type='button'
+                        onClick={()=>subSectionHandler(section._id)}
+                        aria-expanded={isOpen}
+                        className='w-full flex items-center gap-4 p-3 pr-5 text-left'
+                      >
+                        <span className={`grid place-items-center shrink-0 w-11 h-11 rounded-full text-sm font-semibold ${isOpen ? 'bg-white text-night' : 'bg-white/[0.08] border border-white/10 text-white'}`}>
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className='flex-1 min-w-0'>
+                          <span className='block font-medium break-words'>{section?.sectionName}</span>
+                          <span className='block text-xs text-white/45 mt-0.5'>
+                            {n} {n === 1 ? 'lesson' : 'lessons'}{duration && ` · ${duration}`}
+                          </span>
+                        </span>
+                        <FiChevronDown className={`shrink-0 text-white/55 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
 
                       <div className={`
-                            transition-all duration-1000 ease-in-out
-                            ${section._id === subSectionActive ? "opacity-100 max-h-[1000px]" : "opacity-0 max-h-0"}
-                            overflow-hidden w-full
+                            grid transition-all duration-500 ease-in-out
+                            ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}
+                            w-full
                           `}
                         >
-                          <ToggleSection section = {section}/>
+                          <div className='overflow-hidden'>
+                            <ToggleSection section = {section}/>
+                          </div>
                         </div>
-                        
                     </div>
-                   
+                  )
               })
-              }
-            </div>) :<p>Loading...</p>
+            ) : (
+              <div className='space-y-3'>
+                {[0,1,2].map((k) => <div key={k} className='skeleton h-16 rounded-[28px]' />)}
+              </div>
+            )
           }
       </div>
-    
-      </div>
+    </section>
   )
 }
 

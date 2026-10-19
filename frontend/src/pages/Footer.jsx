@@ -1,142 +1,88 @@
-import { Block } from "../components/Common/Block";
-
-import { FaYoutube, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
-import {footerData, Plans, Community, FooterLink2} from "../data/footer-links";
-
 import { Link } from "react-router-dom";
+import { FaYoutube, FaFacebookF, FaXTwitter, FaLinkedinIn } from "react-icons/fa6";
+import { FiArrowUpRight } from "react-icons/fi";
+
+import { Block } from "../components/Common/Block";
+import Logo from "../components/Common/Logo";
+import { footerData, Plans, Community, FooterLink2 } from "../data/footer-links";
+
+const Column = ({ title, children }) => (
+  <div>
+    <h3 className="mb-4 text-sm font-semibold text-white">{title}</h3>
+    <div className="text-sm">{children}</div>
+  </div>
+);
 
 const Footer = () => {
-  const subjects = FooterLink2[0].links;
-  const Languages = FooterLink2[1].links;
-  const carrer = FooterLink2[2].links;
+  const languages = FooterLink2[1].links;
+  const career = FooterLink2[2].links.filter((l) => l.title !== "-");
 
   return (
-    <div className="h-fit w-full border-t-[#e4a51c] drop-shadow-2xl border-[1px] flex justify-center items-center pl-3 ">
-      {" "}
-      {/*Outer */}
-      <div className="w-11/12 max-w-maxContent h-[80%] flex flex-col  gap-2  mt-28">
-        <div className="h-[90%] w-full drop-shadow-2xl  flex flex-1 lg:flex-nowrap lg:flex-row flex-col items-stretch">
-          {" "}
-          {/* Inner */}
-          {/* Section 1 */}
-          <div className=" w-[50%] justify-between py-4  flex gap-4">
-            <div className=" gap-2 ">
-              <div className="flex text-[#C5C7D4] items-center py-2">
-                <img className="h-6 mr-2" src={'/assets/Logo/Logo-Small-Light.png'} />
-                <p className="font-inter font-semibold">CLASS NOTION</p>
-              </div>
-              <div className="m-2 text-[#6E727F]">
-                <h3 className="font-semibold font-inter text-[#AFB2BF] p-2">
-                  Company
-                </h3>
-                <div className="text-xs flex flex-col gap-2">
-                  <p className="px-2 ">About</p>
-                  <p className="px-2">Carrer</p>
-                  <p className="px-2">Affilates</p>
-                </div>
-              </div>
-              <div className="flex flex-row gap-[8px] p-2 text-[#6E727F]">
-                <Link to={""}>
-                  <FaYoutube />
-                </Link>
-
-                <Link to={""}>
-                  <FaFacebook />
-                </Link>
-
-                <Link to={""}>
-                  <FaTwitter />
-                </Link>
-
-                <Link to={""}>
-                  <FaLinkedin />
-                </Link>
-              </div>
-            </div>
-
-            {/*Block-2 */}
-
-            <div className="text-[#AFB2BF] ">
-              <h3 className="font-semibold font-inter p-2">Resource</h3>
-              <div className="text-xs text-[#6E727F] ">
-                <Block resource={footerData} />
-              </div>
-              <div className="mt-4">
-                <h3 className="font-semibold font-inter p-2">Support</h3>
-                <div className="text-xs text-[#6E727F] ">
-                  <Link>
-                    <p className="p-2">Help Center</p>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/*Block-2 */}
-
-            <div className="flex flex-col gap-4 ">
-              <div className="text-[#AFB2BF]">
-                <h3 className="font-semibold font-inter p-2">Plans</h3>
-                <div className="text-xs text-[#6E727F]">
-                  <Block resource={Plans} />
-                </div>
-              </div>
-
-              <div className="text-[#AFB2BF]">
-                <h3 className="font-semibold font-inter p-2">Community</h3>
-                <div className="text-xs text-[#6E727F]">
-                  <Block resource={Community} />
-                </div>
-              </div>
-            </div>
+    <footer className="container-x mt-28 pb-8">
+      {/* CTA card */}
+      <div className="relative overflow-hidden rounded-5xl border border-white/10 bg-surface p-8 sm:p-12 md:p-16">
+        <div className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full bg-magenta/40 blur-[110px]" />
+        <div className="absolute -bottom-40 left-10 w-[380px] h-[380px] rounded-full bg-violet/30 blur-[120px]" />
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+          <div>
+            <p className="eyebrow mb-4">Start today</p>
+            <h2 className="h-display text-4xl sm:text-5xl md:text-6xl max-w-2xl">
+              Turn curiosity into <span className="text-gradient">real skills.</span>
+            </h2>
           </div>
-          <div className="border-l-[1px] ml-12 mr-12 mt-8 hidden lg:block border-[#2C333F]" />
-          {/*Section 2 */}
-
-          <div className="flex justify-between w-[48%] gap-4">
-            <div className="py-4">
-              <h3 className="text-[#AFB2BF] font-semibold font-inter p-2">
-                Subjects
-              </h3>
-              <div className="text-xs text-[#6E727F]">
-                <Block resource={subjects} />
-              </div>
-            </div>
-
-            <div className="p-4">
-              <h3 className="text-[#AFB2BF] font-semibold font-inter p-2">
-                Language
-              </h3>
-              <div className="text-xs text-[#6E727F]">
-                <Block resource={Languages} />
-              </div>
-            </div>
-            <div className="p-4">
-            <h3 className="text-[#AFB2BF] font-semibold font-inter p-2">
-              Carrer building
-            </h3>
-            <div className="text-xs text-[#6E727F]">
-              <Block resource={carrer} />
-            </div>
-          </div>
-          </div>
-         
-        </div>
-
-        <hr className="border-[1px]  mt-6 border-[#2C333F]" />
-
-        <div className="flex justify-between pt-6 mb-10">
-          <div className="flex text-xs gap-2 text-[#AFB2BF]">
-            <p>Privacy Policy</p>
-            <p>Cookie Policy</p>
-            <p>Terms & Conditions</p>
-          </div>
-
-          <div className="flex text-xs gap-2 text-[#AFB2BF]">
-            <p>Made with ❤️ Aman &copy; 2024 ClassNotion</p>
-          </div>
+          <Link to="/signup" className="btn btn-lg btn-primary w-fit">
+            Create free account <FiArrowUpRight />
+          </Link>
         </div>
       </div>
-    </div>
+
+      {/* Links */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 pt-16 pb-12">
+        <div className="col-span-2 sm:col-span-3 lg:col-span-2 space-y-5">
+          <Logo />
+          <p className="text-sm text-white/45 max-w-[280px]">
+            Hands-on courses, guided by people who build for a living. Learn at your own pace, anywhere.
+          </p>
+          <div className="flex gap-2">
+            {[FaYoutube, FaFacebookF, FaXTwitter, FaLinkedinIn].map((Icon, i) => (
+              <a key={i} href="#" className="btn-icon w-10 h-10" aria-label="Social link">
+                <Icon className="text-sm" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <Column title="Company">
+          <ul className="flex flex-col gap-2.5 text-white/45">
+            <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+            <li><Link to="/contact-us" className="hover:text-white transition-colors">Contact</Link></li>
+            <li className="cursor-pointer hover:text-white transition-colors">Careers</li>
+            <li className="cursor-pointer hover:text-white transition-colors">Affiliates</li>
+          </ul>
+        </Column>
+        <Column title="Resources">
+          <Block resource={footerData.slice(0, 6)} />
+        </Column>
+        <Column title="Languages">
+          <Block resource={languages.slice(0, 6)} />
+        </Column>
+        <Column title="Plans & Career">
+          <Block resource={[...Plans, ...career.slice(0, 3)]} />
+        </Column>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between gap-4 pt-6 divider text-xs text-white/35">
+        <div className="flex flex-wrap gap-5">
+          <span className="hover:text-white cursor-pointer">Privacy Policy</span>
+          <span className="hover:text-white cursor-pointer">Cookie Policy</span>
+          <span className="hover:text-white cursor-pointer">Terms</span>
+          {Community.map((c) => (
+            <span key={c.name} className="hover:text-white cursor-pointer">{c.name}</span>
+          ))}
+        </div>
+        <p>© {new Date().getFullYear()} ClassNotion. Made with ♥ by Aman.</p>
+      </div>
+    </footer>
   );
 };
 

@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { COURSE_STATUS } from '../../../../utils/constants';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../../../Common/ConfirmationModal';
 import {  deleteCourse, getInstructorCourse } from '../../../../services/courseDetail';
-import { MdEdit } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit2, FiTrash2, FiClock, FiCheckCircle, FiBookOpen } from "react-icons/fi";
 import { formatDate } from '../../../../services/formatData';
-import { FaClock } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
 
 
 
@@ -32,79 +27,88 @@ const CoursesTable = ({courses, setCourses}) => {
     }
    
 
-  return (
-    <div className='mb-40 w-11/12'>
-        <Table className='text-[#AFB2BF] '>
-            <Thead className='uppercase'>
-                <Tr className=' border-richblack-600  border gap-x-10 '>
-                    <Th className='text-start px-4 py-4'>Courses</Th>
-                    <Th className='text-start px-4 py-4'>Duration</Th>
-                    <Th className='text-start px-4 py-4'>Price</Th>
-                    <Th className='text-start px-4 py-4'>Action</Th>
-                </Tr>
-            </Thead>
-         <Tbody>
-         {
-                courses.length === 0 ? (<Tr>
-                    <Td>No Courses Found</Td>
-                </Tr>):(
-                   
-                    courses.map((course)=>{
-                      return ( <Tr key={course._id} className='gap-x-10 p-8 border-b border-richblack-700'>
-                                     <Td className='flex gap-x-4 p-4'>
-                                <img src={course?.thumbnail}
-                                    className='w-[25%] aspect-video rounded-lg object-cover'
-                                />
-                                <div className='flex flex-col gap-2'>
-                                    <h1 className='text-xl text-[#F1F2FF] capitalize font-inter'> {course.courseName}</h1>
-                                    <p className='text-sm capitalize'>{course.courseDescription}</p>
-                                    <p className='text-sm'>Created At : {`${formatDate(course.createdAt)}`} </p>
-                                    {
-                                        course.status === COURSE_STATUS.DRAFT ?( <p className='flex  items-center gap-1 justify-center text-pink-100 bg-richblack-600 rounded-full px-4 text-sm w-fit py-1'><FaClock className='inline-block font-bold'/> Drafted</p>) :(
-                                             <p className='text-yellow-50 py-1  flex  items-center gap-1 justify-center bg-richblack-600 rounded-full px-4 text-sm w-fit'><FaCheckCircle className='inline'/> Published</p>)
-                                    }
-                                </div>
-                            </Td>
+  if (courses.length === 0) {
+    return (
+      <div className='w-full'>
+        <div className='glass relative flex flex-col items-center gap-4 overflow-hidden px-6 py-16 text-center'>
+          <div className='relative'>
+            <div className='absolute inset-0 scale-[2.2] rounded-full bg-magenta/30 blur-2xl' />
+            <span className='icon-circle-glass relative h-16 w-16'>
+              <FiBookOpen className='text-2xl' />
+            </span>
+          </div>
+          <h2 className='mt-2 text-2xl font-medium tracking-tight'>No courses found</h2>
+          <p className='max-w-md text-white/55'>You haven't created a course yet. Your first one is just a few steps away!</p>
+          <Link to='/dashboard/add-course' className='btn btn-primary mt-2'>Create a course</Link>
+        </div>
+      </div>
+    )
+  }
 
-                            <Td className='text-start px-4 py-4'>
-                                2hr 30min
-                            </Td>
-                            <Td className='text-start px-4 py-4'>
-                            ₹{course.price}
-                            </Td>
-                            <Td className='text-start px-4 py-4'>
-                                <button
-                                 onClick={()=>{navigate(`/dashboard/edit-course/${course._id}`)}}
-                                className='mr-[20px]'
-                                 >
-                                    <MdEdit className='text-xl'/>
-                                </button>
-                                <button 
-                                    onClick={()=>{
-                                        setConfirmationModal({
-                                            text1:"Do you want to delete this course",
-                                            text2:"Add the data of this course will be deleted",
-                                            btn1Text:"Delete",
-                                            btn2Text:"Cancel",
-                                            btn1Handler:()=> handleCourseDelete(course._id),
-                                            btn2Handler :() => setConfirmationModal(null)
-                                        })
-                                    }}
-                                >
-                               <RiDeleteBin6Line className='text-xl'/>
-                                </button>
-                            </Td>
-                        </Tr>)
+  return (
+    <div className='mb-20 w-full'>
+        <ul className='flex flex-col gap-3'>
+         {
+                    courses.map((course)=>{
+                      return ( <li key={course._id} className='glass card-hover flex flex-col gap-4 rounded-4xl p-3 sm:flex-row sm:items-center sm:gap-5 sm:pr-5'>
+                                <div className='duotone aspect-video w-full shrink-0 rounded-3xl sm:w-[220px]'>
+                                  <img src={course?.thumbnail}
+                                      alt={course.courseName}
+                                      className='h-full w-full object-cover'
+                                  />
+                                </div>
+                                <div className='flex min-w-0 flex-1 flex-col gap-2 px-1 sm:px-0'>
+                                    <div className='flex flex-wrap items-center gap-2'>
+                                      {
+                                          course.status === COURSE_STATUS.DRAFT ?( <span className='pill pill-magenta'><FiClock /> Drafted</span>) :(
+                                               <span className='pill pill-citrus'><FiCheckCircle /> Published</span>)
+                                      }
+                                      <span className='text-xs text-white/40'>Created {`${formatDate(course.createdAt)}`}</span>
+                                    </div>
+                                    <h2 className='text-lg font-medium capitalize leading-snug tracking-tight sm:text-xl'>{course.courseName}</h2>
+                                    <p className='line-clamp-2 text-sm capitalize text-white/55'>{course.courseDescription}</p>
+                                    <div className='flex items-center gap-4 text-xs text-white/55'>
+                                      <span className='inline-flex items-center gap-1.5'><FiClock /> 2hr 30min</span>
+                                    </div>
+                                </div>
+                                <div className='flex items-center justify-between gap-4 border-t border-white/[0.07] px-1 pt-3 sm:flex-col sm:items-end sm:justify-center sm:border-0 sm:p-0'>
+                                  <p className='text-2xl font-medium tracking-tight'>₹{course.price}</p>
+                                  <div className='flex gap-2'>
+                                    <button
+                                     onClick={()=>{navigate(`/dashboard/edit-course/${course._id}`)}}
+                                     aria-label='Edit course'
+                                     title='Edit'
+                                     className='btn-icon'
+                                     >
+                                        <FiEdit2 />
+                                    </button>
+                                    <button
+                                        aria-label='Delete course'
+                                        title='Delete'
+                                        className='btn-icon hover:border-rose/30 hover:bg-rose/15 hover:text-rose'
+                                        onClick={()=>{
+                                            setConfirmationModal({
+                                                text1:"Do you want to delete this course?",
+                                                text2:"All the data of this course will be deleted",
+                                                btn1Text:"Delete",
+                                                btn2Text:"Cancel",
+                                                btn1Handler:()=> handleCourseDelete(course._id),
+                                                btn2Handler :() => setConfirmationModal(null)
+                                            })
+                                        }}
+                                    >
+                                   <FiTrash2 />
+                                    </button>
+                                  </div>
+                                </div>
+                        </li>)
                     })
-                
-                )
             }
-         </Tbody>
-        </Table>
+        </ul>
         {
             confirmationModal && <ConfirmationModal modalData={confirmationModal}/>
         }
-        
+
     </div>
   )
 }

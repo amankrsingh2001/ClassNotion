@@ -1,20 +1,17 @@
-import { Link, matchPath, useLocation } from "react-router-dom";
-import { NavbarLinks } from "../../data/navbar-links";
+import { Link, NavLink, matchPath, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { FiShoppingCart } from "react-icons/fi";
-import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { useEffect, useState } from "react";
-
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { FiShoppingBag, FiChevronDown, FiArrowUpRight, FiHome, FiCompass, FiInfo, FiMessageCircle, FiUser, FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { ImCross } from "react-icons/im";
-import { TiThMenu } from "react-icons/ti";
+import { AnimatePresence, motion } from "motion/react";
+
+import { NavbarLinks } from "../../data/navbar-links";
+import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { category } from "../../services/courseDetail";
+import Logo from "./Logo";
 
-import {motion} from "motion/react"
-import { animate } from "framer-motion";
-
-
+const catalogPath = (name) => `/catalog/${name.split(" ").join("_").toLowerCase()}`;
+const DOTS = ["bg-peach", "bg-magenta", "bg-violet", "bg-citrus", "bg-mint", "bg-orchid"];
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.profile);
@@ -22,160 +19,213 @@ const Navbar = () => {
   const { totalItem } = useSelector((state) => state.cart);
   const location = useLocation();
   const [subLinks, setSubLinks] = useState([]);
-  const [navbarCont, setNavbarCont] = useState(false);
-  const [scrollY, setScrollY] = useState(false)
-
+  const [catalogSheet, setCatalogSheet] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    const fetchSubLinks = async () => {
+      try {
+        const result = await category();
+        setSubLinks(result);
+      } catch (error) {
+        toast.error("Something went wrong");
+      }
+    };
     fetchSubLinks();
   }, []);
 
-
-
-  const fetchSubLinks = async () => {
-    try {
-      const result = await category();
-      setSubLinks(result);
-    } catch (error) {
-      toast.error('Something went wrong')
-    }
-  };
-
-
-  const matchRoute = (route) => {
-    return matchPath({ path: route }, location.pathname);
-  };
-
-  useEffect(()=>{
-    const handleScroll  = ()=>{
-      
-      if(window.scrollY>10){
-        setScrollY(true)
-        console.log("Scrolled")
-      }else{
-        setScrollY(false)
-      }
-    }
-
-      
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  },[])
+  }, []);
 
+  useEffect(() => setCatalogSheet(false), [location.pathname]);
 
+  const matchRoute = (route) => matchPath({ path: route }, location.pathname);
+  const catalogLinks = subLinks?.filter((subLink) => subLink?.course?.length > 0) ?? [];
+  const isCatalogActive = location.pathname.startsWith("/catalog");
+  const showCart = token && user?.accountType !== "Instructor";
+
+  const CartButton = () => (
+    <Link to="/dashboard/cart" aria-label="Cart" className="btn-icon relative">
+      <FiShoppingBag />
+      {totalItem > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 grid place-items-center min-w-[18px] h-[18px] px-1 rounded-full bg-brand text-[10px] font-bold text-white">
+          {totalItem}
+        </span>
+      )}
+    </Link>
+  );
 
   return (
-    <motion.div  
-    className={` right-1/2 translate-x-1/2 fixed z-[1001] ${scrollY?"w-[75%]":"w-full"} mx-auto top-2 h-20 flex justify-center items-center ${scrollY?"bg-[#0F0F0F]/90":"bg-[#0F0F0F]"} border-[1px] border-[#fff] rounded-lg z-10 duration-200 ease-linear drop-shadow-xl`}
->
-      <div className="w-11/12 flex max-w-maxContent bg-inherit  items-center justify-between gap-2">
-        <Link to={"/"}>
-        <div>
+    <>
+      {/* ───────── Top bar ───────── */}
+      <header className="sticky top-0 z-[1001] px-3 sm:px-6 pt-3">
+        <div
+          className={`mx-auto max-w-maxContent flex items-center justify-between gap-3 rounded-full pl-3 pr-2 py-2 transition-all duration-300 ${
+            scrolled ? "glass bg-surface/70 shadow-card" : "border border-transparent"
+          }`}
+        >
+          <Logo />
 
-          <img  src={"/assets/Logo/Logo-Full-Light.png"} width={160} height={42} loading="lazy" />
-        </div>
-        </Link>
-        {
-         navbarCont?<ImCross className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px] ${token && "order-2 "}  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/> :<TiThMenu className={` sm:hidden  text-2xl p-1 h-[40px] w-[40px] ${token && "order-2 "}  text-white`} onClick={()=>setNavbarCont(!navbarCont)}/>
+          {/* Desktop nav */}
+          <nav className="hidden md:block">
+            <ul className="segmented">
+              {NavbarLinks.map((item) =>
+                item.title === "Catalog" ? (
+                  <li key={item.title} className="relative group">
+                    <button className={`segmented-item flex items-center gap-1 ${isCatalogActive ? "segmented-item-active" : ""}`}>
+                      {item.title}
+                      <FiChevronDown className="transition-transform duration-200 group-hover:rotate-180" />
+                    </button>
 
-        }
-       
-        <nav className={navbarCont?` absolute flex items-center justify-center top-[55px] z-10 p-4 left-[0px] w-full bg-inherit ${ location.pathname.includes('catalog') || location.pathname.includes('dashboard')?'bg-richblack-800':'bg-richblack-900'}`:'hidden sm:block'} >
-          <ul className="flex sm:flex-row flex-col text-2xl  gap-4 md:gap-8  p-0 md:py-4 md:px-3 mr-4">
-            {NavbarLinks.map((item, index) => {
-              return (
-                <li key={index}>
-                  {item.title === "Catalog" ? (
-                    <div className="flex items-center gap-1 cursor-pointer group relative">
-                      <p
-                        className={`text-sm font-inter text-white hover:scale-110 text-yellow-50":"text-white" }`}
-                      >
-                        {item.title}
-                      </p>
-                      <MdOutlineKeyboardArrowDown className="text-white" />
-
-                      <div className="invisible flex flex-col  text-[#0F0F0F] divide-y-reverse rounded-2xl z-[1001] translate-x-[-51%] translate-y-[20%] bg-[#fff] duration-200 absolute left-[50%] top-[50%] group-hover:visible opacity-0 transition-all group-hover:opacity-100 lg:w-fit whitespace-nowrap">
-                        <div className="absolute left-[50%] top-0 h-6 w-6 rotate-45 rounded translate-x-[80%] translate-y-[-5%] bg-[#fff] "></div>
+                    <div className="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 absolute left-1/2 -translate-x-1/2 top-full pt-4">
+                      <div className="w-[340px] glass-strong bg-surface-2/90 p-2 rounded-3xl shadow-card">
+                        <p className="eyebrow px-3 pt-2 pb-3">Categories</p>
                         {subLinks && subLinks.length === 0 ? (
-                            <div className=" animate-pulse p-6">
-
-                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700 mb-2.5"></div>
-                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700 mb-2.5"></div>
-                            <div className="h-2 bg-[#666262] rounded-full dark:bg-gray-700"></div>
-                        </div>
-                        ) : 
-                        (
-                          subLinks?.filter((subLink)=>(subLink?.course?.length>0)).map((subLink, i, allLinks)=>{
-                            return (
-                              <Link  className={`${i !==allLinks.length-1? "":''} `} key={i} to={`/catalog/${subLink.name.split(' ').join("_").toLowerCase()}`}>
-                              <motion.p  whileHover={{
-                        scale:1.1,
-                      }} className="px-8 py-4 text-sm text-[#0F0F0F] font-semibold ">{subLink.name}</motion.p>
-
+                          <div className="space-y-2 p-1">
+                            {[0, 1, 2].map((i) => (
+                              <div key={i} className="skeleton h-12" />
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="grid gap-1">
+                            {catalogLinks.map((subLink, i) => (
+                              <Link
+                                key={subLink._id ?? i}
+                                to={catalogPath(subLink.name)}
+                                className="group/item flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl hover:bg-white/[0.06] transition"
+                              >
+                                <span className="flex items-center gap-3">
+                                  <span className={`w-2 h-2 rounded-full ${DOTS[i % DOTS.length]}`} />
+                                  <span className="text-sm font-medium text-white/90">{subLink.name}</span>
+                                </span>
+                                <span className="text-xs text-white/40 group-hover/item:hidden">{subLink.course.length} courses</span>
+                                <FiArrowUpRight className="hidden group-hover/item:block text-white/70" />
                               </Link>
-
-                            )
-                          })
-                        
+                            ))}
+                          </div>
                         )}
                       </div>
                     </div>
-                  ) : (
-                    <Link to={item.path}>
-                      <motion.p
-                      whileHover={{
-                        scale:1.3,
-                        originX:0,
-                        color:"#E5A317"
-                      }}
-                        className={`text-sm font-inter  ${
-                          matchRoute(item?.path)
-                            ? "text-[#E5A317]"
-                            : "text-white"
-                        }`}
-                      >
-                        {item.title}
-                      </motion.p>
+                  </li>
+                ) : (
+                  <li key={item.title}>
+                    <Link to={item.path} className={`segmented-item inline-flex items-center ${matchRoute(item?.path) ? "segmented-item-active" : ""}`}>
+                      {item.title}
                     </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                  </li>
+                )
+              )}
+            </ul>
+          </nav>
 
-        <div className={`sm:flex lg:flex-row space-x-4  items-center  ${token ?"flex order-1  ml-auto sm:ml-0":'hidden'}`}>
-          {token && user?.accountType !== "Instructor" && (
-            <Link to="/dashboard/cart" className="relative">
-             <FiShoppingCart className="text-white mr-4 md:inline-block hidden "/>
-              {totalItem > 0 && <span className=" absolute w-[16px] h-[16px] font-bold text-center bottom-2 left-3 bg-[#F1F2FF] rounded-full  text-xs text-black">{totalItem}</span>}
-            </Link>
-          )}
-          {token === null && (
-            <Link to="/login">
-              <motion.button
-                    whileHover={{ scale: 1.1, background:"#fff",color:"#0F0F0F", boxShadow:"0px 0px 3px rgb(255,255,255)", transition:{duration:0.5, type:"spring", stiffness:200} }}
-                whileTap={{scale:0.7}}
-              className="text-richblack-50 text-nowrap rounded-2xl  sm:inline-block hidden border-[1px] text-sm border-[#F0F0F0] px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-[#0F0F0F]">
-                Login
-              </motion.button>
-            </Link>
-          )}
-          {token === null && (
-            <Link to="/signup">
-              <motion.button 
-                 whileHover={{ scale: 1.1, background:"#fff",color:"#0F0F0F", boxShadow:"0px 0px 3px rgb(255,255,255)", transition:{duration:0.5, type:"spring", stiffness:200} }}
-               whileTap={{scale:0.7}}
-              className="text-richblack-50 md:inline-block rounded-2xl text-nowrap  border-[1px] text-sm border-[#F0F0F0] px-[12px] py-[6px] hover:scale-[1.04] duration-100 bg-[#0F0F0F]">
-                Sign Up
-              </motion.button>
-            </Link>
-          )}
-          {token  && <ProfileDropDown />}
-
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            {showCart && <CartButton />}
+            {token === null && (
+              <>
+                <Link to="/login" className="btn btn-ghost btn-sm hidden sm:inline-flex">
+                  Log in
+                </Link>
+                <Link to="/signup" className="btn btn-primary btn-sm">
+                  Get started
+                </Link>
+              </>
+            )}
+            {token && <ProfileDropDown />}
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </header>
+
+      {/* ───────── Mobile dock ───────── */}
+      <nav className="md:hidden fixed bottom-4 inset-x-0 z-[1001] flex justify-center px-4">
+        <div className="flex items-center gap-1 p-1.5 rounded-full glass-strong bg-surface-2/80 shadow-card">
+          {[
+            { to: "/", icon: FiHome, label: "Home", end: true },
+            { to: "/about", icon: FiInfo, label: "About" },
+            { to: "/contact-us", icon: FiMessageCircle, label: "Contact" },
+          ].map(({ to, icon: Icon, label, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              aria-label={label}
+              className={({ isActive }) =>
+                `grid place-items-center w-12 h-12 rounded-full transition ${isActive ? "bg-white text-night" : "text-white/70"}`
+              }
+            >
+              <Icon className="text-lg" />
+            </NavLink>
+          ))}
+          <button
+            aria-label="Catalog"
+            onClick={() => setCatalogSheet(true)}
+            className={`grid place-items-center w-12 h-12 rounded-full transition ${isCatalogActive ? "bg-white text-night" : "text-white/70"}`}
+          >
+            <FiCompass className="text-lg" />
+          </button>
+          <NavLink
+            to={token ? "/dashboard/my-profile" : "/login"}
+            aria-label="Account"
+            className={({ isActive }) =>
+              `grid place-items-center w-12 h-12 rounded-full transition ${
+                isActive || location.pathname.startsWith("/dashboard") ? "bg-white text-night" : "bg-white/10 text-white"
+              }`
+            }
+          >
+            <FiUser className="text-lg" />
+          </NavLink>
+        </div>
+      </nav>
+
+      {/* Mobile catalog sheet */}
+      <AnimatePresence>
+        {catalogSheet && (
+          <motion.div
+            className="md:hidden fixed inset-0 z-[1002] bg-night/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setCatalogSheet(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 32 }}
+              onClick={(e) => e.stopPropagation()}
+              className="absolute bottom-0 inset-x-0 rounded-t-[32px] glass-strong bg-surface-2/95 p-5 pb-10"
+            >
+              <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-white/20" />
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xl font-semibold">Browse catalog</p>
+                <button className="btn-icon" onClick={() => setCatalogSheet(false)} aria-label="Close">
+                  <FiX />
+                </button>
+              </div>
+              <div className="grid gap-2">
+                {catalogLinks.length === 0 && [0, 1, 2].map((i) => <div key={i} className="skeleton h-14" />)}
+                {catalogLinks.map((subLink, i) => (
+                  <Link key={subLink._id ?? i} to={catalogPath(subLink.name)} className="row-item">
+                    <span className={`icon-circle ${i === 0 ? "" : "bg-white/10 text-white"}`}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${DOTS[i % DOTS.length]}`} />
+                    </span>
+                    <span className="flex-1">
+                      <span className="block text-sm font-medium">{subLink.name}</span>
+                      <span className="block text-xs text-white/45">{subLink.course.length} courses</span>
+                    </span>
+                    <FiArrowUpRight className="text-white/50" />
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

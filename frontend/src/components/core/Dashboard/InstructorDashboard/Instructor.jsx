@@ -6,6 +6,8 @@ import {
 } from "../../../../services/courseDetail";
 import { Link } from "react-router-dom";
 import InstructorChart from "./InstructorChart";
+import { motion } from "motion/react";
+import { FiBookOpen, FiUsers, FiTrendingUp, FiPlus, FiChevronRight } from "react-icons/fi";
 
 const Instructor = () => {
   const [loading, setLoading] = useState(false);
@@ -39,80 +41,159 @@ const Instructor = () => {
     0
   );
 
+  // Decorative mini-bars: per-course share, normalised to the tallest bar
+  const sparkFrom = (values) => {
+    const list = (values.length ? values : [0]).slice(0, 12);
+    const max = Math.max(...list, 1);
+    return list.map((v) => Math.max(12, Math.round((v / max) * 100)));
+  };
+
+  const stats = [
+    {
+      label: "Total courses",
+      value: courses?.length,
+      icon: FiBookOpen,
+      color: "bg-citrus",
+      spark: sparkFrom(courses.map((c) => c?.studentsEnrolled?.length || 0)),
+    },
+    {
+      label: "Total students",
+      value: totalStudents,
+      icon: FiUsers,
+      color: "bg-magenta",
+      spark: sparkFrom(instructorData.map((c) => c.totalStudentsEnrolled || 0)),
+    },
+    {
+      label: "Total income",
+      value: `₹${totalAmount}`,
+      icon: FiTrendingUp,
+      color: "bg-violet",
+      spark: sparkFrom(instructorData.map((c) => c.totalAmountGenerated || 0)),
+    },
+  ];
+
   return (
-    <div className=" w-11/12 p-12">
-      <div className="flex justify-center flex-col items-center border-b-[1px] border-[#F1F2FF]">
-        <h1 className="text-4xl text-[#F1F2FF]">
-          {user.firstName} {user.lastName}
-        </h1>
-        <p className="text-[#838894] text-md mt-3 mb-3">
-          Let's start something new
-        </p>
-      </div>
+    <div className="w-full py-8 text-white sm:py-10">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 220, damping: 24 }}
+        className="flex flex-wrap items-end justify-between gap-4"
+      >
+        <div>
+          <p className="eyebrow">Instructor dashboard</p>
+          <h1 className="h-display mt-3 text-4xl sm:text-5xl">
+            Good to see you, <span className="text-gradient">{user.firstName}</span>
+          </h1>
+          <p className="mt-3 text-white/55">Let's start something new</p>
+        </div>
+        <Link to="/dashboard/add-course" className="btn btn-gradient">
+          <FiPlus /> New course
+        </Link>
+      </motion.div>
 
       {loading ? (
-        <div className="">Loading...</div>
-      ) : courses.length > 0 ? (
-        <div className="text-white">
-          <div className=" flex justify-between gap-3 mt-8 flex-wrap sm:flex-nowrap">
-            <InstructorChart courses={instructorData} />
-            <div className="w-[30%] flex flex-col gap-5 mt-6 relative top-12">
-              <p className="text-4xl text-[#F1F2FF] text-center">Statistic</p>
-
-              <div className="flex gap-3 flex-col font-inter border border-richblack-600 p-4 rounded-md items-center">
-                <div className=" bg-richblack-800 px-8 w-[80%] py-8 rounded-md">
-                  <p className="text-2xl text-[#F1F2FF] text-nowrap">Total courses</p>
-                  <p className="text-[#838894] text-2xl">{courses?.length}</p>
-                </div>
-                <div className=" bg-richblack-800 w-[80%] px-8 py-8 rounded-md">
-                  <p className="text-2xl text-[#F1F2FF] text-nowrap">Total students</p>
-                  <p className="text-[#838894] text-2xl">{totalStudents}</p>
-                </div>
-
-                <div className=" bg-richblack-800 w-[80%] px-8 py-8 rounded-md">
-                  <p className="text-2xl text-[#F1F2FF] text-nowrap">
-                    Total Income
-                  </p>
-                  <p className="text-[#838894] text-2xl">{totalAmount}</p>
-                </div>
-              </div>
-            </div>
+        <div className="mt-8 flex flex-col gap-6">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[0, 1, 2].map((k) => <div key={k} className="skeleton h-36 rounded-4xl" />)}
           </div>
-          <div>
-            {/* Render 3 courses */}
-            <div>
-              <div className="flex justify-between items-center mt-12">
-                <p className="text-[#F1F2FF] text-2xl">Your Courses</p>
-                <Link to={"/dashboard/my-courses"}>
-                  <p className="text-right cursor-pointer text-richblack-200  hover:underline hover:text-yellow-25">View All</p>
-                </Link>
-              </div>
-              <div className="flex mt-12 gap-4 ">
-                {courses.slice(0, 3).map((course) => {
-                  return (
-                    <div key={course._id}  className="w-[40%] rounded-md hover:bg-richblack-800 p-2 border border-richblack-800">
-                      <img src={course?.thumbnail} className="w-[100%] aspect-video object-cover rounded-md"/>
-                      <div className="flex flex-col gap-3 mt-2 px-2">
-                        <p className="text-xl text-[#F1F2FF] capitalize font-inter">{course.courseName}</p>
-                        <p className="capitalize text-sm text-[#c5c5cb]">{course.courseDescription.length>200?course.courseDescription.slice(0,200):course.courseDescription} </p>
-                        <div className="flex  gap-3 text-[#838791] mb-4">
-                          <p>{course?.studentsEnrolled.length} Students</p>
-                          <p> | </p>
-                          <p>Rs: {course?.price}</p>
-                        </div>
+          <div className="skeleton h-[420px] rounded-4xl" />
+        </div>
+      ) : courses.length > 0 ? (
+        <div>
+          {/* Stats */}
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {stats.map((stat, i) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.05 * i }}
+                  className="glass relative overflow-hidden p-6"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="icon-circle-glass h-10 w-10">
+                      <Icon className="text-[15px]" />
+                    </span>
+                    <div className="flex h-10 items-end gap-[3px]" aria-hidden="true">
+                      {stat.spark.map((h, k) => (
+                        <span
+                          key={k}
+                          className={`w-1.5 rounded-full ${stat.color} ${k === stat.spark.length - 1 ? "opacity-100" : "opacity-40"}`}
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="mt-6 break-all text-4xl font-medium tracking-tight">{stat.value}</p>
+                  <p className="mt-1 text-sm text-white/45">{stat.label}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Chart */}
+          <div className="mt-6">
+            <InstructorChart courses={instructorData} />
+          </div>
+
+          {/* Your courses */}
+          <div className="mt-12">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-2xl font-medium tracking-tight">
+                Your courses <sup className="text-sm text-white/45">{courses.length}</sup>
+              </h2>
+              <Link to={"/dashboard/my-courses"} className="btn btn-ghost btn-sm">
+                View all <FiChevronRight />
+              </Link>
+            </div>
+            <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+              {courses.slice(0, 3).map((course) => {
+                return (
+                  <div
+                    key={course._id}
+                    className="card-hover relative aspect-[4/5] w-[78%] shrink-0 snap-start overflow-hidden rounded-4xl border border-white/10 sm:w-auto"
+                  >
+                    <img src={course?.thumbnail} alt={course.courseName} className="absolute inset-0 h-full w-full object-cover" />
+                    <div className="absolute inset-0 bg-pink-wash mix-blend-screen" />
+                    <div className="absolute inset-0 bg-photo-fade" />
+
+                    <div className="absolute inset-x-4 top-4 flex items-center justify-end">
+                      <span className="pill pill-white">₹{course?.price}</span>
+                    </div>
+
+                    <div className="absolute inset-x-0 bottom-0 p-5">
+                      <p className="line-clamp-2 text-2xl font-medium capitalize leading-tight tracking-tight">{course.courseName}</p>
+                      <p className="mt-2 line-clamp-2 text-sm capitalize text-white/60">{course.courseDescription.length>200?course.courseDescription.slice(0,200):course.courseDescription}</p>
+                      <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4 text-sm">
+                        <span className="inline-flex items-center gap-1.5 text-white/75">
+                          <FiUsers /> {course?.studentsEnrolled.length} Students
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-white/75">
+                          Rs: {course?.price}
+                        </span>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       ) : (
-        <div>
-          <p>You haven't created any course yet</p>
-          <Link to={"dashboard/add-course"}>
-            <p>Create a course</p>
+        <div className="glass relative mt-8 flex flex-col items-center gap-4 overflow-hidden px-6 py-16 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 scale-[2.2] rounded-full bg-violet/30 blur-2xl" />
+            <span className="icon-circle-glass relative h-16 w-16">
+              <FiPlus className="text-2xl" />
+            </span>
+          </div>
+          <h2 className="mt-2 text-2xl font-medium tracking-tight">You haven't created any course yet</h2>
+          <p className="max-w-md text-white/55">Build your first course and your stats will show up right here.</p>
+          <Link to={"/dashboard/add-course"} className="btn btn-primary mt-2">
+            Create a course
           </Link>
         </div>
       )}

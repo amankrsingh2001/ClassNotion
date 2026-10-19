@@ -26,11 +26,19 @@ const EditCourse = () => {
     },[token])
 
   return (
-    <div className='text-white'>
-        <h1>Edit Course</h1>
+    <div className='w-full py-8 text-white sm:py-10'>
+        <p className='eyebrow'>Instructor studio</p>
+        <h1 className='h-display mt-3 mb-8 text-4xl sm:text-5xl'>
+            Edit <span className='text-gradient'>course</span>
+        </h1>
         <div>
             {
-                course? (<RenderSteps/>) :(<div></div>)
+                course? (<RenderSteps/>) :(
+                  <div className='flex flex-col gap-6'>
+                    <div className='skeleton h-28 rounded-4xl' />
+                    <div className='skeleton h-[420px] rounded-4xl' />
+                  </div>
+                )
             }
         </div>
     </div>

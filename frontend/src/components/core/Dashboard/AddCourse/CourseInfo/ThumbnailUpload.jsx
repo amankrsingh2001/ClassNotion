@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { SlCloudUpload } from "react-icons/sl";
+import { FiUploadCloud } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 
 const ThumbnailUpload = ({
@@ -104,54 +104,54 @@ useEffect(() => {
 
   return (
     <>
-  
-    <div className="bg-[rgb(44,51,63)] min-h-[200px]  rounded-md text-white gap-2 flex flex-col items-center justify-center">
+    <div className="w-full">
       {!mediaPreview && (
-        <>
-      
         <div
-          className="w-full h-full flex justify-center flex-col items-center gap-2"
+          className="group relative flex min-h-[240px] w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-4xl border border-dashed border-white/20 bg-white/[0.03] p-6 text-center transition hover:border-orchid/50 hover:bg-white/[0.05]"
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          <div className=" bg-[#171717] p-4 rounded-full">
-            <SlCloudUpload className="text-[#FFD60A] text-2xl" />
+          <div className="pointer-events-none absolute left-1/2 top-1/3 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-magenta/20 blur-3xl transition group-hover:bg-magenta/30" />
+          <div className="icon-circle-glass relative h-14 w-14">
+            <FiUploadCloud className="text-xl" />
           </div>
 
-          <div className="flex justify-center flex-row items-center w-[44%]">
-            <p className="w-[60%] text-sm text-richblack-300">
-              Drag and Drop an Image or
-              <input
-                ref={fileInputRef}
-                onChange={handleFileInputChange}
-                type="file"
-                name={name}
-                hidden
-              />
-            </p>
-
-            <button className="text-[#FFD60A]" onClick={handlerButtonClick}>
+          <div className="relative text-sm text-white/70">
+            Drag and drop a file, or{" "}
+            <input
+              ref={fileInputRef}
+              onChange={handleFileInputChange}
+              type="file"
+              name={name}
+              hidden
+            />
+            <button type="button" className="font-semibold text-white underline decoration-orchid decoration-2 underline-offset-4 hover:text-peach" onClick={handlerButtonClick}>
               Browse
             </button>
           </div>
-          <p className="text-sm text-richblack-300">Max 6MB each (12MB for videos) </p>
-         
+          <p className="relative text-xs text-white/40">Max 6MB each (12MB for videos)</p>
+          <div className="relative flex flex-wrap justify-center gap-2">
+            <span className="pill">Aspect ratio 16:9</span>
+            <span className="pill">Recommended 1024x576</span>
+          </div>
         </div>
-          <ul className="flex w-full list-disc justify-evenly">
-          <li className="text-richblack-300 text-sm">Aspect ratio 16:9 </li>
-          <li className="text-richblack-300 text-sm">Recommended size 1024x576 </li>
-        </ul>
-        </>
       )}
       {mediaPreview && (
-        <div className="flex items-start gap-1">
-          {mediaPreview}
-          <button onClick={removeHandler}><RxCross2 className="text-[#EF476F]" /></button>
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-night">
+          <div className="aspect-video w-full">
+            {mediaPreview}
+          </div>
+          <button
+            onClick={removeHandler}
+            className="btn-icon absolute right-3 top-3 h-9 w-9 bg-night/60"
+            aria-label="Remove file"
+          >
+            <RxCross2 />
+          </button>
         </div>
       )}
-  
     </div>
-    {errors[name] && <span className="text-[#EF476F]" >Thumnail is required</span>}
+    {errors[name] && <p className="field-error">Thumbnail is required</p>}
     </>
   );
 };

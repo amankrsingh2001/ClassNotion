@@ -4,7 +4,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { updateCompletedLecture } from '../../../slices/viewCourseSlice'
 import {Player} from 'video-react'
 import "video-react/dist/video-react.css";
-import { IoPlayCircleOutline } from "react-icons/io5";
+import { FiArrowLeft, FiArrowRight, FiCheck, FiFilm, FiRotateCcw } from "react-icons/fi";
+import { motion } from "motion/react";
 import { updateCourseProgress } from '../../../services/courseDetail'
 
 
@@ -23,18 +24,14 @@ const VideoDetails = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const playerRef = useRef() 
+    const playerRef = useRef()
 
 
- 
-
-
-    
     useEffect(()=>{
 
         const setVideoSpecificDetails = async() =>{
             if(!courseSection.length){
-                return 
+                return
             }
             if(!courseId && !sectionId && !subSectionId){
                 navigate('/dashboard/enrolled-courses')
@@ -86,13 +83,13 @@ const VideoDetails = () => {
         const currentSectionIndex = courseSection.findIndex(
             (data) => data._id === sectionId
         )
-    
+
         const noOfSubSections = courseSection[currentSectionIndex].subSection.length;
-    
+
         const currentSubSectionIndex = courseSection[currentSectionIndex].subSection.findIndex(
             (data) => data._id === subSectionId
         )
-    
+
         if(currentSubSectionIndex !== noOfSubSections - 1) {
             //same section ki next video me jao
             const nextSubSectionId = courseSection[currentSectionIndex].subSection[currentSectionIndex + 1]._id;
@@ -103,17 +100,17 @@ const VideoDetails = () => {
             //different section ki first video
             const nextSectionId = courseSection[currentSectionIndex + 1]._id;
             const nextSubSectionId = courseSection[currentSectionIndex + 1].subSection[0]._id;
-            ///iss voide par jao 
+            ///iss voide par jao
             navigate(`/view-course/${courseId}/section/${nextSectionId}/sub-section/${nextSubSectionId}`)
         }
       }
 
-    
+
 
 
     const goToPreviousVideo = () =>{
         const currentSectionIndex = courseSection.findIndex((data)=>data._id === sectionId)
-          
+
         const noOfSubSections = courseSection[currentSectionIndex].subSection.length
 
         const currentSubSectionIndex = courseSection[currentSectionIndex].subSection.findIndex(
@@ -139,66 +136,119 @@ const VideoDetails = () => {
         if(res){
             dispatch(updateCompletedLecture(subSectionId))
         }
-        
+
         setLoading(false)
     }
-    
+
+    const instructor = courseEntireData?.instructor
+    const isDone = completedLecture.includes(subSectionId)
+
   return (
-    <div className='text-white relative z-0'>
+    <div className='relative z-0 flex flex-col gap-6'>
         {
-            !videoData ? (<div>No data found</div>) : (
-                <Player 
+            !videoData ? (
+                <div className='glass aspect-video flex flex-col items-center justify-center text-center gap-3 p-10'>
+                    <div className='relative'>
+                        <div className='absolute inset-0 -z-10 rounded-full bg-magenta/40 blur-2xl' />
+                        <span className='icon-circle-glass w-14 h-14'><FiFilm className='text-xl' /></span>
+                    </div>
+                    <p className='text-lg font-medium tracking-tight'>No data found</p>
+                    <p className='text-sm text-white/55'>Pick a lesson from the list to start watching.</p>
+                </div>
+            ) : (
+                <div className='overflow-hidden rounded-3xl md:rounded-4xl border border-white/10 bg-night shadow-card [&_.video-react]:!bg-night [&_.video-react]:!font-sans [&_.video-react-control-bar]:!bg-night/60 [&_.video-react-control-bar]:backdrop-blur-xl [&_.video-react-big-play-button]:!rounded-full [&_.video-react-big-play-button]:!w-20 [&_.video-react-big-play-button]:!h-20 [&_.video-react-big-play-button]:!leading-[5rem] [&_.video-react-big-play-button]:!border-white/25 [&_.video-react-big-play-button]:!bg-white/15 [&_.video-react-big-play-button]:backdrop-blur-xl [&_.video-react-big-play-button]:!left-1/2 [&_.video-react-big-play-button]:!top-1/2 [&_.video-react-big-play-button]:!-ml-10 [&_.video-react-big-play-button]:!-mt-10 [&_.video-react-play-progress]:!bg-citrus [&_.video-react-volume-level]:!bg-citrus'>
+                <Player
                 ref = {playerRef}
                 aspectRatio = "16:9"
                 playsInline
                 onEnded={(()=>setVideoEnded(true))}
                 src={videoData?.videoUrl}
                 >
-                 
-                 <IoPlayCircleOutline />
 
                 {
                     videEnded && (
-                        <div className='border-2 border-white  flex gap-5'>
-                            <div className='absolute flex top-1/2 left-1/3 z-10  gap-4'>
-                           {
-                              !completedLecture.includes(subSectionId) && (
-                                <button className='px-2 py-3 rounded-md text-2xl  bg-caribbeangreen-400 text-black w-fit' onClick={()=>handleLectureCompletion()}>Mark As Completed</button>
-                            ) 
-                            }
+                        <div className='absolute inset-0 z-10 grid place-items-center bg-night/60 backdrop-blur-sm p-3 sm:p-4'>
+                            <motion.div
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+                                className='glass-strong p-4 sm:p-7 flex flex-col items-center gap-3 sm:gap-5 max-w-full'
+                            >
+                                <div className='text-center'>
+                                    <p className='eyebrow'>Lesson finished</p>
+                                    <p className='mt-1 text-lg sm:text-2xl font-medium tracking-tight'>Nice work — what's next?</p>
+                                </div>
+                                <div className='flex flex-wrap justify-center gap-2 sm:gap-3'>
+                                {
+                                    !completedLecture.includes(subSectionId) && (
+                                        <button className='btn btn-primary' onClick={()=>handleLectureCompletion()}>
+                                            <FiCheck strokeWidth={3} /> {loading ? 'Saving...' : 'Mark as completed'}
+                                        </button>
+                                    )
+                                }
+                                    <button className='btn btn-glass' onClick={()=>{
+                                        if(playerRef?.current){
+                                            playerRef.current?.seek(0)
+                                    setVideoEnded(false)}}}>
+                                        <FiRotateCcw /> Rewatch
+                                    </button>
+                                </div>
 
-
-                                <button className=' px-2 py-3 rounded-md text-2xl  bg-richblack-800 w-fit   text-white z-10' onClick={()=>{
-                                    if(playerRef?.current){
-                                        playerRef.current?.seek(0)
-                                setVideoEnded(false)}}}>Rewatch</button>
-
-                            </div>
-                           
-                                <div className='bg-white'>
+                                <div className='flex flex-wrap justify-center gap-2 sm:gap-3'>
                                    {
                                     !isFirstVideo() &&  (
-                                        <button className='bg-caribbeangreen-200 text-white h-[40px] w-[40px]' onClick={()=>goToPreviousVideo()}>Prev</button>
+                                        <button className='btn btn-glass btn-sm' onClick={()=>goToPreviousVideo()}>
+                                            <FiArrowLeft /> Prev
+                                        </button>
                                     )
                                    }
                                    {
-                                    !isLastVideo() && ( <button className='bg-caribbeangreen-400 text-white h-[40px] w-[40px]' onClick={()=>goToNextVideo()}>Next</button>
+                                    !isLastVideo() && (
+                                        <button className='btn btn-glass btn-sm' onClick={()=>goToNextVideo()}>
+                                            Next <FiArrowRight />
+                                        </button>
                                     )
                                    }
                                 </div>
+                            </motion.div>
                         </div>
                     )
                 }
                 </Player>
+                </div>
             )
         }
-        <div className='mt-8 flex flex-col gap-2'>
-        <h1 className='text-xl'>{videoData?.title}</h1>
-        <p className='text-[#818186]'>{videoData?.description}</p>
+
+        <div className='flex flex-col gap-5 px-1'>
+            <div className='flex flex-wrap items-center gap-2'>
+                <span className='pill'><span className='w-1.5 h-1.5 rounded-full bg-magenta' /> Now playing</span>
+                {isDone && <span className='pill pill-citrus'><FiCheck strokeWidth={3} /> Completed</span>}
+            </div>
+            <h1 className='h-display text-3xl sm:text-4xl md:text-5xl text-white break-words'>{videoData?.title}</h1>
+            {videoData?.description && <p className='text-white/55 text-base md:text-lg whitespace-pre-line max-w-3xl'>{videoData?.description}</p>}
+
+            {instructor && (
+                <div className='flex items-center justify-between gap-4 p-3 pr-5 rounded-[26px] bg-white/[0.04] border border-white/[0.07]'>
+                    <div className='flex items-center gap-3 min-w-0'>
+                        <span className='shrink-0 p-[2px] bg-brand rounded-full'>
+                            <img
+                                src={instructor?.image}
+                                alt={`${instructor?.firstName ?? ''} ${instructor?.lastName ?? ''}`}
+                                className='w-11 h-11 rounded-full object-cover border-2 border-night bg-surface-2'
+                            />
+                        </span>
+                        <div className='min-w-0'>
+                            <p className='text-xs text-white/45'>By</p>
+                            <p className='font-medium truncate'>{instructor?.firstName} {instructor?.lastName}</p>
+                        </div>
+                    </div>
+                    <p className='text-sm text-white/55 truncate max-w-[45%] text-right'>{courseEntireData?.courseName}</p>
+                </div>
+            )}
         </div>
-      
+
     </div>
   )
 }
 
-export default VideoDetails 
+export default VideoDetails

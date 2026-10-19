@@ -1,57 +1,72 @@
-import React, { useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AiOutlineCaretDown } from "react-icons/ai";
-import { VscDashboard, VscSignOut } from "react-icons/vsc"
-import userOnClickOutside from '../../../hooks/useOnClickOutside'
-import { Link, useNavigate } from 'react-router-dom';
-import { logOut } from '../../../services/authApi';
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { VscDashboard, VscSignOut, VscSettingsGear } from "react-icons/vsc";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "motion/react";
+import userOnClickOutside from "../../../hooks/useOnClickOutside";
+import { logOut } from "../../../services/authApi";
 
 const ProfileDropDown = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const [open, setOpen] = useState(false)
-  const { user } = useSelector((state)=>state.profile)
-  const ref = useRef(null)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.profile);
+  const ref = useRef(null);
 
+  userOnClickOutside(ref, () => setOpen(false));
 
-    userOnClickOutside(ref, () =>setOpen(false))
+  if (!user) return null;
 
-    if(!user) return null;
+  const logOutHandler = () => {
+    setOpen(false);
+    dispatch(logOut(navigate));
+  };
 
-
-    const logOutHandler = () =>{
-      dispatch(logOut(navigate))
-    }
+  const itemClass = "flex w-full items-center gap-3 px-3 py-2.5 rounded-2xl text-sm text-white/80 hover:text-white hover:bg-white/[0.06] transition";
 
   return (
-    <button className='relative' onClick={()=>setOpen(true)}>
-      <div className='flex items-center gap-x-1'>
-        <img src={user?.image} alt={user?.firstName} className='aspect-square w-[30px] rounded-full object-cover'/>
-        <AiOutlineCaretDown className="text-sm text-richblack-100" />
-      </div>
-      {
-        open && ( 
-        <div onClick={(e)=>e.stopPropagation}
-        className="absolute top-[118%] right-0 z-[1000] divide-y-[1px] divide-richblack-700 overflow-hidden rounded-md border-[1px] border-richblack-700 bg-richblack-800"
-          ref={ref}
-        >
-          <Link to="/dashboard/my-profile" onClick={()=>setOpen(false)}>
-            <div className='flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25'>
-            <VscDashboard className="text-lg" />
-            Dashboard
-            </div>
-          </Link>
-          <div className='flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25'
-            onClick={logOutHandler}
-          >
-           
-            <VscSignOut className="text-lg" />
-           <p className='p-[2px]'> Logout</p>
-          </div>
-        </div>
-        )}
-    </button>
-  )
-}
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Account menu"
+        className="block rounded-full p-[2px] bg-brand transition hover:shadow-glow"
+      >
+        <img src={user?.image} alt={user?.firstName} className="w-10 h-10 rounded-full object-cover border-2 border-night" />
+      </button>
 
-export default ProfileDropDown
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className="absolute top-[calc(100%+12px)] right-0 z-[1000] w-64 glass-strong bg-surface-2/95 rounded-3xl p-2 shadow-card"
+          >
+            <div className="flex items-center gap-3 p-3">
+              <img src={user?.image} alt="" className="w-10 h-10 rounded-full object-cover" />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold truncate">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <p className="text-xs text-white/45">{user?.accountType}</p>
+              </div>
+            </div>
+            <div className="divider my-1" />
+            <Link to="/dashboard/my-profile" onClick={() => setOpen(false)} className={itemClass}>
+              <VscDashboard className="text-base" /> Dashboard
+            </Link>
+            <Link to="/dashboard/setting" onClick={() => setOpen(false)} className={itemClass}>
+              <VscSettingsGear className="text-base" /> Settings
+            </Link>
+            <button onClick={logOutHandler} className={`${itemClass} hover:!text-rose`}>
+              <VscSignOut className="text-base" /> Log out
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default ProfileDropDown;

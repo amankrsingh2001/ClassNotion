@@ -6,6 +6,7 @@ import { setCourse } from '../../../../../slices/courseSlice'
 import { RxCross2 } from "react-icons/rx";
 import ThumbnailUpload from '../CourseInfo/ThumbnailUpload'
 import toast from 'react-hot-toast'
+import { motion } from 'motion/react'
 
 const SubSectionModal = ({modalData, setModalData, add=false ,
   view = false,
@@ -113,64 +114,84 @@ const SubSectionModal = ({modalData, setModalData, add=false ,
       setModalData(null)
   }
 
+  const modeLabel = view ? "Viewing" : edit ? "Editing" : "Adding"
+  const modeClass = view ? "pill" : edit ? "pill pill-magenta" : "pill pill-citrus"
+
   return (
-    <div className="fixed w-11/12 inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-night/70 p-4 backdrop-blur-md">
 
-      <div className="w-[700px]  rounded-lg border border-richblack-400 bg-richblack-800 p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 240, damping: 24 }}
+        className="glass-strong relative my-8 w-full max-w-[700px] overflow-hidden bg-surface-2/80"
+      >
+        <div className='pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-violet/25 blur-3xl' />
 
-        <div className='flex mt-8'>
-            <p className='font-bold text-3xl py-4'>{view && "Check out"} {edit && "Editing"} {add && "Adding"} Lecture</p>
-            <button className="text-[#EF476F] p-4" onClick={() => {!loading ? setModalData(null):{}}}><RxCross2 /></button>
+        <div className='relative flex items-center justify-between gap-4 border-b border-white/[0.07] px-5 py-4 sm:px-7 sm:py-5'>
+            <div className='flex items-center gap-3'>
+              <span className={modeClass}>{modeLabel}</span>
+              <p className='text-xl font-medium tracking-tight sm:text-2xl'>Lecture</p>
+            </div>
+            <button
+              type='button'
+              aria-label='Close'
+              className="btn-icon"
+              onClick={() => {!loading ? setModalData(null):{}}}
+            ><RxCross2 /></button>
         </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='rounded-md p-4 space-y-8 bg-[#161D29] border-[#2C333F] border-2 '  encType="multipart/form-data">
+      <form onSubmit={handleSubmit(onSubmit)} className='relative space-y-6 p-5 sm:p-7' encType="multipart/form-data">
 
-          <ThumbnailUpload name="lectureVideo"
-            label="lectureVideo"
-            register={register}
-            setValue={setValue}
-            errors={errors}
-            video ={true}
-            viewData = {view? modalData.videoUrl : null}
-            editData = {edit? modalData.videoUrl: null}
-          />
-          <div  className='flex flex-col gap-2 px-2' >
-            <label className='font-[#F1F2FF]' htmlFor='lectureTitle'>Lecture Title</label>
-            <input id='lectureTitle' 
-              placeholder='Enter Lecture Titile'
+          <div>
+            <p className='field-label'>Lecture video</p>
+            <ThumbnailUpload name="lectureVideo"
+              label="lectureVideo"
+              register={register}
+              setValue={setValue}
+              errors={errors}
+              video ={true}
+              viewData = {view? modalData.videoUrl : null}
+              editData = {edit? modalData.videoUrl: null}
+            />
+          </div>
+          <div>
+            <label className='field-label' htmlFor='lectureTitle'>Lecture title</label>
+            <input id='lectureTitle'
+              placeholder='Enter Lecture Title'
               {...register("lectureTitle", {required:true})}
-              className='w-full p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+              className='field'
             />
             {
-              errors.lectureTitle && (<span>Lecture Title is required</span>)
+              errors.lectureTitle && (<p className='field-error'>Lecture Title is required</p>)
             }
           </div>
-          <div className='flex flex-col gap-2 px-2'>
-            <label  className='font-[#F1F2FF]' htmlFor="lectureDescription">Lecture Descritpion</label> 
+          <div>
+            <label className='field-label' htmlFor="lectureDescription">Lecture description</label>
             <textarea
               id='lectureDescription'
               placeholder='Enter Lecture Description'
               {...register('lectureDesc', {required:true})}
-              className='min-h-[130px] w-full  p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+              className='field min-h-[130px] resize-y'
             />
             {
-              errors.lectureDesc && (<span>
+              errors.lectureDesc && (<p className='field-error'>
                 Lecture Description is required
-              </span>)
+              </p>)
             }
           </div>
 
           {
             !view && (
-              <div className='flex gap-4'>
-                <button className='bg-yellow-50 p-2 text-richblack-800 rounded-md font-medium'>{edit ? "Save Changes" : "Save"} </button>
-                <button className='bg-white rounded-md text-richblack-800 p-2' onClick={()=>setModalData(null)} type='button'>Cancel</button>
+              <div className='flex flex-wrap justify-end gap-3'>
+                <button className='btn btn-glass' onClick={()=>setModalData(null)} type='button'>Cancel</button>
+                <button className='btn btn-gradient'>{edit ? "Save Changes" : "Save"}</button>
               </div>
             )
           }
 
       </form>
-      </div>
+      </motion.div>
 
     </div>
   )

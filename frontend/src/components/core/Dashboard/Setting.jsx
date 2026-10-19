@@ -5,12 +5,13 @@ import toast from "react-hot-toast";
 import countrycode from "../../../data/countrycode.json";
 import DeleteAccount from "./settings/DeleteAccount";
 import ChangePassword from "./settings/ChangePassword";
+import { FiCamera, FiUpload, FiX, FiCheck, FiChevronDown } from "react-icons/fi";
 
 const Setting = () => {
   const { user } = useSelector((state) => state.profile);
   const [image, setImage] = useState(user?.image);
   const [file, setFile] = useState(null);
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
 
   const [aboutData, setAboutData] = useState({
     dateOfBirth: "",
@@ -44,14 +45,14 @@ const Setting = () => {
       dispatch(UpdateDispayPicture(formData));
       setFile(null);
     } catch (error) {
-      throw(error)
+      throw error;
     }
   };
 
   const onChangeHandler = (e) => {
-    const selectedFile = e.target.files[0]; // Ensure the file is correctly accessed
+    const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile); // Ensure the selected file is stored in state
+      setFile(selectedFile);
       const imageUrl = URL.createObjectURL(selectedFile); // Preview the image
       setImage(imageUrl);
     }
@@ -67,85 +68,97 @@ const Setting = () => {
   };
 
   return (
-    <div className="text-white h-full flex flex-col items-start justify-center gap-8 w-[80%] px-8 py-4 ">
-      <h1 className="text-4xl font-medium">Profile</h1>
+    <div className="w-full flex flex-col gap-6 lg:gap-8">
+      <div>
+        <p className="eyebrow">Account</p>
+        <h1 className="h-display text-4xl sm:text-5xl mt-3">Settings</h1>
+        <p className="mt-3 text-white/55">Update your photo, personal details and password.</p>
+      </div>
 
-      <form
-        onSubmit={submitHandler}
-        className="lg:w-[80%] rounded-md flex lg:flex-row flex-col items-center py-6 px-4 gap-6  bg-richblack-800"
+      {/* Avatar upload */}
+      <SettingsSection
+        eyebrow="01 · Photo"
+        title="Profile picture"
+        helper="Click the avatar to pick a new image. PNG, JPG or GIF."
       >
-        <div className="image relative">
-          <img
-          onClick={() => inputRef.current.click()}
-            src={image}
-            alt={`profile-${user.firstName}`}
-            className="aspect-square w-[78px] border-2 border-richblack-700 cursor-pointer object-cover rounded-full "
-          />
-         
-          <input
-            id="image"
-            type="file"
-            ref = {inputRef}
-            className="w-[40px] h-full opacity-0"
-            onChange={onChangeHandler}
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          <div className="">
-            <p className="text-[#F1F2FF] font-semibold text-xl">
-              Change Your Profile
-            </p>
-          </div>
-          <div className="flex flex-col lg:flex-row gap-3">
+        <form onSubmit={submitHandler} className="flex flex-col sm:flex-row sm:items-center gap-6">
+          <div className="relative shrink-0 self-start">
+            <div className="absolute inset-0 rounded-full bg-magenta/30 blur-2xl pointer-events-none" />
             <button
-              type="submit"
-              className="bg-yellow-50 px-4 py-2  text-black rounded-md cursor-pointer w-full"
-            >
-              Change
-            </button>
-            <input
-              onClick={removeButtonHandler}
               type="button"
-              value="Remove"
-              className="bg-richblack-400 px-4 py-2 text-white rounded-md cursor-pointer w-full"
+              onClick={() => inputRef.current.click()}
+              className="group relative block p-[3px] bg-brand rounded-full"
+              aria-label="Choose a new picture"
+            >
+              <img
+                src={image}
+                alt={`profile-${user?.firstName}`}
+                className="aspect-square w-28 sm:w-32 rounded-full object-cover bg-surface-2 border-4 border-night"
+              />
+              <span className="absolute inset-[3px] grid place-items-center rounded-full bg-night/50 opacity-0 group-hover:opacity-100 transition">
+                <FiCamera className="text-2xl" />
+              </span>
+              <span className="absolute bottom-1 right-1 icon-circle w-9 h-9 border-2 border-night">
+                <FiCamera />
+              </span>
+            </button>
+            {file && <span className="absolute -top-2 -left-2 pill pill-citrus">Preview</span>}
+            <input id="image" type="file" ref={inputRef} className="hidden" onChange={onChangeHandler} />
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-lg font-medium tracking-tight">Change your profile picture</p>
+            <p className="mt-1 text-sm text-white/55 truncate">
+              {file ? `Selected: ${file.name}` : "No new file selected yet."}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2.5">
+              <button type="button" onClick={() => inputRef.current.click()} className="btn btn-glass btn-sm">
+                <FiUpload /> Select
+              </button>
+              <button type="submit" className="btn btn-primary btn-sm">
+                <FiCheck /> Upload
+              </button>
+              <button type="button" onClick={removeButtonHandler} className="btn btn-ghost btn-sm">
+                <FiX /> Remove
+              </button>
+            </div>
+          </div>
+        </form>
+      </SettingsSection>
+
+      {/* Personal information */}
+      <SettingsSection
+        eyebrow="02 · Profile"
+        title="Personal information"
+        helper="This is shown on your profile and used for your certificates."
+      >
+        <form onSubmit={aboutHandler} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="md:col-span-2">
+            <label className="field-label" htmlFor="about">
+              About
+            </label>
+            <input
+              onChange={aboutChangeHandler}
+              type="text"
+              id="about"
+              name="about"
+              placeholder="Tell us about Yourself"
+              className="field"
+              required
             />
           </div>
-        </div>
-      </form>
 
-      <div className="lg:w-[80%] rounded-md flex flex-col items-center py-6 px-4 gap-6  bg-richblack-800">
-        <p className="text-xl font-medium text-start w-full">
-          Personal Information
-        </p>
-
-        <form onSubmit={aboutHandler} className="flex flex-col w-full gap-8">
-          {/* section 1 */}
-
-          <div className="flex justify-between w-full  gap-4  p-4 ">
-            <div className="flex flex-col w-[40%] gap-1">
-              <label className="text-[#F1F2FF]" htmlFor="about">
-                About
-              </label>
-              <input
-                onChange={aboutChangeHandler}
-                type="text"
-                id="about"
-                name="about"
-                placeholder="Tell us about Yourself"
-                className="p-3 bg-richblack-600 outline-none rounded-lg text-[#c4c8d5]"
-                required
-              />
-              {/* <p className="text-xs">Name entered above will be used for all issued certifies.</p> */}
-            </div>
-
-            <div className="flex flex-col w-[40%] gap-1">
-              <p className="text-[#F1F2FF]">Profession</p>
+          <div>
+            <label className="field-label" htmlFor="profession">
+              Profession
+            </label>
+            <div className="relative">
               <select
                 onChange={aboutChangeHandler}
                 defaultValue="Web developer"
                 id="profession"
                 name="profession"
-                className="p-3 bg-richblack-600 outline-none rounded-lg text-[#c4c8d5]"
+                className="field"
                 required
               >
                 <option value="Web Developer">Web Developer</option>
@@ -153,85 +166,91 @@ const Setting = () => {
                 <option value="Test Engineer">Test Engineer</option>
                 <option value="Ios Developer">Ios Developer</option>
               </select>
+              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
             </div>
           </div>
 
-          <div className="flex justify-between w-full gap-3 p-4">
-            <div className="flex flex-col w-[40%] gap-1">
-              <label htmlFor="dateOfBirth" className="text-[#F1F2FF]">
-                Date of Birth
-              </label>
-              <input
-                onChange={aboutChangeHandler}
-                type="date"
-                name="dateOfBirth"
-                id="dateOfBirth"
-                className="p-3 bg-richblack-600 w-[45] outline-none rounded-lg text-[#c4c8d5]"
-                required
-              />
-            </div>
+          <div>
+            <label htmlFor="dateOfBirth" className="field-label">
+              Date of Birth
+            </label>
+            <input
+              onChange={aboutChangeHandler}
+              type="date"
+              name="dateOfBirth"
+              id="dateOfBirth"
+              className="field [color-scheme:dark]"
+              required
+            />
+          </div>
 
-            <div className="flex flex-col w-[40%] gap-1">
-              <p className="text-[#F1F2FF]">Gender</p>
-
+          <div>
+            <label className="field-label" htmlFor="gender">
+              Gender
+            </label>
+            <div className="relative">
               <select
                 onChange={aboutChangeHandler}
                 defaultValue="male"
                 id="gender"
                 name="gender"
-                className="p-3 bg-richblack-600 outline-none rounded-lg text-[#c4c8d5]"
+                className="field"
                 required
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
+              <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
             </div>
           </div>
 
-          {/* section 3   */}
-
-          <div className="flex flex-col gap-1">
-            <p className="p-4">Contact Number</p>
-
-            <div className="flex justify-between gap-3 p-4">
-              <select
-                id="code"
-                name="code"
-                className="bg-richblack-600 text-[#999DAA] rounded-lg text-md text-center py-3 md:h-full outline-none"
-              >
+          <div>
+            <label className="field-label" htmlFor="contactNumber">
+              Contact Number
+            </label>
+            <div className="flex gap-2">
+              <select id="code" name="code" className="field !w-[96px] !px-3 shrink-0 text-center">
                 {countrycode.map((code, index) => {
-                  return (
-                    <option className="bg-richblack-600" key={index}>
-                      {code.code}
-                    </option>
-                  );
+                  return <option key={index}>{code.code}</option>;
                 })}
               </select>
               <input
                 onChange={aboutChangeHandler}
                 type="text"
                 placeholder="0123 456 789"
-                className="p-3 bg-richblack-600 w-[70%] outline-none rounded-lg text-[#999DAA]"
+                className="field min-w-0"
                 name="contactNumber"
                 id="contactNumber"
               />
             </div>
           </div>
 
-          <button
-            className="bg-yellow-200 font-semibold rounded-md text-black py-4"
-            type="submit"
-          >
-            Change About us
-          </button>
+          <div className="md:col-span-2 flex justify-end pt-1">
+            <button className="btn btn-primary w-full sm:w-auto" type="submit">
+              Save details
+            </button>
+          </div>
         </form>
-      </div>
+      </SettingsSection>
 
-                <ChangePassword/>
+      <ChangePassword />
 
-    <DeleteAccount/>
+      <DeleteAccount />
     </div>
   );
 };
+
+// Two-column glass section: title column on the left, form on the right
+const SettingsSection = ({ eyebrow, title, helper, children }) => (
+  <section className="glass p-6 sm:p-8 grid grid-cols-1 xl:grid-cols-[240px_1fr] gap-6 xl:gap-10">
+    <div>
+      <p className="eyebrow text-[10px]">{eyebrow}</p>
+      <h2 className="mt-2 text-xl sm:text-2xl font-medium tracking-tight">{title}</h2>
+      {helper && <p className="mt-2 text-sm text-white/55 leading-relaxed">{helper}</p>}
+    </div>
+    <div className="min-w-0">{children}</div>
+  </section>
+);
+
 export default Setting;

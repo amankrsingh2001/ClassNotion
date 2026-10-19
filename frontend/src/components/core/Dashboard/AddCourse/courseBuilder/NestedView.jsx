@@ -1,10 +1,7 @@
+import toast from 'react-hot-toast'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { RxDropdownMenu } from "react-icons/rx";
-import { MdEdit } from "react-icons/md";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import { BiSolidDownArrow } from "react-icons/bi";
-import { AiOutlinePlus } from "react-icons/ai";
+import { FiEdit2, FiTrash2, FiChevronDown, FiPlay, FiPlus } from "react-icons/fi";
 import SubSectionModal from './SubSectionModal';
 import ConfirmationModal from '../../../../Common/ConfirmationModal';
 import { deleteSection, deleteSubSection } from '../../../../../services/courseDetail';
@@ -57,24 +54,36 @@ const NestedView = ({ handleChangeEditSectionName }) => {
   return (
     <div>
 
-      <div className='rounded bg-richblack-700 py-6 px-8'>
-     
-        {course?.courseContent?.map((section)=>{
+      <div className='flex flex-col gap-3'>
+
+        {course?.courseContent?.map((section, sIndex)=>{
 
           return (
-          <details key={section._id}  className='text-white'>
-            <summary className='flex items-center text-xl justify-between gap-x-3 border-b-2'>
-                <div className='flex items-center gap-2'>
-                <RxDropdownMenu className='text-white' />
-                <p className='text-pink-100'>{section.sectionName}</p>
+          <details key={section._id} className='glass group overflow-hidden rounded-3xl open:bg-white/[0.06]'>
+            <summary className='flex cursor-pointer list-none items-center justify-between gap-3 p-3 pl-4 sm:p-4 sm:pl-5 [&::-webkit-details-marker]:hidden'>
+                <div className='flex min-w-0 items-center gap-3'>
+                <span className='grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/[0.06] text-xs font-semibold text-white/60'>
+                  {String(sIndex + 1).padStart(2, '0')}
+                </span>
+                <div className='min-w-0'>
+                  <p className='truncate font-medium tracking-tight'>{section.sectionName}</p>
+                  <p className='text-xs text-white/45'>{section.subSection?.length || 0} lessons</p>
+                </div>
                 </div>
 
-                <div className='flex items-center gap-x-3'>
-                  <button 
+                <div className='flex shrink-0 items-center gap-1.5'>
+                  <button
+                   type='button'
+                   aria-label='Edit section'
+                   className='btn-icon h-9 w-9'
                    onClick={()=>handleChangeEditSectionName(section._id, section.sectionName)}
-                  ><MdEdit/></button>
+                  ><FiEdit2 className='text-sm'/></button>
 
-                  <button onClick={()=>{
+                  <button
+                    type='button'
+                    aria-label='Delete section'
+                    className='btn-icon h-9 w-9 hover:border-rose/30 hover:bg-rose/15 hover:text-rose'
+                    onClick={()=>{
                       setConfirmationModal({
                         text1:"Delete this section",
                         text2:"All your lectures in this section will be deleted",
@@ -84,33 +93,41 @@ const NestedView = ({ handleChangeEditSectionName }) => {
                         btn2Hander:() => setConfirmationModal(null)
                       })
                   }}>
-                  <RiDeleteBin5Line />
+                  <FiTrash2 className='text-sm' />
                   </button>
-                  <span>|</span>
-                  <BiSolidDownArrow className={`text-richblack-300`}/>
+                  <span className='mx-1 h-5 w-px bg-white/10' />
+                  <FiChevronDown className='text-white/55 transition-transform duration-300 group-open:rotate-180'/>
 
                 </div>
             </summary>
 
-            <div>
+            <div className='flex flex-col gap-2 border-t border-white/[0.07] p-3 sm:p-4'>
               {
                 section.subSection.map((data)=>{
                   return( <div key={data._id} onClick={()=>setViewSubSection(data)}
-                      className='flex items-center justify-between gap-x-3 border-b-2'
-                  > 
-                <div className='flex items-center gap-x-3'>
-                <RxDropdownMenu className='text-white' />
-                   <p>{data.title}</p>
+                      className='row-item cursor-pointer'
+                  >
+                <div className='flex min-w-0 flex-1 items-center gap-3'>
+                <span className='icon-circle h-10 w-10'>
+                  <FiPlay className='ml-0.5 fill-night text-sm' />
+                </span>
+                   <p className='truncate text-[15px] font-medium'>{data.title}</p>
 
                    </div>
-                    <div 
+                    <div
                       onClick={(e)=>e.stopPropagation()}
-                    className='flex items-center gap-x-3'>
+                    className='flex shrink-0 items-center gap-1.5'>
 
-                      <button onClick={()=>setEditSubSection({...data, sectionId:section._id})}>
-                      <MdEdit/>
+                      <button
+                        aria-label='Edit lecture'
+                        className='btn-icon h-9 w-9'
+                        onClick={()=>setEditSubSection({...data, sectionId:section._id})}>
+                      <FiEdit2 className='text-sm'/>
                       </button>
-                      <button onClick={()=>
+                      <button
+                        aria-label='Delete lecture'
+                        className='btn-icon h-9 w-9 hover:border-rose/30 hover:bg-rose/15 hover:text-rose'
+                        onClick={()=>
                          setConfirmationModal({
                           text1:"Delete this sub section",
                           text2:"Selected lecture will be deleted",
@@ -120,20 +137,19 @@ const NestedView = ({ handleChangeEditSectionName }) => {
                           btn2Hander:() => setConfirmationModal(null)
                         })
                       }>
-                            <RiDeleteBin5Line />
+                            <FiTrash2 className='text-sm' />
                       </button>
 
                     </div>
-
 
                   </div>)
                 })
               }
               <button onClick={()=>setAddSubSection(section._id)}
-                className='mt-4 flex items-center gap-x-2 text-yellow-50'
+                className='btn btn-glass btn-sm mt-1 self-start'
               >
-              <AiOutlinePlus />
-              <p>Add Lecture</p>
+              <FiPlus />
+              <span>Add Lecture</span>
               </button>
 
             </div>
@@ -148,11 +164,11 @@ const NestedView = ({ handleChangeEditSectionName }) => {
           setModalData = {setAddSubSection}
           add = {true}
         />) :
-         viewSubSection?(<SubSectionModal 
+         viewSubSection?(<SubSectionModal
           modalData = {viewSubSection}
           setModalData = {setViewSubSection}
           view = {true}
-         />) : 
+         />) :
          editSubSection ? (<SubSectionModal
           modalData = {editSubSection}
           setModalData = {setEditSubSection}
@@ -160,12 +176,11 @@ const NestedView = ({ handleChangeEditSectionName }) => {
          />):
        ( <div></div>)
 
-
       }
        {confirmationModal? (<ConfirmationModal modalData={confirmationModal}/>):(<div></div>)}
-        
+
     </div>
   )
 }
 
-export default NestedView 
+export default NestedView

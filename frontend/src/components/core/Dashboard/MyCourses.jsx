@@ -23,10 +23,16 @@ const MyCourses = () =>{
         fetchCourses()
     },[])
 
-    return <div className="flex flex-col items-center">
-        <div className="flex justify-between w-11/12  my-8">
-            <h1 className="text-[#F1F2FF] text-4xl font-medium font-inter">My Courses</h1>
-                <button className=" bg-yellow-50 px-4 rounded-md text-black" onClick={()=>(navigate('/dashboard/add-course'))}>Add Courses <IoAdd className="inline"/></button>
+    return <div className="w-full py-8 text-white sm:py-10">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p className="eyebrow">Instructor</p>
+                <h1 className="h-display mt-3 text-4xl sm:text-5xl">
+                    My courses
+                    {courses?.length > 0 && <sup className="ml-1 align-super text-base font-medium text-white/45 sm:text-lg">{courses.length}</sup>}
+                </h1>
+            </div>
+            <button className="btn btn-gradient" onClick={()=>(navigate('/dashboard/add-course'))}>Add Course <IoAdd className="text-lg"/></button>
         </div>
 
         {

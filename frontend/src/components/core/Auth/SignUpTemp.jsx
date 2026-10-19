@@ -1,17 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { HilightText } from "../HomePage/HilightText";
-import {  useNavigate } from "react-router-dom";
-import Cpabutton from "../HomePage/Cpabutton";
+import { Link, useNavigate } from "react-router-dom";
 import { signUpValue } from "../../../data/signUpData";
-import { FaRegEye } from "react-icons/fa";
 import { value } from "../../../data/signUpData";
 import { useDispatch } from "react-redux";
-import { setSignUpData } from '../../../slices/authSlice'
-import { toast } from 'react-hot-toast';
+import { setSignUpData } from "../../../slices/authSlice";
+import { toast } from "react-hot-toast";
 import { otpApi } from "../../../services/authApi";
-import {motion} from "motion/react"
-import { AnimatePresence } from "framer-motion";
-import { IoMdArrowBack } from "react-icons/io";
+import { motion } from "motion/react";
+import { FiArrowRight, FiBookOpen, FiAward } from "react-icons/fi";
+
+import { AuthLayout, AuthHeading, EyeToggle, OrDivider } from "./LoginTemp";
+
+// Per-account-type panel copy (presentation only)
+const PANELS = [
+  {
+    eyebrow: "Free to join",
+    headline: "Learn it. Build it. Own it.",
+    card: { title: "AI for Creators", duration: "18h 9m", rating: "4.7", videos: "16", progress: "1 of 5" },
+    icon: FiBookOpen,
+  },
+  {
+    eyebrow: "Teach on ClassNotion",
+    headline: "Teach what you love. Reach learners everywhere.",
+    card: { title: "Creative Sprint", duration: "6h 40m", rating: "4.9", videos: "14", progress: "Draft 2 of 5", status: "Live" },
+    icon: FiAward,
+  },
+];
 
 const SignUpTemp = ({ frame, code }) => {
   const [active, setActive] = useState(0);
@@ -27,7 +41,7 @@ const SignUpTemp = ({ frame, code }) => {
     contactNumber: "",
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const chagneActive = (e, index) => {
@@ -45,24 +59,19 @@ const SignUpTemp = ({ frame, code }) => {
     setData(newValue[0]);
   }, [active]);
 
-
   const submitHandler = (e) => {
     e.preventDefault();
     const signUpData = { ...formData, accountType: value[active].value };
 
-    const {password, confirmPassword} = signUpData;
-   if(password !== confirmPassword){
-      toast.error("false")
-      return
-   }
+    const { password, confirmPassword } = signUpData;
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-   
     dispatch(setSignUpData(signUpData));
-    dispatch(otpApi(signUpData.email, navigate))
- 
+    dispatch(otpApi(signUpData.email, navigate));
   };
-
-
 
   const confirmPasswordHandler = () => {
     setShowConfirmPassword(!showConfirmPassword);
@@ -74,191 +83,172 @@ const SignUpTemp = ({ frame, code }) => {
 
   if (!data) return;
 
+  const panel = PANELS[active] ?? PANELS[0];
+
   return (
-    <AnimatePresence >
+    <AuthLayout
+      image={data.image}
+      imageAlt={`${data.type} signing up`}
+      panelKey={`signup-${active}`}
+      quote={{ eyebrow: panel.eyebrow, headline: panel.headline, sub: data.description }}
+      card={panel.card}
+    >
+      <AuthHeading title="Create your account" subtitle="It takes less than a minute. Choose how you'll use ClassNotion." />
 
-    
-    <div className="w-screen min-h-screen bg-[url(/public/assets/Images/alblal.png)] flex items-center justify-center">
-      <div className="w-11/12 flex flex-col lg:flex-row justify-around items-center ">
-        {/**Section 1 */}
-        <div className=" lg:w-[35%]  p-10  text-white bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl ">
-           
-          <div className="p-2 flex flex-col">
-            <motion.h1 key={data.title} initial={{ x: 200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -200 }}
-            transition={{ duration: 0.3 }}  className="text-xl mb-4 text-center ">{data.title}</motion.h1>
-            <p className="text-md w-full text-[#AFB2BF] text-center text-xs">
-              {data.description}
-              <HilightText
-                font={"font-edu-sa"}
-                text={"Education to future-proof your carrer"}
-              />
-            </p>
-          </div>
-          <div className="flex justify-center py-2 ">
-            <motion.div className="flex bg-yellow-800 w-full justify-between rounded-full   gap-2   border-[#2C333F] ">
-              {value.map((element, index) => {
-                return (
-                  <p
-                    onClick={(e) => chagneActive(e, index)}
-                    className={`py-2  w-full text-center cursor-pointer transition-all duration-300 ${
-                      active === index
-                        ? "bg-black text-white"
-                        : "text-[#999DAA] bg-[2C333F]"
-                    } hover:bg-black rounded-full`}
-                    key={index}
-                  >
-                    {element.value}
-                  </p>
-                );
-              })}
-            </motion.div>
-          </div>
-
-          <form onSubmit={submitHandler}>
-            <div className="w-full flex  py-3 flex-col space-y-2">
-              
-              <div className="flex flex-col ">
-                  <label htmlFor="firstName " className="text-sm py-[3px]">
-                    First Name   <span className="text-[#EF476F]"> *</span>
-                  </label>
-                  <input
-                    onChange={changeHandler}
-                    id="firstName"
-                    name="firstName"
-                    placeholder="Jhon"
-                    type="text"
-
-                    className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full "
-                    required
-                  />
-                </div>
-
-                <div className="flex flex-col  ">
-                  <label htmlFor="lastName" className="text-sm py-[3px]">
-                    Last Name  <span className="text-[#EF476F]"> *</span>
-                  </label>
-                  <input
-                    onChange={changeHandler}
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Doe"
-                    type="text"
-                    className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                  />
-                </div>
-
-              <div className="flex flex-col ">
-                <label className="text-sm py-[6px]" htmlFor="email">
-                  Email Address <span className="text-[#EF476F]"> *</span>
-                </label>
-                <input
-                  onChange={changeHandler}
-                  id="email"
-                  name="email"
-                  placeholder="user@email.com"
-                  type="text"
-                  className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                  autoComplete="email"
-                  required
+      {/* Account type segmented control */}
+      <div role="tablist" aria-label="Account type" className="segmented w-full mt-7 grid grid-cols-2">
+        {value.map((element, index) => {
+          const Icon = PANELS[index]?.icon;
+          const isActive = active === index;
+          return (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={(e) => chagneActive(e, index)}
+              key={index}
+              className="segmented-item flex items-center justify-center"
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="signup-seg"
+                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                  className="absolute inset-0 rounded-full segmented-item-active"
                 />
-              </div>
+              )}
+              <span className={`relative inline-flex items-center gap-2 ${isActive ? "text-white" : ""}`}>
+                {Icon && <Icon />}
+                {element.value}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
-             
-              <div className="flex flex-col ">
-                  <label htmlFor="password" className="text-sm py-[6px]">
-                    Password  <span className="text-[#EF476F]"> *</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      onChange={changeHandler}
-                      id="password"
-                      name="password"
-                      placeholder="your secret password"
-                      type={`${showPassword ? "text" : "password"}`}
-                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                      autoComplete="new-password"
-                      required
-                    />
-                    <FaRegEye
-                      className="cursor-pointer absolute  right-3 top-3 text-[#999DAA]"
-                      onClick={passwordHandler}
-                    />
-                  </div>
-                </div>
-              <div className="flex flex-col  ">
-                  <label htmlFor="confirmPassword" className="text-sm py-[6px]">
-                    Confirm Password  <span className="text-[#EF476F]"> *</span>
-                  </label>
-                  <div className="">
-                    <input
-                      onChange={changeHandler}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder="your secret password"
-
-                      type={`${showConfirmPassword ? "text" : "password"}`}
-                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                      autoComplete="confirm-newPassword"
-                      required
-                    />
-                    
-                  </div>
-                </div>
-
-                <div className="flex flex-col">
-                <label className="text-sm py-[6px]" htmlFor="contactNumber">
-                  Phone Number <span className="text-[#EF476F]"> *</span>
-                </label>
-                <div className="flex md:flex-row flex-col gap-1 justify-between">
-                  <div className="md:w-[18%]">
-                    <select
-                      className="px-3 py-2.5 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                      
-                    >
-                      {code.map((it, index) => {
-                        return <option  key={index}>{`${it.code}-${it.country}`}</option>;
-                      })}
-                    </select>
-                  </div>
-
-                  <div className="md:w-[78%]">
-                    <input
-                      onChange={changeHandler}
-                      id="contactNumber"
-                      name="contactNumber"
-                      type="tel"
-                      placeholder="999 999 9999"
-                      className="px-3 py-2 bg-transparent border-[1px]  outline-none rounded-xl text-white w-full"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-           
-            </div>
-
-            <div>
-            <motion.button  
-            whileHover={{ scale: 1, background:"#fff",color:"#0F0F0F", boxShadow:"0px 0px 3px rgb(255,255,255)", transition:{duration:0.5, type:"spring", stiffness:200} }}
-            whileTap={{scale:0.7}}
-            type="submit" 
-            className="w-full px-4 mt-3 py-3 rounded-xl bg-[#381700] text-white"
-            >Signup</motion.button>
-            </div>
-          </form>
-          <button onClick={()=>navigate('/login')} className="inline-block my-auto text-sm mt-2"><IoMdArrowBack className="text-end inline-block text-sm" /> Account already Exist</button>
-        
+      <form onSubmit={submitHandler} className="mt-6 space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="firstName" className="field-label">
+              First name <span className="text-rose">*</span>
+            </label>
+            <input
+              onChange={changeHandler}
+              id="firstName"
+              name="firstName"
+              placeholder="John"
+              type="text"
+              className="field"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="lastName" className="field-label">
+              Last name <span className="text-rose">*</span>
+            </label>
+            <input
+              onChange={changeHandler}
+              id="lastName"
+              name="lastName"
+              placeholder="Doe"
+              type="text"
+              className="field"
+            />
+          </div>
         </div>
 
-      
+        <div>
+          <label className="field-label" htmlFor="email">
+            Email address <span className="text-rose">*</span>
+          </label>
+          <input
+            onChange={changeHandler}
+            id="email"
+            name="email"
+            placeholder="user@email.com"
+            type="text"
+            className="field"
+            autoComplete="email"
+            required
+          />
+        </div>
 
-       
-      </div>
-    </div>
-    </AnimatePresence>
+        <div>
+          <label className="field-label" htmlFor="contactNumber">
+            Phone number <span className="text-rose">*</span>
+          </label>
+          <div className="flex gap-2">
+            <select aria-label="Country code" className="field w-[112px] shrink-0 px-3 cursor-pointer">
+              {code.map((it, index) => {
+                return (
+                  <option key={index} className="bg-surface">{`${it.code}-${it.country}`}</option>
+                );
+              })}
+            </select>
+            <input
+              onChange={changeHandler}
+              id="contactNumber"
+              name="contactNumber"
+              type="tel"
+              placeholder="999 999 9999"
+              className="field min-w-0"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="password" className="field-label">
+              Password <span className="text-rose">*</span>
+            </label>
+            <div className="relative">
+              <input
+                onChange={changeHandler}
+                id="password"
+                name="password"
+                placeholder="Password"
+                type={`${showPassword ? "text" : "password"}`}
+                className="field pr-12"
+                autoComplete="new-password"
+                required
+              />
+              <EyeToggle visible={showPassword} onClick={passwordHandler} />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="confirmPassword" className="field-label">
+              Confirm <span className="text-rose">*</span>
+            </label>
+            <div className="relative">
+              <input
+                onChange={changeHandler}
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="One more time"
+                type={`${showConfirmPassword ? "text" : "password"}`}
+                className="field pr-12"
+                autoComplete="new-password"
+                required
+              />
+              <EyeToggle visible={showConfirmPassword} onClick={confirmPasswordHandler} />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" className="btn btn-primary btn-lg w-full !mt-8">
+          Create account <FiArrowRight />
+        </button>
+      </form>
+
+      <OrDivider />
+
+      <p className="text-center text-sm text-white/55">
+        Already have an account?{" "}
+        <Link to="/login" className="font-medium text-white hover:text-orchid transition">
+          Log in
+        </Link>
+      </p>
+    </AuthLayout>
   );
 };
 

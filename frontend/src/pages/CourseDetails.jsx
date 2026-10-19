@@ -1,17 +1,16 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { FiCheck } from 'react-icons/fi';
 import { getNewCourseDetail } from '../services/courseDetail';
 import { useSelector } from 'react-redux';
 import CoursePage from '../components/core/catalog/CoursePage';
 import CourseContent from '../components/core/catalog/CourseContent';
 
-
-
-
 const CourseDetail = () =>{
     const {courseId} = useParams()
     const [courseDetail, setCourseDetail] = useState(null)
+    // eslint-disable-next-line no-unused-vars
     const {token} = useSelector(state =>state.auth)
 
     const getCourseDetail = async() =>{
@@ -20,9 +19,6 @@ const CourseDetail = () =>{
         setCourseDetail(response)
     }
 
-
-
-
     useEffect(()=>{
         if(courseId){
             getCourseDetail()
@@ -30,45 +26,77 @@ const CourseDetail = () =>{
     },[courseId])
 
     if(!courseDetail){
-        return <div>Loading...</div>
+        return (
+            <div className="container-x pt-4 md:pt-8 pb-16">
+                <div className="skeleton rounded-4xl md:rounded-5xl aspect-[4/3] sm:aspect-[16/8] lg:aspect-[16/6]" />
+                <div className="mt-8 md:mt-12 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-10 lg:gap-12">
+                    <div className="flex flex-col gap-5">
+                        <div className="skeleton h-14 w-3/4" />
+                        <div className="skeleton h-5 w-full" />
+                        <div className="skeleton h-5 w-2/3" />
+                        <div className="skeleton h-[72px] rounded-[26px]" />
+                        <div className="skeleton h-48 rounded-4xl" />
+                    </div>
+                    <div className="skeleton h-[460px] rounded-4xl" />
+                </div>
+            </div>
+        )
     }
 
-
+    const instructor = courseDetail?.instructor
 
     return (
-        <div className="w-full gap-8 items-center  min-h-[calc(100vh-12.5rem)] flex flex-col  item-center  text-white">
+        <div className="w-full min-h-[calc(100vh-12.5rem)]">
+            <CoursePage courseDetail = {courseDetail}>
 
-            <div className='w-full bg-richblack-800 '>
-            <CoursePage courseDetail = {courseDetail}/>
-            </div>  
+                {/* What you'll learn */}
+                <section className="relative overflow-hidden glass p-6 sm:p-8">
+                    <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-16 w-64 h-64 rounded-full bg-violet/20 blur-3xl" />
+                    <p className="relative eyebrow">Outcomes</p>
+                    <h2 className="relative mt-2 text-2xl md:text-3xl font-medium tracking-tight">What you'll learn</h2>
+                    {courseDetail?.whatYouWillLearn && (
+                        <p className="relative mt-4 text-white/70 whitespace-pre-line">{courseDetail?.whatYouWillLearn}</p>
+                    )}
+                    {courseDetail?.tag?.length > 0 && (
+                        <ul className="relative mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {
+                                courseDetail?.tag?.map((it, index)=>{
+                                    return (
+                                        <li key={index} className="flex items-center gap-3 rounded-2xl bg-white/[0.04] border border-white/[0.07] px-3 py-2.5 text-sm">
+                                            <span className="shrink-0 grid place-items-center w-6 h-6 rounded-full bg-citrus text-night">
+                                                <FiCheck className="text-xs" strokeWidth={3} />
+                                            </span>
+                                            <span className="break-words min-w-0 text-white/85">{it}</span>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    )}
+                </section>
 
-            <div className='w-full flex justify-center p-6'>
-                <div className='w-10/12'>
-                    <p className='text-2xl py-4 '>What You'll Learn</p>
-                    {
-                        courseDetail?.tag?.map((it, index)=>{
-                            return <p key={index} className='py-2 text-[#C5C7D4]' >{it}</p>
-                        })
-                    }
-                </div>
-            </div>
+                <CourseContent courseDetail = {courseDetail}/>
 
-            <div className='w-full flex justify-center'>
-                    <CourseContent courseDetail = {courseDetail}/>
-            </div>
-
-            <div className="text-white w-10/12 py-12 px-2 gap-6 flex flex-col">
-                <p className='text-2xl'>Author</p>
-                <div className='flex items-center gap-6'> 
-                    <div className='w-[60px] h-[60px] rounded-full'>
-                        <img className='w-full rounded-full h-full object-cover' src={courseDetail?.instructor?.image}/>
+                {/* Instructor */}
+                <section>
+                    <h2 className="text-2xl md:text-3xl font-medium tracking-tight mb-5">Meet your instructor</h2>
+                    <div className="glass p-6 flex flex-col sm:flex-row gap-5">
+                        <span className="shrink-0 self-start p-[2px] bg-brand rounded-full">
+                            <img
+                                className="w-20 h-20 rounded-full border-2 border-night object-cover bg-surface-2"
+                                src={instructor?.image}
+                                alt={`${instructor?.firstName ?? ''} ${instructor?.lastName ?? ''}`}
+                            />
+                        </span>
+                        <div className="min-w-0">
+                            <p className="text-xl font-medium tracking-tight">{instructor?.firstName} {instructor?.lastName}</p>
+                            <span className="pill pill-magenta mt-2">Instructor</span>
+                            <p className="mt-4 text-white/55 leading-relaxed">{instructor?.additionalDetails?.about || "I will be your lead trainer in this course. Within no time, I will help you to understand the subject in an easy manner. I have a huge experience in online training and recording videos. Let's get started!"}</p>
+                        </div>
                     </div>
-                    <p className='text-center text-xl'>{courseDetail?.instructor?.firstName} {courseDetail?.instructor?.lastName} </p>
-                </div>
-                <p className='text-[#C5C7D4] w-[80%] font-light'>{courseDetail?.instructor?.additionalDetails?.about || "I will be your lead trainer in this course. Within no time, I will help you to understand the subject in an easy manner. I have a huge experience in online training and recording videos. Let's get started!"}</p>
-            </div>
-                       
-        </div>)
+                </section>
+            </CoursePage>
+        </div>
+    )
 }
 export default CourseDetail
-

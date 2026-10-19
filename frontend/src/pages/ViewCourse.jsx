@@ -8,9 +8,6 @@ import VideoDetailsSidebar from "../components/core/viewCourse/VideoDetailsSideb
 import CourseReviewModal from '../components/core/viewCourse/CourseReviewModal';
 
 
-
-
-
 const ViewCourse = () =>{
     const [reviewModal , setReviewModal] = useState(false)
     const {courseId} = useParams()
@@ -33,7 +30,7 @@ const ViewCourse = () =>{
             })
             dispatch(setTotalNoOfLectures(lectures))
         }
-       
+
     }
 
     useEffect(()=>{
@@ -43,18 +40,20 @@ const ViewCourse = () =>{
     },[token])
 
 
-    return <div className="relative w-full flex min-h-[calc(100vh-3.5rem)]">
+    return (
+        <div className="relative container-x pt-4 md:pt-8 pb-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6 lg:gap-8 items-start min-h-[calc(100vh-3.5rem)]">
 
-         <VideoDetailsSidebar setReviewModal={setReviewModal}/>
-         <div className="h-full w-full overflow-auto">
+            <div className="w-full min-w-0">
 
-            <Outlet/>
+                <Outlet/>
 
-         </div>
-         {
-            reviewModal && <CourseReviewModal setReviewModal={setReviewModal}/>
-         }
-    </div>
+            </div>
+            <VideoDetailsSidebar setReviewModal={setReviewModal}/>
+            {
+                reviewModal && <CourseReviewModal setReviewModal={setReviewModal}/>
+            }
+        </div>
+    )
 }
 
 export default ViewCourse

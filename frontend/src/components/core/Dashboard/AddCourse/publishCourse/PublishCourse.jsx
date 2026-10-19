@@ -5,6 +5,7 @@ import { resetCourseState, setStep } from '../../../../../slices/courseSlice'
 import { COURSE_STATUS } from '../../../../../utils/constants'
 import {  editCourseAPI } from '../../../../../services/courseDetail'
 import { useNavigate } from 'react-router-dom'
+import { FiArrowLeft, FiGlobe } from 'react-icons/fi'
 
 const PublishCourse = () => {
     const {register, handleSubmit, setValue, getValues} = useForm()
@@ -49,27 +50,45 @@ const PublishCourse = () => {
     }
 
   return (
-    <div className='rounded-md border-[1px] bg-richblack-800 flex   flex-col justify-center items-start py-8 px-4 gap-4 mt-8'>
-        <p className='text-[#F1F2FF] text-3xl'>Publish Course</p>
+    <div className='glass flex flex-col gap-6 p-5 sm:p-8'>
+        <div className='flex flex-wrap items-end justify-between gap-3'>
+            <div>
+                <p className='eyebrow'>Step 3 of 3</p>
+                <h2 className='mt-2 text-2xl font-medium tracking-tight sm:text-3xl'>Publish settings</h2>
+            </div>
+            <span className='pill'>Almost there</span>
+        </div>
+        <div className='divider' />
         <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
-           <div className='flex gap-4 justify-between'>
-           <div className=''>
-                <label htmlFor='public'>
+            <label htmlFor='public' className='group block cursor-pointer'>
                 <input type='checkbox' id='public'
                     {...register("public")}
-                    className=' border-richblack-700 bg-transparent mr-2 accent-richblack-700'
+                    className='peer sr-only'
                 />
-                Make this Course as Public
-                </label>
-            </div>
+                <div className='relative flex items-center gap-4 overflow-hidden rounded-4xl border border-white/10 bg-white/[0.04] p-5 transition hover:border-white/20 hover:bg-white/[0.06] peer-checked:border-citrus/30 peer-checked:bg-citrus/[0.06] peer-focus-visible:ring-4 peer-focus-visible:ring-orchid/30 sm:gap-6 sm:p-7
+                  [&_.sw-track]:bg-white/10 peer-checked:[&_.sw-track]:bg-citrus
+                  [&_.sw-knob]:translate-x-0 peer-checked:[&_.sw-knob]:translate-x-6 peer-checked:[&_.sw-knob]:bg-night
+                  [&_.sw-glow]:opacity-0 peer-checked:[&_.sw-glow]:opacity-100'>
+                    <div className='sw-glow pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-citrus/20 blur-3xl transition-opacity duration-500' />
+                    <span className='icon-circle-glass relative h-12 w-12'>
+                        <FiGlobe className='text-lg' />
+                    </span>
+                    <span className='relative flex min-w-0 flex-1 flex-col gap-1'>
+                        <span className='text-lg font-medium tracking-tight sm:text-xl'>Make this course public</span>
+                        <span className='text-sm text-white/55'>If you mark this course as public, it will be visible to all the students.</span>
+                    </span>
+                    <span className='sw-track relative h-8 w-14 shrink-0 rounded-full border border-white/10 transition-colors duration-300'>
+                        <span className='sw-knob absolute left-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-white shadow-card transition-all duration-300' />
+                    </span>
+                </div>
+            </label>
 
-            <div className='text-[#6E727F] relative bottom-14 w-[40%] text-sm'>If you mark this course as public this course will be visible to all the students </div>
-           </div>
-            <div className='flex justify-center gap-x-3 w-full mt-8 items-center' >
-                <button type='button' onClick={goBack} className='bg-richblack-5 py-2 px-4 rounded-sm text-black'>
-                    Back
+            <div className='divider mt-8' />
+            <div className='mt-6 flex flex-wrap justify-end gap-3' >
+                <button type='button' onClick={goBack} className='btn btn-glass'>
+                    <FiArrowLeft /> Back
                 </button>
-                <button className='bg-yellow-5 py-2 px-4 rounded-sm text-black'>Save Changes</button>
+                <button className='btn btn-gradient'>Save Changes</button>
             </div>
         </form>
 

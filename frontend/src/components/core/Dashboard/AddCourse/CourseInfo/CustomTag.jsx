@@ -40,33 +40,33 @@ const CustomTag = ({ label, name, placeholder, register, errors, setValue, getVa
 
   
   return (
-    <div className="flex flex-col gap-2 px-2">
-      <label htmlFor={name}>
-        {label}<span className="text-[#EF476F]">*</span>
+    <div>
+      <label htmlFor={name} className="field-label">
+        {label} <span className="text-rose">*</span>
       </label>
-      <input
-        className="w-full p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]"
-        onChange={(e) => setTagValue(e.target.value)}
-        value={tagValue}
-        placeholder={placeholder}
-        onKeyDown={addTags}
-      />
-      {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {tags.map((tag, index) => (
-            <div key={index} className="flex items-start">
-                <span  className="bg-[#3A4556] text-[#F1F2FF] px-2 py-1 rounded-md">
-              {tag}
-            </span>
-            <button onClick={(index)=>removeHandler(index)}>
-            <RxCross2 className="text-sm text-[#EF476F]"/>
+      <div className="field flex h-auto min-h-12 flex-wrap items-center gap-2 py-2 focus-within:border-orchid/60 focus-within:bg-white/[0.06] focus-within:ring-4 focus-within:ring-orchid/15">
+        {tags.map((tag, index) => (
+          <span key={index} className="pill pr-1.5">
+            {tag}
+            <button
+              onClick={(index)=>removeHandler(index)}
+              className="grid h-4 w-4 place-items-center rounded-full text-white/60 transition hover:bg-white/20 hover:text-white"
+              aria-label={`Remove ${tag}`}
+            >
+              <RxCross2 className="text-[10px]" />
             </button>
-                </div>
-            
-          ))}
-        </div>
-      )}
-      {errors[name] && <span className="text-[#EF476F]">This field is required</span>}
+          </span>
+        ))}
+        <input
+          id={name}
+          className="h-8 min-w-[160px] flex-1 bg-transparent text-[15px] text-white outline-none placeholder:text-white/30"
+          onChange={(e) => setTagValue(e.target.value)}
+          value={tagValue}
+          placeholder={placeholder}
+          onKeyDown={addTags}
+        />
+      </div>
+      {errors[name] && <p className="field-error">This field is required</p>}
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GoArrowLeft } from "react-icons/go";
+import { FiLock, FiArrowRight } from "react-icons/fi";
 import { useState } from "react";
-import { FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../../services/authApi";
+import Ambient from "../../ui/Ambient";
+import { AuthLayout, AuthHeading, EyeToggle } from "./LoginTemp";
 
 const UpdatePassword = () => {
   const dispatch = useDispatch();
@@ -23,30 +25,42 @@ const UpdatePassword = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const token = location.pathname.split('/').at(-1);
+    const token = location.pathname.split("/").at(-1);
 
     const { password, confirmPassword } = input;
     dispatch(resetPassword(password, confirmPassword, token, navigate));
   };
 
   return (
-    <div className="w-screen min-h-screen bg-richblack-900 flex justify-center items-center">
-      <div className="p-20 flex flex-col gap-4 ">
-        <h1 className="text-[#F1F2FF] text-4xl font-bold">
-          Choose new Password
-        </h1>
-        <p className="text-[#AFB2BF] text-md">
-          Almost done. Enter your new password and youre all set.
-        </p>
-        <div className=" ">
-          <form onSubmit={submitHandler} className="flex flex-col gap-4">
-            <div className="flex flex-col relative ">
-              <label
-                className=" py-[6px] text-white text-xl font-semibold"
-                for="password"
-              >
-                New Password<span className="text-[#EF476F]"> *</span>
-              </label>
+    <>
+      <Ambient />
+      <AuthLayout
+        image="/assets/Images/signup.webp"
+        imageAlt="Learner studying"
+        panelKey="update-password"
+        quote={{
+          eyebrow: "Make it strong",
+          headline: "Fresh start, new password.",
+          sub: "Pick something strong you'll actually remember.",
+        }}
+        card={{ title: "AI for Creators", progress: "1 of 5" }}
+      >
+        <AuthHeading
+          title="Choose new password"
+          subtitle="Almost done. Enter your new password and you’re all set."
+          icon={
+            <span className="icon-circle-glass">
+              <FiLock className="text-lg" />
+            </span>
+          }
+        />
+
+        <form onSubmit={submitHandler} className="mt-8 space-y-5">
+          <div>
+            <label className="field-label" htmlFor="password">
+              New password <span className="text-rose">*</span>
+            </label>
+            <div className="relative">
               <input
                 value={input.password}
                 onChange={handlePasswordChange}
@@ -54,21 +68,18 @@ const UpdatePassword = () => {
                 name="password"
                 type={`${showPassword ? "password" : "text"}`}
                 placeholder="Enter your password"
-                className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
+                autoComplete="new-password"
+                className="field pr-12"
               />
-              <FaEyeSlash
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-[#AFB2BF] cursor-pointer text-xl absolute right-6 bottom-[15px]"
-              />
+              <EyeToggle visible={!showPassword} onClick={() => setShowPassword(!showPassword)} />
             </div>
+          </div>
 
-            <div className="flex flex-col relative ">
-              <label
-                className=" py-[6px] text-white text-xl font-semibold"
-                for="confirmPassword"
-              >
-                Confirm New Password<span className="text-[#EF476F]"> *</span>
-              </label>
+          <div>
+            <label className="field-label" htmlFor="confirmPassword">
+              Confirm new password <span className="text-rose">*</span>
+            </label>
+            <div className="relative">
               <input
                 value={input.confirmPassword}
                 onChange={handlePasswordChange}
@@ -76,28 +87,28 @@ const UpdatePassword = () => {
                 name="confirmPassword"
                 type={`${showConfirmPassword ? "password" : "text"}`}
                 placeholder="Enter your password"
-                className="p-3 bg-[#161D29] outline-none rounded-lg text-[#999DAA]"
+                autoComplete="new-password"
+                className="field pr-12"
               />
-              <FaEyeSlash
+              <EyeToggle
+                visible={!showConfirmPassword}
                 onClick={() => setShowConirmPassword(!showConfirmPassword)}
-                className="text-[#AFB2BF] cursor-pointer text-xl absolute right-6 bottom-[15px]"
               />
             </div>
-            <button
-              type="submit"
-              className="text-center text-[12px]  py-3 mt-2 rounded-md font-bold text-richblack-600 bg-yellow-50 cursor-pointer"
-            >
-              Update Password
-            </button>
-          </form>
-        </div>
-        <div className="flex w-[75%]">
-          <Link className="text-[20px]  text-white " to="/login">
-            <GoArrowLeft className="inline " /> Back to Login
+          </div>
+
+          <button type="submit" className="btn btn-primary btn-lg w-full !mt-8">
+            Update password <FiArrowRight />
+          </button>
+        </form>
+
+        <div className="mt-6 pt-5 divider">
+          <Link className="btn btn-ghost btn-sm -ml-4" to="/login">
+            <GoArrowLeft /> Back to login
           </Link>
         </div>
-      </div>
-    </div>
+      </AuthLayout>
+    </>
   );
 };
 export default UpdatePassword;

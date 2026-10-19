@@ -130,7 +130,24 @@ createRoot(document.getElementById("root")).render(
 
     <Provider store={store}>
       <RouterProvider router={Router} />
-      <Toaster />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "rgba(28,25,34,.92)",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,.1)",
+            borderRadius: "999px",
+            padding: "10px 18px",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 20px 40px -20px rgba(0,0,0,.8)",
+            fontFamily: '"Plus Jakarta Sans", sans-serif',
+            fontSize: "14px",
+          },
+          success: { iconTheme: { primary: "#DDF247", secondary: "#0B0A0F" } },
+          error: { iconTheme: { primary: "#FF6B81", secondary: "#0B0A0F" } },
+        }}
+      />
     </Provider>
 
 );

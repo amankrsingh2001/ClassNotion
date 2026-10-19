@@ -1,9 +1,11 @@
+import toast from 'react-hot-toast'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseApi } from '../../../../../services/api'
 import { HiOutlineCurrencyRupee } from "react-icons/hi2";
+import { FiArrowRight, FiChevronDown } from "react-icons/fi";
 import RequirementField from './RequirementField'
 import { setCourse, setStep } from '../../../../../slices/courseSlice'
 import { COURSE_STATUS } from '../../../../../utils/constants'
@@ -151,67 +153,83 @@ const CourseInformationForm = () => {
   }
 
   return (
-    <div className=' mt-4 p-6 w-11/12'>
-      <form onSubmit={handleSubmit(onSubmit)} className='rounded-md p-4 space-y-8 bg-[#161D29] border-[#2C333F] border-2 '
+    <div className='w-full'>
+      <form onSubmit={handleSubmit(onSubmit)} className='glass space-y-7 p-5 sm:p-8'
         encType="multipart/form-data"
       >
+        <div className='flex flex-wrap items-end justify-between gap-3'>
+          <div>
+            <p className='eyebrow'>Step 1 of 3</p>
+            <h2 className='mt-2 text-2xl font-medium tracking-tight sm:text-3xl'>Course information</h2>
+          </div>
+          <span className='pill'>Details &amp; media</span>
+        </div>
+        <div className='divider' />
 
-        <div className='flex flex-col gap-2 px-2'>
-          <label htmlFor='courseTitle' className='font-[#F1F2FF]'> Course Name <span className="text-[#EF476F]"> *</span>
+        <div>
+          <label htmlFor='courseTitle' className='field-label'>Course name <span className="text-rose">*</span>
           </label>
-          <input id='courseTitle' placeholder='Enter course Title' 
+          <input id='courseTitle' placeholder='Enter course Title'
             {...register('courseTitle',{required:true}) }
-            className='w-full p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+            className='field'
           />{
             errors.courseTitle && (
-              <span  className="text-[#EF476F]" >Course Title is Required</span>
+              <p className="field-error">Course Title is Required</p>
             )
           }
         </div>
-        <div className='flex flex-col gap-2 px-2' >
-          <label htmlFor='courseShortDesc' className='font-[#F1F2FF]'>Course Short Description <span className="text-[#EF476F]"> *</span></label>
+
+        <div>
+          <label htmlFor='courseShortDesc' className='field-label'>Short description <span className="text-rose">*</span></label>
           <textarea id='courseShortDesc'
             placeholder='Enter Description of your course'
             {...register('courseShortDesc',{required:true})}
-            className='min-h-[130px] w-full  p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+            className='field min-h-[130px] resize-y'
           />
           {
-            errors.courseShortDesc && (<span  className="text-[#EF476F]" >Course Description is required</span>)
+            errors.courseShortDesc && (<p className="field-error">Course Description is required</p>)
           }
         </div>
 
-        <div  className='flex flex-col gap-2 px-2 relative'>
-          <label htmlFor='coursePrice' className='font-[#F1F2FF]'>Course Price <span className="text-[#EF476F]"> *</span> </label>
-          <input id='coursePrice' placeholder='Enter Price' 
-            {...register('coursePrice',{required:true, valueAsNumber:true}) }
-            className='w-full py-3 pl-9 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
-          />
-           <HiOutlineCurrencyRupee className='absolute top-[45px] left-4 text-[#585D69] text-xl'/>
-          {
-            errors.coursePrice && (
-              <span className="text-[#EF476F]">Course Price is Required</span>
-            )
-          }
-        </div>
-
-        <div className='flex flex-col gap-2 px-2'>
-            <label htmlFor='courseCategory' className='font-[#F1F2FF]'>Course Category <span className="text-[#EF476F]"> *</span> </label>
-            <select id='courseCategory' defaultValue="" className='w-full py-3 pl-4 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]' {...register("courseCategory",{required:true})}>
-              <option value="" className='text-[#F1F2FF]' disabled>Choose a Category</option>
-              {
-               !loading && courseCategories.map((category, index)=>{
-                  return (<option key={index} className='text-black' value={category?._id}>{category?.name}</option>)
-                })
-              }
-            </select>
+        <div className='grid gap-7 md:grid-cols-2'>
+          <div>
+            <label htmlFor='coursePrice' className='field-label'>Price <span className="text-rose">*</span> </label>
+            <div className='relative'>
+              <input id='coursePrice' placeholder='Enter Price'
+                {...register('coursePrice',{required:true, valueAsNumber:true}) }
+                className='field pl-11'
+              />
+              <HiOutlineCurrencyRupee className='pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-white/40'/>
+            </div>
             {
-              errors.courseCategory && (
-                <span className="text-[#EF476F]" >Course category is Required</span>
+              errors.coursePrice && (
+                <p className="field-error">Course Price is Required</p>
               )
             }
+          </div>
+
+          <div>
+            <label htmlFor='courseCategory' className='field-label'>Category <span className="text-rose">*</span> </label>
+            <div className='relative'>
+              <select id='courseCategory' defaultValue="" className='field cursor-pointer [&>option]:bg-surface-2' {...register("courseCategory",{required:true})}>
+                <option value="" disabled>Choose a Category</option>
+                {
+                 !loading && courseCategories.map((category, index)=>{
+                    return (<option key={index} value={category?._id}>{category?.name}</option>)
+                  })
+                }
+              </select>
+              <FiChevronDown className='pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/45' />
+            </div>
+            {
+              errors.courseCategory && (
+                <p className="field-error">Course category is Required</p>
+              )
+            }
+          </div>
         </div>
 
-        <CustomTag 
+        <CustomTag
         label='Tags'
         name="courseTag"
         placeholder = "Enter tags and press enter"
@@ -221,7 +239,8 @@ const CourseInformationForm = () => {
         getValues = {getValues}
         />
 
-         <div className=' px-2'>
+        <div>
+          <p className='field-label'>Course thumbnail <span className="text-rose">*</span></p>
           <ThumbnailUpload
             name = 'image'
             label = 'Browse'
@@ -230,47 +249,39 @@ const CourseInformationForm = () => {
             setValue = {setValue}
             getValues = {getValues}
             editData = {course.thumbnail}
-          /> 
+          />
+        </div>
 
-          
-       </div>
-          {/* create a component for uploading and showing preview of media */}
+        <div>
+          <label htmlFor='courseBenefits' className='field-label'>Benefits of the course <span className="text-rose">*</span></label>
+          <textarea id='courseBenefits' className='field min-h-[130px] resize-y' placeholder='Enter Benefits of the course'
+           {...register('courseBenefits', {required:true})} />
+           {
+            errors.courseBenefits && <p className="field-error">Benefits are required</p>
+           }
+        </div>
 
-          <div className='flex flex-col gap-2 px-2'>
-            <label htmlFor='courseBenefits' className='font-[#F1F2FF]'>Benefits of the course<span className="text-[#EF476F]"> *</span></label>
-            <textarea id='courseBenefits'  className='min-h-[130px] w-full  p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]' placeholder='Enter Benefits of the course'
-             {...register('courseBenefits', {required:true})} />
-             {
-              errors.courseBenefits && <span  className="text-[#EF476F]" >Benefits are required</span>
-             }
-          </div>
+        <RequirementField
+          name= 'instructions'
+          label = "Requirements / Instructions"
+          register = {register}
+          errors = {errors}
+          setValue = {setValue}
+          getValues = {getValues}
+          />
 
-              <RequirementField
-                name= 'instructions'
-                label = "Requirements / Instructions"
-                register = {register}
-                errors = {errors}
-                setValue = {setValue}
-                getValues = {getValues}
-                />
-
-                <div className='flex  gap-2 px-2'>
-                  {
-                     (
-                    <button onClick={()=>dispatch(setStep(2))} className='bg-richblack-400 px-4 py-3 rounded-md'>
-                      Continue without saving</button>
-                      )
-                  }
-                  {
-                    (
-                      <button type='submit' className='bg-yellow-5 text-black py-3 px-4 rounded-md'>
-                          {
-                            !editCourse ? "Next" :'Save Change'
-                          }
-                      </button>
-                    )
-                  }
-                </div>
+        <div className='divider' />
+        <div className='flex flex-col-reverse gap-3 sm:flex-row sm:justify-end'>
+          <button onClick={()=>dispatch(setStep(2))} className='btn btn-ghost'>
+            Continue without saving
+          </button>
+          <button type='submit' className='btn btn-gradient'>
+            {
+              !editCourse ? "Next" :'Save Change'
+            }
+            <FiArrowRight />
+          </button>
+        </div>
       </form>
 
     </div>

@@ -1,68 +1,105 @@
-import {  useState } from "react"
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaRegEye } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { changeNewPassword } from "../../../../services/authApi";
 
+const ChangePassword = () => {
+  const dispatch = useDispatch();
+  const [currentPassword, setCurrentPassword] = useState(false);
+  const [changePassword, setChagnePassword] = useState(false);
+  const [formData, setFormData] = useState({
+    password: "",
+    newPassword: "",
+  });
 
+  const onChangeHandler = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-const ChangePassword = () =>{
-    const dispatch = useDispatch()
-    const [currentPassword, setCurrentPassword] = useState(false)
-    const [changePassword, setChagnePassword] = useState(false)
-    const [formData, setFormData] = useState({
-        password:'',
-        newPassword:''
-    })
+  const currentPasswordHandler = () => {
+    setCurrentPassword(!currentPassword);
+  };
 
-    const onChangeHandler = (e) =>{
-        setFormData((prev)=>({...prev,[e.target.name]:e.target.value}))
-    }
+  const changePasswordHandler = () => {
+    setChagnePassword(!changePassword);
+  };
 
-  const currentPasswordHandler = () =>{
-    setCurrentPassword(!currentPassword)
-}
-
-const changePasswordHandler= () =>{
-    setChagnePassword(!changePassword)
-}
-
-const submitHandler = (e)=>{
+  const submitHandler = (e) => {
     e.preventDefault();
-    if(formData.password === formData.newPassword){
-        toast.error('New password cannot be same as Current password')
-        return;
+    if (formData.password === formData.newPassword) {
+      toast.error("New password cannot be same as Current password");
+      return;
     }
-    dispatch(changeNewPassword(formData))
-    
-}
+    dispatch(changeNewPassword(formData));
+  };
 
+  return (
+    <section className="glass p-6 sm:p-8 grid grid-cols-1 xl:grid-cols-[240px_1fr] gap-6 xl:gap-10">
+      <div>
+        <p className="eyebrow text-[10px]">03 · Security</p>
+        <h2 className="mt-2 text-xl sm:text-2xl font-medium tracking-tight">Password</h2>
+        <p className="mt-2 text-sm text-white/55 leading-relaxed">
+          Your new password must be different from the current one.
+        </p>
+      </div>
 
-//  className="f"
-    return <div className="lg:w-[80%] rounded-md flex flex-col items-center py-6 px-4 gap-6  bg-richblack-800">
-        <form onSubmit={submitHandler} className="flex flex-col justify-between w-full gap-7 p-4 ">
-
-          <div className="flex  justify-between ">
-          <div className="flex flex-col w-[42%] gap-1 relative">
-                  <label className="text-[#F1F2FF]" htmlFor="password">Current Password</label>
-                  <input onChange={onChangeHandler} type={`${!currentPassword?"password":"text"}`} name="password" id="password" placeholder="Current Password"  className="p-3 bg-richblack-600 outline-none rounded-lg text-[#c4c8d5]"/>
-                  <FaRegEye onClick={currentPasswordHandler}
-                    className="cursor-pointer absolute text-xl right-2 bottom-4 text-[#999DAA]"
-                  />
-              </div>
-
-              <div className="flex flex-col w-[42%] gap-1 relative">
-              <label className="text-[#F1F2FF]" htmlFor="newPassword">Change Password</label>
-                  <input onChange={onChangeHandler} type={`${!changePassword?"password":"text"}`} name="newPassword" id="newPassword" placeholder="New password" className="p-3 bg-richblack-600 outline-none rounded-lg text-[#c4c8d5]"/>
-                  <FaRegEye onClick={changePasswordHandler}
-                    className="cursor-pointer absolute text-xl right-2 bottom-4 text-[#999DAA]"
-                  />
-              </div>
+      <form onSubmit={submitHandler} className="min-w-0 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label className="field-label" htmlFor="password">
+            Current Password
+          </label>
+          <div className="relative">
+            <input
+              onChange={onChangeHandler}
+              type={`${!currentPassword ? "password" : "text"}`}
+              name="password"
+              id="password"
+              placeholder="Current Password"
+              className="field pr-12"
+            />
+            <button
+              type="button"
+              onClick={currentPasswordHandler}
+              aria-label="Toggle current password visibility"
+              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-white/45 hover:text-white hover:bg-white/[0.06] transition"
+            >
+              {currentPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
           </div>
-       
-            <button className="text-black font-semibold  bg-yellow-200 py-3 rounded-md" type="submit">Change Passowrd</button>
-          </form>
+        </div>
 
-    </div>
-}
-export default ChangePassword
+        <div>
+          <label className="field-label" htmlFor="newPassword">
+            New Password
+          </label>
+          <div className="relative">
+            <input
+              onChange={onChangeHandler}
+              type={`${!changePassword ? "password" : "text"}`}
+              name="newPassword"
+              id="newPassword"
+              placeholder="New password"
+              className="field pr-12"
+            />
+            <button
+              type="button"
+              onClick={changePasswordHandler}
+              aria-label="Toggle new password visibility"
+              className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full text-white/45 hover:text-white hover:bg-white/[0.06] transition"
+            >
+              {changePassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+        </div>
+
+        <div className="md:col-span-2 flex justify-end pt-1">
+          <button className="btn btn-primary w-full sm:w-auto" type="submit">
+            Change password
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+};
+export default ChangePassword;

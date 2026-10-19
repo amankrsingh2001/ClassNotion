@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { FiPlus } from 'react-icons/fi'
+import { RxCross2 } from 'react-icons/rx'
 
 
 const RequirementField = ({name, label, register, errors, setValue, getValues}) => {
@@ -34,42 +36,39 @@ const RequirementField = ({name, label, register, errors, setValue, getValues}) 
 
 
   return (
-    <div className='flex flex-col gap-2 px-2'>
-
-        <label htmlFor={name}  className='font-[#F1F2FF]' >{label}<span className="text-[#EF476F]"> *</span> </label>
-        <div className='gap-4 flex flex-col'>
+    <div>
+        <label htmlFor={name} className='field-label'>{label} <span className="text-rose">*</span></label>
+        <div className='flex flex-col gap-3 sm:flex-row'>
             <input type='text'
                 id={name}
                 value={requirement}
                 onChange={(e)=>setRequirement(e.target.value)}
-                className=' w-full  p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+                placeholder='e.g. Basic JavaScript knowledge'
+                className='field'
             />
-           
+            <button type='button' className='btn btn-glass h-12 shrink-0' onClick={handleAddButton}>
+                <FiPlus /> Add
+            </button>
         </div>
         {
             requirementList.length > 0 && (
-            <ul className='flex  gap-4 '>
+            <ul className='mt-4 flex flex-wrap gap-2'>
                 {
                     requirementList.map((requirements, index)=>{
-                      return  <li className='text-[#F1F2FF]' key={index}  >
-                            <span className='text-white mr-4'>{requirements}</span>
-                            <button type='button' className='text-richblack-400 text-sm' onClick={(index)=>handlerRemoveButton(index)}>Clear</button>
+                      return  <li key={index} className='pill pr-1.5'>
+                            <span>{requirements}</span>
+                            <button type='button' aria-label={`Remove ${requirements}`} className='grid h-4 w-4 place-items-center rounded-full text-white/60 transition hover:bg-white/20 hover:text-white' onClick={(index)=>handlerRemoveButton(index)}>
+                              <RxCross2 className='text-[10px]' />
+                            </button>
                         </li>
                     })
                 }
             </ul>
             )
         }
-        
-        <button type='button' className='bg-yellow-50  w-[12%] py-2 rounded-md text-[#2C333F]' onClick={handleAddButton}>
-                    Add
-            </button>
 
-
-           
-
-            {
-            errors[name] && (<span  className="text-[#EF476F]" >{label} is  required</span>)
+        {
+            errors[name] && (<p className="field-error">{label} is required</p>)
         }
 
     </div>

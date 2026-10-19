@@ -1,9 +1,8 @@
 import { useForm } from 'react-hook-form';
 import IconBtn from '../../../../Common/IconBtn';
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { FiPlusCircle, FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BiRightArrow } from "react-icons/bi";
 import { setCourse, setEditCourse, setStep } from '../../../../../slices/courseSlice';
 import toast from 'react-hot-toast';
 import { createSection, updateSection } from '../../../../../services/courseDetail';
@@ -94,50 +93,58 @@ const CourseBuilderForm = () =>{
             setValue("sectionName", sectionName)
         }
 
-    return <div className="rounded-md w-11/12 border-richblack-300 border-2 bg-[#161D29] p-4 mt-8 flex flex-col gap-4">
-            <p className='text-3xl mt-4 font-bold'>Course Builder</p>
-            <form className='flex flex-col ' onSubmit={handleSubmit(onSubmit)}>
-                <div className='flex flex-col gap-2 px-2' >
-                    <label  className='font-[#F1F2FF]' htmlFor='sectionName'>Section name</label>
+    return <div className="glass flex flex-col gap-6 p-5 sm:p-8">
+            <div className='flex flex-wrap items-end justify-between gap-3'>
+                <div>
+                    <p className='eyebrow'>Step 2 of 3</p>
+                    <h2 className='mt-2 text-2xl font-medium tracking-tight sm:text-3xl'>Course builder</h2>
+                </div>
+                <span className='pill'>
+                    Sections <sup className='text-white/60'>{course?.courseContent?.length || 0}</sup>
+                </span>
+            </div>
+            <div className='divider' />
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <label className='field-label' htmlFor='sectionName'>Section name</label>
                     <input id='sectionName'
                         placeholder='Add section name'
                         {...register("sectionName",{ required:true })}
-                         className='w-full p-3 rounded-md bg-[#2C333F] outline-none text-[#F1F2FF]'
+                         className='field'
                     />{
                         errors.sectionName && (
-                            <span  className="text-[#EF476F]" >Section name is required</span>
+                            <p className="field-error">Section name is required</p>
                         )
                     }
                 </div>
 
-                <div className='mt-10 px-2'>
-                    <button type='submit' className='border-2 py-2 px-3 text-yellow-50 border-yellow-50 rounded-md inline-block' >
-                        {editSectionName ?"Edit Section Name":"Create Section"}  <IoMdAddCircleOutline className='inline mb-[1px]'/></button>
-                   
+                <div className='flex flex-wrap items-center gap-3'>
+                    <button type='submit' className='btn btn-primary' >
+                        <FiPlusCircle className='text-base'/>
+                        {editSectionName ?"Edit Section Name":"Create Section"}
+                    </button>
+
                         {
                             editSectionName && (
                                 <button type='button'
                                     onClick={cancelEdit}
-                                    className='text-sm text-richblack-300'
+                                    className='btn btn-ghost btn-sm'
                                 >Cancel Edit</button>
                             )
                         }
                 </div>
             </form>
 
-
-
             { course?.courseContent?.length > 0 && (
                 <NestedView handleChangeEditSectionName={handleChangeEditSectionName}/>
             )}
-            <div className='flex justify-end gap-x-4 py-2'>
-                <button className='bg-white text-[#161D29] p-2 border-2 rounded-md border-richblack-400' onClick={goBack}>Back</button>
-                <button onClick={goToNext} className='border-2 border-yellow-50 p-2 rounded-md text-yellow-50'>Next
-                <BiRightArrow className='inline mb-1' />
-
+            <div className='divider' />
+            <div className='flex flex-wrap justify-end gap-3'>
+                <button className='btn btn-glass' onClick={goBack}><FiArrowLeft /> Back</button>
+                <button onClick={goToNext} className='btn btn-gradient'>Next
+                <FiArrowRight />
                 </button>
             </div>
-                 
 
     </div>
 }

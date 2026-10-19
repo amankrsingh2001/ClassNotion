@@ -1,22 +1,19 @@
-import React from "react";
+import { FiChevronRight } from "react-icons/fi";
 
+// A "lesson row" style value item.
 export const LogoCard = ({ index, description, name, logo }) => {
   return (
-    <>
-      <div className="flex items-center ">
-        <div className="bg-white rounded-full p-2 drop-shadow-2xl">
-          <img className="h-5 w-5" src={logo} />
-        </div>
-        <div className=" p-2 border-green">
-          <h3 className="bg-gradient-to-tr from-[#E4A51C] to-white text-transparent bg-clip-text text-lg lg:text-sm text-bold ">{name}</h3>
-          <p className="text-lg lg:text-xs text-white opacity-80">{description}</p>
-        </div>
+    <div className="row-item">
+      <span className={index === 1 ? "icon-circle" : "icon-circle-glass"}>
+        <img className={`h-4 w-4 ${index === 1 ? "" : "invert opacity-80"}`} src={logo} alt="" />
+      </span>
+      <div className="flex-1 min-w-0">
+        <p className="text-[15px] font-medium text-white">{name}</p>
+        <p className="text-xs text-white/45 truncate">{description}</p>
       </div>
-      {index !== 4 ? (
-        <div className="h-[40px] w-[1px] pl-4">
-          <hr className="border-[1px] border-[#AFB2BF] h-[100%] border-dotted" />
-        </div>
-      ) : null}
-    </>
+      <span className="hidden sm:flex items-center gap-1 text-xs text-white/45">
+        0{index} <FiChevronRight />
+      </span>
+    </div>
   );
 };
