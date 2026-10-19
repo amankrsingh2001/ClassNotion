@@ -10,7 +10,7 @@ const signUpValidation = zod.object({
     email:zod.string().email(),
     password:zod.string().max(20).min(5),
     confirmPassword:zod.string().max(20).min(5),
-    accountType:zod.enum(['Admin',"Student","Instructor"]),
+    accountType:zod.enum(["Student","Instructor"]),
     contactNumber:zod.string(),
     otp: zod.string()
 })

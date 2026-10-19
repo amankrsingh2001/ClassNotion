@@ -1,62 +1,28 @@
-const {User} = require('../models/User');
+const { prisma } = require('../config/database')
 const { mailSender } = require('../utils/mailSender')
+const { handle, fail } = require('../utils/http')
+const crypto = require('node:crypto')
 const bcrypt = require('bcrypt')
 
-
-
-    const resetPasswordToken = async(req,res)=>{
-        try {
-            const email = req.body.email;
-            const user = await User.findOne({email})
-            if(!user){
-                return res.json({success:false,message:"Your email is not registered"})
-            }
-    
-            const token = crypto.randomUUID();
-    
-            const updatedDetails = await User.findOneAndUpdate({email},{token:token,
-                resetPasswordExpires:Date.now() + 5*60*1000
-            },{
-                new:true
-            })
-            
-            const url = `https://class-notion.vercel.app//update-password/${token}`
-    
-            await mailSender(email,"Password Reset Link",`Password Reset Link ${url}`)
-            return res.status(200).json({success:true,message:"Email sent successFully, Please check email and change your password"})
-        } catch (error) {
-            return res.status(400).json({success:false,message:"Failed to Reset Password"})
-        }
-    }
-
-    const resetPassword = async(req,res) =>{
-        try {
-             const {password,confirmPassword,token} = req.body
-             if(password !== confirmPassword){
-                return res.status(401).json({success:false,message:"Password and confirm Password can't be different"})
-             }
-             const userDetails = await User.findOne({token})
-             if(!userDetails){
-                return res.json({
-                    success:false,
-                    message:"Cannot find token"
-                })
-             }
-             if( userDetails.resetPasswordExpires < Date.now()){
-                return res.status(402).json({success:false,message:'Token is expired '})
-             }
-
-             const salt = 10;
-             const hashedPassword = await bcrypt.hash(password,salt);
-             await User.findOneAndUpdate({ token },{ password : hashedPassword },{ new:true })
-
-             return res.status(200).json({success:true,message:"Password Reset Successfully"})
-        } catch (error) {
-            return res.status(500).json({success:false,message:'Something went wrong'})
-        }
-    }
-
-    module.exports = {
-        resetPasswordToken,
-        resetPassword
-    }
+const resetPasswordToken = handle(async (req, res) => {
+    const { email } = req.body
+    if (!email) return fail(res, 400, 'Email is required')
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user) return fail(res, 400, 'Your email is not registered')
+    const token = crypto.randomUUID()
+    await prisma.user.update({ where: { id: user.id }, data: { token, resetPasswordExpires: new Date(Date.now() + 5 * 60000) } })
+    const origin = process.env.FRONTEND_URL || 'https://class-notion.vercel.app'
+    await mailSender(email, 'Password Reset Link', `Password Reset Link ${origin}/update-password/${token}`)
+    res.json({ success: true, message: 'Email sent successfully, please check your email' })
+})
+const resetPassword = handle(async (req, res) => {
+    const { password, confirmPassword, token } = req.body
+    if (typeof password !== 'string' || password.length < 5 || password.length > 20 || password !== confirmPassword || !token) return fail(res, 400, 'Invalid password or token')
+    const result = await prisma.user.updateMany({
+        where: { token, resetPasswordExpires: { gt: new Date() } },
+        data: { password: await bcrypt.hash(password, 10), token: null, resetPasswordExpires: null },
+    })
+    if (!result.count) return fail(res, 400, 'Invalid or expired token')
+    res.json({ success: true, message: 'Password Reset Successfully' })
+})
+module.exports = { resetPasswordToken, resetPassword }

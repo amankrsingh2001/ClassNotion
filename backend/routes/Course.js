@@ -38,7 +38,7 @@ router.get('/getInstructorCourses', auth, isInstructor, getInstructorCourses)
 
 // router.post('/getCoursesDetails', getcourseDetail)
 
-router.post('/deleteCourse', deleteCourses)
+router.post('/deleteCourse', auth, isInstructor, deleteCourses)
 
 router.post('/updateCourseProgress',auth, isStudent, updateCourseProgress)
 

@@ -1,93 +1,29 @@
-const {Category} = require('../models/Category')
-const { createCategoryValidation } = require("../utils/zodVerification")
+const { prisma } = require('../config/database')
+const { apiData, publicCourseInclude } = require('../utils/apiData')
+const { handle, fail } = require('../utils/http')
 
-function getRandomInt(max){
-    return Math.floor(Math.random()* max)
-}
-
-const createCategory = async(req,res) =>{
-    const createPayload = req.body
-    const parserPayload = createCategoryValidation.safeParse(createPayload)
-    try {
-        const categoryDetails = await Category.create({
-            name:createPayload.name,
-            description:createPayload.description
-        })
-        return res.status(200).json({success:true,message:"Category created Successfully"})
-        
-    } catch (error) {
-        res.status(500).json({success:false,msg:"Failed to create Category",error:error})
-    }
-}
-
-const showAllCategory = async(req,res) =>{
-    try {
-        const allCategory = await Category.find({})
-        return res.status(200).json({success:true, message:"All category of course returned successfully", allCategory:allCategory})
-    } catch (error) {
-        res.status(500).json({success:false, msg:"Failed to get Tag"})
-    }
-} 
-
-const categoryPageDetails = async(req, res)=>{
-    try {
-        const categoryId =  req.body.categoryId
-
-        const selectedCategory = await Category.findById(categoryId).populate({path:'course',
-             match:{status:"Published"}, populate:"ratingAndReviews"}).exec()
-
-        if(!selectedCategory){
-            return res.status(404).json({success:false,
-                 message:"Category not found"})
-        }
-
-        if(selectedCategory.course.length === 0){
-
-            return res.status(404).json({
-                success:false,
-                message:"No course found for the category",
-            })
-        }
-            //Get courses for other categories
-            const categoriesExpectedSelected = await Category.find({
-                _id:{$ne: categoryId },
-            })
-            let differentCategory = await Category.findOne(
-                categoriesExpectedSelected[getRandomInt(categoriesExpectedSelected.length)]._id
-            ).populate({
-                path:"course",
-                match:{status :"Published"}
-            }).exec()
-
-            const allCategories = await Category.find().populate({
-                path:"course",
-                match:{status: "Published"},
-                populate:{
-                    path: "instructor"
-                }
-            }).exec()
-
-            const allCourses = allCategories.flatMap((category)=>category.course)
-            const mostSellingCourses = allCourses.sort((a, b)=>b.sold-a.sold).slice(0,10)
-
-            return res.status(200).json({
-                success:true,
-                data:{
-                    selectedCategory,
-                    differentCategory,
-                    mostSellingCourses
-                }
-            })
-
-    } catch (error) {
-        res.status(500).json({success:false, msg:"Failed to get Page Details", error:error})
-    }
-}
-
-
-
-module.exports = {
-    createCategory,
-    showAllCategory,
-    categoryPageDetails,
-}
+const createCategory = handle(async (req, res) => {
+    const { name, description } = req.body
+    if (!name?.trim()) return fail(res, 400, 'Category name is required')
+    await prisma.category.create({ data: { name: name.trim(), description } })
+    res.json({ success: true, message: 'Category created Successfully' })
+})
+const showAllCategory = handle(async (req, res) => {
+    const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } })
+    res.json({ success: true, message: 'All categories returned successfully', allCategory: apiData(categories) })
+})
+const categoryPageDetails = handle(async (req, res) => {
+    const { categoryId } = req.body
+    if (!categoryId) return fail(res, 400, 'Category ID is required')
+    const categories = await prisma.category.findMany({
+        include: { course: { where: { status: 'Published' }, include: publicCourseInclude, orderBy: { createdAt: 'desc' } } },
+    })
+    const selectedCategory = categories.find(c => c.id === categoryId)
+    if (!selectedCategory) return fail(res, 404, 'Category not found')
+    const others = categories.filter(c => c.id !== categoryId)
+    const differentCategory = others[Math.floor(Math.random() * others.length)] || null
+    const mostSellingCourses = categories.flatMap(c => c.course)
+        .sort((a, b) => b.enrollments.length - a.enrollments.length).slice(0, 10)
+    res.json({ success: true, data: apiData({ selectedCategory, differentCategory, mostSellingCourses }) })
+})
+module.exports = { createCategory, showAllCategory, categoryPageDetails }

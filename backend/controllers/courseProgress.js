@@ -1,41 +1,17 @@
-const { SubSection } = require("../models/SubSection");
-const {CourseProgress} = require('../models/CourseProgress')
+const { prisma } = require('../config/database')
+const { handle, fail, userId } = require('../utils/http')
 
-
-const updateCourseProgress = async(req, res) =>{
-    const {courseId, subSectionId} = req.body;
-
-    const userId = req.user.id || req.authorization.id
-
-    try {
-        const subSection = await SubSection.findById(subSectionId)
-        if(!subSection){
-            return res.status(404).json({success:false, message:"Cannot find subSection"})
-        }
-        let courseProgress = await CourseProgress.findOne({
-            courseId:courseId,
-            userId:userId
-        })
-
-
-        if(!courseProgress){
-            return res.status(404).json({success:false, message:"course prgoress doesnt exist"})
-        }else{
-            if(courseProgress.completedVideo.includes(subSectionId)){
-                return res.status(400).json({success:false, message:"Sub Section already marked"})
-            }
-            courseProgress.completedVideo.push(subSectionId)
-        }
-        await courseProgress.save()
-        return res.status(200).json({success:true, message:"Course progress added"})
-
-
-    } catch (error) {
-        return res.status(500).json({success:false, message:error})
-    }   
-}
-
-
-module.exports = {
-    updateCourseProgress
-}
+const updateCourseProgress = handle(async (req, res) => {
+    const { courseId, subSectionId } = req.body
+    if (!courseId || !subSectionId) return fail(res, 400, 'Course and lesson IDs are required')
+    const key = { userId: userId(req), courseId }
+    if (!await prisma.enrollment.findUnique({ where: { userId_courseId: key } })) return fail(res, 403, 'You are not enrolled in this course')
+    const video = await prisma.subSection.findFirst({ where: { id: subSectionId, section: { courseId } } })
+    if (!video) return fail(res, 404, 'Cannot find subSection in this course')
+    await prisma.$transaction(async tx => {
+        const progress = await tx.courseProgress.upsert({ where: { userId_courseId: key }, create: key, update: {} })
+        await tx.videoCompletion.createMany({ data: [{ progressId: progress.id, subSectionId }], skipDuplicates: true })
+    })
+    res.json({ success: true, message: 'Course progress added' })
+})
+module.exports = { updateCourseProgress }

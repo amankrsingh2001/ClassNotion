@@ -5,7 +5,7 @@ const auth = async( req , res , next )=>{
     try {
         const token =  req.headers.authorization
         if(!token){
-            res.status(401).json({msg:"Token not found"})
+            return res.status(401).json({msg:"Token not found"})
         }
        try {
          const word = token.split(' ');
@@ -31,7 +31,7 @@ const auth = async( req , res , next )=>{
 const isStudent = async( req,res,next ) =>{
         try {
             if(req.user.accountType !== "Student"){
-                res.status(401).json({message:false,message:"This is a protected route for Students only"})
+                return res.status(401).json({success:false,message:"This is a protected route for Students only"})
             }
             next()
         } catch (error) {
@@ -44,7 +44,7 @@ const isStudent = async( req,res,next ) =>{
 const isInstructor = async( req,res,next ) =>{
     try {
         if(req.user.accountType !== "Instructor"){
-            res.status(401).json({message:false,message:"This is a protected route for Instructors only"})
+            return res.status(401).json({success:false,message:"This is a protected route for Instructors only"})
         }
         next()
     } catch (error) {
@@ -57,7 +57,7 @@ const isAdmin = async( req,res,next ) =>{
   
     try {
         if(req.user.accountType !== "Admin"){
-           return res.status(401).json({message:false,message:"This is a protected route for Admin only"})
+           return res.status(401).json({success:false,message:"This is a protected route for Admin only"})
         }
         next()
     } catch (error) {

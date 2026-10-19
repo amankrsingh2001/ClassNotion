@@ -1,121 +1,32 @@
-const { default: mongoose, mongo } = require("mongoose");
-const { Course } = require("../models/Course");
-const { RatingAndReview } = require("../models/RatingAndReview");
+const { prisma } = require('../config/database')
+const { apiData, publicUserSelect } = require('../utils/apiData')
+const { handle, fail, userId } = require('../utils/http')
+const include = { user: { select: publicUserSelect }, course: { select: { id: true, courseName: true } } }
 
-
-//create Rating And Review
-const createRating = async(req, res) =>{
-
-      
-        try {
-            const {rating, review, courseId} = req.body;
-            const userId = req.user.id || req.authorization.id;
-
-            const courseDetail = await Course.findOne({_id:courseId},{studentsEnrolled:{$elemMatch:{$er:userId}}})
-
-            if(!courseDetail){
-                return res.status(404).json({success:false,message:"Student isnt enrolled in the course"})
-            }
-
-            const alreadyReivewd = await RatingAndReview.findOne({
-                user:userId,
-                course:courseId
-            })
-
-            if(alreadyReivewd){
-                return res.status(403).json({success:false, message:"Course is already reviewd by the user"})
-            }
-
-            const ratingReview = await RatingAndReview.create({
-                rating:rating,
-                review:review,
-                course:courseId,
-                user:userId
-            })
-
-            const updateCourse = await Course.findByIdAndUpdate(courseId,{
-                "$push":{
-                    ratingAndReviews:ratingReview._id
-                }
-            },{ new:true })
-
-            return res.status(200).json({success:true, message:"Rating and Review Created successfully"})
-        } catch (error) {
-            return res.status(500).json({success:false,message:"Failed to create Rating and Review", error:error.message})
-        }
-}
-
-
-
-    //get Avg Rating
-const getAverageRating = async(req, res) =>{
-
-    try {
-        const { courseId } = req.body;
-
-        const result = await RatingAndReview.aggregate([
-            { 
-                $match:{
-                    course:courseId //Mongoose will automatically convert it into an ObjectId when querying
-                },
-                
-            },{
-                $group:{
-                    _id:null, // null wrap all the entries in a single group
-                    averageRating:{
-                        $avg:"$rating"
-                    }
-                }
-            }
-        ])
-        if(result.length>0){
-            return res.status(200).json({success:true,averageRating:result[0].averageRating})
-        }
-        return res.status(200).json({success:true, message:"Average Rating is 0, not Rating given till now",averageRating : 0})
-
-    } catch (error) {
-        return res.status(500).json({success:false, message:"Failed to Find average rating"})
-    }
-
-}
-
-//getAll Rating
-
-const getAllRatingAndReview = async(req,res)=>{
-        try {
-            const allReview = await RatingAndReview.find({}).sort({rating:"desc"}).populate({
-                path:"user",
-                select:"firstName lastName email image"
-            }).populate({
-                path:"course",
-                select:"courseName"
-            }).exec()
-            return res.status(200).json({success:true, message:"All Review fetched Successfuly", data:allReview})
-        } catch (error) {
-            return res.status(500).json({success: false, message: error.message})
-        }
-}
-
-const getCourseRatingandReview = async (req, res)=>{
-    try {
-        const courseId = req.body || req.params;
-        if(!courseId){
-            return res.status(402).json({success:false, message: "Courseid isn't valid"})
-        }
-        const course = await Course.findOne({_id:courseId}).populate('ratingAndReviews')
-        const courseRating = {
-            ratingAndReview:course.ratingAndReviews
-        }
-        return res.status(200).json({success:false, data:courseRating})
-    } catch (error) {
-        return res.status(500).json({success:false,message:"Failed to find the course Review and Rating"})
-    }
-}
-
-
-module.exports={
-    createRating,
-    getAverageRating,
-    getAllRatingAndReview,
-    getCourseRatingandReview
-}
+const createRating = handle(async (req, res) => {
+    const { review, courseId } = req.body
+    const rating = Number(req.body.rating)
+    if (!courseId || !review || !Number.isInteger(rating) || rating < 1 || rating > 5) return fail(res, 400, 'A course, review and rating from 1 to 5 are required')
+    const key = { userId: userId(req), courseId }
+    if (!await prisma.enrollment.findUnique({ where: { userId_courseId: key } })) return fail(res, 403, 'Student is not enrolled in the course')
+    if (await prisma.ratingAndReview.findUnique({ where: { userId_courseId: key } })) return fail(res, 403, 'Course is already reviewed by the user')
+    await prisma.ratingAndReview.create({ data: { ...key, rating, review } })
+    res.json({ success: true, message: 'Rating and Review Created successfully' })
+})
+const getAverageRating = handle(async (req, res) => {
+    const courseId = req.query.courseId || req.body.courseId
+    if (!courseId) return fail(res, 400, 'Course ID is required')
+    const result = await prisma.ratingAndReview.aggregate({ where: { courseId }, _avg: { rating: true } })
+    res.json({ success: true, averageRating: result._avg.rating || 0 })
+})
+const getAllRatingAndReview = handle(async (req, res) => {
+    const reviews = await prisma.ratingAndReview.findMany({ include, orderBy: { rating: 'desc' } })
+    res.json({ success: true, message: 'All reviews fetched successfully', data: apiData(reviews) })
+})
+const getCourseRatingandReview = handle(async (req, res) => {
+    const courseId = req.params.id || req.body.courseId
+    if (!courseId) return fail(res, 400, 'Course ID is required')
+    const reviews = await prisma.ratingAndReview.findMany({ where: { courseId }, include })
+    res.json({ success: true, data: { ratingAndReview: apiData(reviews) } })
+})
+module.exports = { createRating, getAverageRating, getAllRatingAndReview, getCourseRatingandReview }

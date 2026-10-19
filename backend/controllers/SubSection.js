@@ -1,100 +1,49 @@
-const { Section } = require("../models/Section");
-const { SubSection } = require("../models/SubSection");
-const { uploadOnCloudinary } = require("../utils/imageUploader");
-const { subSectionValidation } = require("../utils/zodVerification");
-require('dotenv').config()
+const { prisma } = require('../config/database')
+const { uploadOnCloudinary } = require('../utils/imageUploader')
+const { apiData } = require('../utils/apiData')
+const { handle, fail } = require('../utils/http')
+const { ownsSection } = require('../utils/courseAccess')
+const include = { subSection: { orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] } }
 
-
-
-
-const createSubSection = async(req,res)=>{
-
-        try {
-            const {title, description, sectionId} = req.body
-
-            const video = req.files.video
-
-            const uploadDetails = await uploadOnCloudinary(video,process.env.FOLDER_NAME);
-
-            const subSectionDetails = await SubSection.create({
-                title,
-                timeDuration:'0',
-                description,
-                videoUrl:uploadDetails.secure_url
-            })
-
-            const section = await Section.findByIdAndUpdate(sectionId,{
-                "$push":{
-                    subSection:subSectionDetails._id
-                }
-            },{new:true}).populate({path:"subSection"})
-
-            return res.status(200).json({success:true,message:"SubSection created Successfully", data:section} )
-
-        } catch (error) {
-            return res.status(500).json({success:false,message:error.message})
-        }
-}
-
-
-const updateSubSection = async(req,res) =>{
-    try {
-
-        const {subSectionId, title, description, sectionId} = req.body;
-
-
-        const subSection = await SubSection.findById(subSectionId)
-        if(!subSection){
-            return res.status(400).json({success:false,message:"Cannot find sub-section"})
-        }
-
-
-        let uploadDetails = null;
-        if (req.files && req.files.video) {
-            const video = req.files.video;
-            uploadDetails = await uploadOnCloudinary(video, process.env.FOLDER_NAME);
-          }
-
-        const updatedSubSection = await SubSection.findByIdAndUpdate(subSectionId,{
-            title : title || subSection.title,
-            description : description|| subSection.description,
-            videoUrl: uploadDetails ? uploadDetails.secure_url : subSection.videoUrl,
-        },{new:true})
-
-        const section = await Section.findById({_id:sectionId}).populate({path:"subSection"})
-
-        return res.status(200).json({success:true,message:"SubSection created Successfully", data:section})
-
-    } catch (error) {
-        return res.status(500).json({success:false,message:error.message})
+const createSubSection = handle(async (req, res) => {
+    const { title, description, sectionId } = req.body
+    if (!title || !sectionId || !req.files?.video) return fail(res, 400, 'Title, section ID and video are required')
+    if (!await ownsSection(req, res, sectionId)) return
+    const upload = await uploadOnCloudinary(req.files.video, process.env.FOLDER_NAME)
+    const section = await prisma.$transaction(async tx => {
+        await tx.subSection.create({ data: { title, description, sectionId, timeDuration: String(upload.duration || 0), videoUrl: upload.secure_url } })
+        return tx.section.findUnique({ where: { id: sectionId }, include })
+    })
+    res.json({ success: true, message: 'SubSection created Successfully', data: apiData(section) })
+})
+const updateSubSection = handle(async (req, res) => {
+    const { subSectionId, title, description, sectionId } = req.body
+    if (!subSectionId || !sectionId) return fail(res, 400, 'Lesson and section IDs are required')
+    if (!await ownsSection(req, res, sectionId)) return
+    const video = await prisma.subSection.findUnique({ where: { id: subSectionId } })
+    if (!video || video.sectionId !== sectionId) return fail(res, 404, 'Cannot find sub-section in this section')
+    const data = { title, description }
+    if (req.files?.video) {
+        const upload = await uploadOnCloudinary(req.files.video, process.env.FOLDER_NAME)
+        data.videoUrl = upload.secure_url
+        data.timeDuration = String(upload.duration || 0)
     }
-}
-
-
-
-const deleteSubSection = async(req,res) =>{
-  try {
-    const {subSectionId, sectionId} = req.body 
-
-    const section = await Section.findByIdAndUpdate(sectionId,{
-        '$pull':{
-            subSection:subSectionId
-        }
-    },{new:true})
-
-    const subSection = await SubSection.findByIdAndDelete(subSectionId);
-    
-    if(!subSection){
-        return res.status(400).json({success:false,message:'Subsection not found'})
-    }
-      return res.status(200).json({success:true,message:"Deleted Sub-section successfully", data:section})
-  } catch (error) {
-    return res.status(500).json({success:false,message:"Failed To delete sub-section" })
-  }
-}
-
-module.exports = {
-    createSubSection,
-    updateSubSection,
-    deleteSubSection
-}
+    const section = await prisma.$transaction(async tx => {
+        await tx.subSection.update({ where: { id: subSectionId }, data })
+        return tx.section.findUnique({ where: { id: sectionId }, include })
+    })
+    res.json({ success: true, message: 'SubSection updated Successfully', data: apiData(section) })
+})
+const deleteSubSection = handle(async (req, res) => {
+    const { subSectionId, sectionId } = req.body
+    if (!subSectionId || !sectionId) return fail(res, 400, 'Lesson and section IDs are required')
+    if (!await ownsSection(req, res, sectionId)) return
+    const video = await prisma.subSection.findUnique({ where: { id: subSectionId } })
+    if (!video || video.sectionId !== sectionId) return fail(res, 404, 'Sub-section not found')
+    const section = await prisma.$transaction(async tx => {
+        await tx.subSection.delete({ where: { id: subSectionId } })
+        return tx.section.findUnique({ where: { id: sectionId }, include })
+    })
+    res.json({ success: true, message: 'Deleted Sub-section successfully', data: apiData(section) })
+})
+module.exports = { createSubSection, updateSubSection, deleteSubSection }
